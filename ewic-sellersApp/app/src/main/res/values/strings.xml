@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Ewic - Sellers</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="connect_local">Connect to local server</string>
+    <string name="connect_remote">Connect to remote server</string>
+    <string name="retry">Retry</string>
+    <string name="error_connect_server">Could not connect to server</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="access">Acess</string>
+    <string name="endpoint">Endpoint</string>
+    <string name="back">Back</string>
+    <string name="connecting_server">Connecting to the server</string>
+    <string name="please_wait">Please wait</string>
+    <string name="error_server">An error has occurred, please retry the operation</string>
+    <string name="error_empty_field">Field can\'t be empty</string>
+    <string name="error_username_login">Username and/or password incorrect</string>
+    <string name="welcome">Welcome</string>
+    <string name="startCapacityShop">To start the capacity control and for the store to appear as open, click on it\'s name.</string>
+    <string name="close_shop">Close shop</string>
+    <string name="warning">Warning</string>
+    <string name="pre_close_shop">You sure want to close the store. All active entries will be terminated.</string>
+    <string name="close">Close</string>
+    <string name="cancel">Cancel</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
+</resources>
