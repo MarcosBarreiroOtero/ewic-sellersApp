@@ -36,10 +36,10 @@ import es.ewic.sellers.utils.RequestUtils;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MyShops#newInstance} factory method to
+ * Use the {@link MyShopsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyShops extends Fragment {
+public class MyShopsFragment extends Fragment {
 
     private static final String ARG_SELLER = "sellerData";
 
@@ -52,12 +52,12 @@ public class MyShops extends Fragment {
         public void onShopClick(Shop shop);
     }
 
-    public MyShops() {
+    public MyShopsFragment() {
         // Required empty public constructor
     }
 
-    public static MyShops newInstance(Seller seller) {
-        MyShops fragment = new MyShops();
+    public static MyShopsFragment newInstance(Seller seller) {
+        MyShopsFragment fragment = new MyShopsFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_SELLER, seller);
         fragment.setArguments(args);
@@ -115,7 +115,7 @@ public class MyShops extends Fragment {
             public void onResponse(JSONArray response) {
                 shops = ModelConverter.jsonArrayToShopList(response);
                 ListView shopList = parent.findViewById(R.id.shop_list);
-                ShopRowAdapter shopRowAdapter = new ShopRowAdapter(MyShops.this, shops, getResources(), getActivity().getPackageName());
+                ShopRowAdapter shopRowAdapter = new ShopRowAdapter(MyShopsFragment.this, shops, getResources(), getActivity().getPackageName());
                 shopList.setAdapter(shopRowAdapter);
                 pd.hide();
             }

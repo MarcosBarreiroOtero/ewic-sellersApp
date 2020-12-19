@@ -2,7 +2,6 @@ package es.ewic.sellers;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.app.VoiceInteractor;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -23,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
+import com.ramijemli.percentagechartview.PercentageChartView;
 
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.BackEndEndpoints;
@@ -31,10 +31,10 @@ import es.ewic.sellers.utils.RequestUtils;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ShopCapacity#newInstance} factory method to
+ * Use the {@link ShopCapacityFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShopCapacity extends Fragment {
+public class ShopCapacityFragment extends Fragment {
 
     private static final String ARG_SHOP = "shop";
 
@@ -45,12 +45,12 @@ public class ShopCapacity extends Fragment {
         public void shopClosed();
     }
 
-    public ShopCapacity() {
+    public ShopCapacityFragment() {
         // Required empty public constructor
     }
 
-    public static ShopCapacity newInstance(Shop shop) {
-        ShopCapacity fragment = new ShopCapacity();
+    public static ShopCapacityFragment newInstance(Shop shop) {
+        ShopCapacityFragment fragment = new ShopCapacityFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_SHOP, shop);
         fragment.setArguments(args);
@@ -80,6 +80,10 @@ public class ShopCapacity extends Fragment {
                 showPreCloseDialog(parent);
             }
         });
+
+        PercentageChartView percentageChartView = parent.findViewById(R.id.shop_capacity);
+        float percentage = ((float) shopData.getActualCapacity() / shopData.getMaxCapacity()) * 100;
+        FormUtils.configureSemaphorePercentageChartView(getResources(), percentageChartView, percentage);
 
         openShop();
 
@@ -121,7 +125,6 @@ public class ShopCapacity extends Fragment {
         RequestUtils.sendStringRequest(getContext(), Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e("HTTP", "open " + response);
                 pd.hide();
             }
         }, new Response.ErrorListener() {
@@ -162,7 +165,6 @@ public class ShopCapacity extends Fragment {
         RequestUtils.sendStringRequest(getContext(), Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e("HTTP", "close " + response);
                 pd.hide();
                 mCallback.shopClosed();
             }

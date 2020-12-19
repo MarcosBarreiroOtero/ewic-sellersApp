@@ -10,7 +10,7 @@ import es.ewic.sellers.model.Seller;
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.FragmentUtils;
 
-public class MainActivity extends AppCompatActivity implements LoginFragment.OnLoginListener, MyShops.OnMyShopsListener, ShopCapacity.OnShopCapacityListener {
+public class MainActivity extends AppCompatActivity implements LoginFragment.OnLoginListener, MyShopsFragment.OnMyShopsListener, ShopCapacityFragment.OnShopCapacityListener {
 
     private Seller seller;
     private Shop openShop;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     @Override
     public void onLoadSellerData(Seller sellerData) {
         seller = sellerData;
-        FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), MyShops.newInstance(seller), false);
+        FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), MyShopsFragment.newInstance(seller), false);
 
     }
 
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     public void onShopClick(Shop shop) {
         if (seller != null) {
             openShop = shop;
-            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopCapacity.newInstance(openShop), true);
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopCapacityFragment.newInstance(openShop), true);
         }
     }
 
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
             if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                 getSupportFragmentManager().popBackStack();
             } else {
-                FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), MyShops.newInstance(seller), false);
+                FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), MyShopsFragment.newInstance(seller), false);
             }
         }
     }
