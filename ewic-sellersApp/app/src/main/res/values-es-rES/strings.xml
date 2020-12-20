@@ -22,4 +22,7 @@
     <string name="pre_close_shop">Seguro que quiere cerrar la tienda. Se finalizarán todas las entradas activas.</string>
     <string name="close">Cerrar</string>
     <string name="cancel">Cancelar</string>
+    <string name="capacity">Aforo</string>
+    <string name="open">Abierto</string>
+    <string name="closed">Cerrado</string>
 </resources>

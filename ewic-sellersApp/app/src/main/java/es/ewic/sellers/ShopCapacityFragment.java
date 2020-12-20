@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,11 +80,23 @@ public class ShopCapacityFragment extends Fragment {
             }
         });
 
-        PercentageChartView percentageChartView = parent.findViewById(R.id.shop_capacity);
+        PercentageChartView percentageChartView = parent.findViewById(R.id.shop_percentage);
         float percentage = ((float) shopData.getActualCapacity() / shopData.getMaxCapacity()) * 100;
         FormUtils.configureSemaphorePercentageChartView(getResources(), percentageChartView, percentage);
 
-        openShop();
+        TextView shop_capacity = parent.findViewById(R.id.shop_capacity);
+        shop_capacity.setText(shopData.getActualCapacity() + "/" + shopData.getMaxCapacity());
+        if (percentage < 75) {
+            shop_capacity.setTextColor(getResources().getColor(R.color.semaphore_green));
+        } else if (percentage < 100) {
+            shop_capacity.setTextColor(getResources().getColor(R.color.semaphore_ambar));
+        } else {
+            shop_capacity.setTextColor(getResources().getColor(R.color.semaphore_red));
+        }
+
+        if (!shopData.isAllowEntries()) {
+            openShop();
+        }
 
         return parent;
     }

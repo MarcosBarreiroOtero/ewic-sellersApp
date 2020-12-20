@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import es.ewic.sellers.R;
@@ -64,11 +66,22 @@ public class ShopRowAdapter extends BaseAdapter implements ListAdapter {
         }
 
         TextView shop_name = convertView.findViewById(R.id.shop_list_name);
+        TextView shop_capacity = convertView.findViewById(R.id.shop_list_capacity);
+        TextView shop_state = convertView.findViewById(R.id.shop_list_state);
 
         Shop shop_data = getItem(position);
 
         if (shop_data != null) {
             shop_name.setText(shop_data.getName());
+            shop_capacity.setText(resources.getString(R.string.capacity) + ": " + shop_data.getActualCapacity() + "/" + shop_data.getMaxCapacity());
+
+            if (shop_data.isAllowEntries()) {
+                shop_state.setText(resources.getString(R.string.open));
+                shop_state.setTextColor(resources.getColor(R.color.semaphore_green));
+            } else {
+                shop_state.setText(resources.getString(R.string.closed));
+                shop_state.setTextColor(resources.getColor(R.color.semaphore_red));
+            }
         }
 
         return convertView;

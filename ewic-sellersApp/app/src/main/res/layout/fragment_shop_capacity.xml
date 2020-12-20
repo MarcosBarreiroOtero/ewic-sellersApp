@@ -19,12 +19,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.ramijemli.percentagechartview.PercentageChartView
-        android:id="@+id/shop_capacity"
+        android:id="@+id/shop_percentage"
         android:layout_width="0dp"
         android:layout_height="400dp"
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,4 +45,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/shop_capacity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shop_percentage" />
 </androidx.constraintlayout.widget.ConstraintLayout>

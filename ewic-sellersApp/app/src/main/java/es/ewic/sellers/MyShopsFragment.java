@@ -88,7 +88,6 @@ public class MyShopsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Shop selectedShop = shops.get(position);
-                Log.e("SHOP", selectedShop.toString());
                 mCallback.onShopClick(selectedShop);
             }
         });
@@ -117,7 +116,7 @@ public class MyShopsFragment extends Fragment {
                 ListView shopList = parent.findViewById(R.id.shop_list);
                 ShopRowAdapter shopRowAdapter = new ShopRowAdapter(MyShopsFragment.this, shops, getResources(), getActivity().getPackageName());
                 shopList.setAdapter(shopRowAdapter);
-                pd.hide();
+                pd.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override

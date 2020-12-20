@@ -30,10 +30,10 @@ public class FormUtils {
 
         percentageChartView.drawBackgroundEnabled(false)
                 .drawBackgroundBarEnabled(true)
-                .backgroundBarThickness(200)
+                .backgroundBarThickness(150)
                 .orientation(BaseModeRenderer.ORIENTATION_CLOCKWISE)
                 .progressBarStyle(RingModeRenderer.CAP_SQUARE)
-                .progressBarThickness(80)
+                .progressBarThickness(75)
                 .startAngle(90)
                 .textStyle(Typeface.BOLD)
                 .textSize(200)
@@ -43,7 +43,7 @@ public class FormUtils {
         percentageChartView.setAdaptiveColorProvider(new AdaptiveColorProvider() {
             @Override
             public int provideProgressColor(float progress) {
-                if (progress < 25) {
+                if (progress < 75) {
                     return resources.getColor(R.color.semaphore_green);
                 } else if (progress < 100) {
                     return resources.getColor(R.color.semaphore_ambar);

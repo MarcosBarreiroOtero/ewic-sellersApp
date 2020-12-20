@@ -156,7 +156,7 @@ public class LoginFragment extends Fragment {
             public void onResponse(JSONObject response) {
 
                 Seller newSeller = ModelConverter.jsonObjectToSeller(response);
-                pd.hide();
+                pd.dismiss();
                 mCallback.onLoadSellerData(newSeller);
             }
         }, new Response.ErrorListener() {

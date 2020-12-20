@@ -22,6 +22,9 @@
     <string name="pre_close_shop">You sure want to close the store. All active entries will be terminated.</string>
     <string name="close">Close</string>
     <string name="cancel">Cancel</string>
+    <string name="capacity">Capacity</string>
+    <string name="open">Open</string>
+    <string name="closed">Closed</string>
     <!-- TODO: Remove or change this placeholder text -->
     <!-- TODO: Remove or change this placeholder text -->
 </resources>
