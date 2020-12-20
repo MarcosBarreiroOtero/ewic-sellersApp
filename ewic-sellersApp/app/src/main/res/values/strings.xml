@@ -25,6 +25,7 @@
     <string name="capacity">Capacity</string>
     <string name="open">Open</string>
     <string name="closed">Closed</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="shop_connect_message">In order to enter the store it is necessary to connect via bluetooth to the device:</string>
+    <string name="activate">Activate</string>
+    <string name="bluetooth_needed_message">For customers to enter the shop it is necessary to have Bluetooth activated</string>
 </resources>

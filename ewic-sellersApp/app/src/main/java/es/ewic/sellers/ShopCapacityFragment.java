@@ -1,15 +1,21 @@
 package es.ewic.sellers;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +28,8 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import com.ramijemli.percentagechartview.PercentageChartView;
+
+import org.w3c.dom.Text;
 
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.BackEndEndpoints;
@@ -36,9 +44,12 @@ import es.ewic.sellers.utils.RequestUtils;
 public class ShopCapacityFragment extends Fragment {
 
     private static final String ARG_SHOP = "shop";
+    private static final int BLUETOOTH_REQUEST_CODE = 01;
 
     private Shop shopData;
     OnShopCapacityListener mCallback;
+    private BluetoothAdapter mBluetoothAdapter;
+    private TextView shop_bluetooth_name;
 
     public interface OnShopCapacityListener {
         public void shopClosed();
@@ -98,6 +109,16 @@ public class ShopCapacityFragment extends Fragment {
             openShop();
         }
 
+        //Bluetooth
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        shop_bluetooth_name = parent.findViewById(R.id.shop_bluetooth_name);
+        if (mBluetoothAdapter != null) {
+            if (mBluetoothAdapter.isEnabled()) {
+                shop_bluetooth_name.setText(Html.fromHtml(getString(R.string.shop_connect_message) + " <strong>" + getLocalBluetoothName() + "</strong>."));
+            } else {
+                requestActivateBluetooth();
+            }
+        }
         return parent;
     }
 
@@ -107,6 +128,42 @@ public class ShopCapacityFragment extends Fragment {
         super.onAttach(context);
 
         mCallback = (OnShopCapacityListener) getActivity();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == BLUETOOTH_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                shop_bluetooth_name.setText(Html.fromHtml(getString(R.string.shop_connect_message) + " <strong>" + getLocalBluetoothName() + "</strong>."));
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bluetooth_needed_message), Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction(R.string.activate, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackbar.dismiss();
+                        requestActivateBluetooth();
+                    }
+                });
+                snackbar.show();
+            }
+        }
+    }
+
+    private void requestActivateBluetooth() {
+        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        startActivityForResult(enableBtIntent, BLUETOOTH_REQUEST_CODE);
+    }
+
+    private String getLocalBluetoothName() {
+
+        String name = mBluetoothAdapter.getName();
+        if (name == null) {
+            System.out.println("Name is null!");
+            name = mBluetoothAdapter.getAddress();
+            Log.e("BLUETOOTH", "Adress: " + name);
+        }
+        return name;
     }
 
     private void showPreCloseDialog(ConstraintLayout parent) {
