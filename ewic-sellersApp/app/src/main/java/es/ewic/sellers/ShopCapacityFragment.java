@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothServerSocket;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,6 +33,9 @@ import com.ramijemli.percentagechartview.PercentageChartView;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
+import java.util.UUID;
+
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.BackEndEndpoints;
 import es.ewic.sellers.utils.FormUtils;
@@ -45,11 +50,15 @@ public class ShopCapacityFragment extends Fragment {
 
     private static final String ARG_SHOP = "shop";
     private static final int BLUETOOTH_REQUEST_CODE = 01;
+    private static final int BLUETOOTH_REQUEST_DISCOVERABLE = 02;
 
     private Shop shopData;
     OnShopCapacityListener mCallback;
-    private BluetoothAdapter mBluetoothAdapter;
     private TextView shop_bluetooth_name;
+
+    private BluetoothAdapter mBluetoothAdapter;
+    private BluetoothServerSocket mBluetoothServerSocket;
+    private static final UUID MY_UUID_SECURE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     public interface OnShopCapacityListener {
         public void shopClosed();
@@ -115,6 +124,7 @@ public class ShopCapacityFragment extends Fragment {
         if (mBluetoothAdapter != null) {
             if (mBluetoothAdapter.isEnabled()) {
                 shop_bluetooth_name.setText(Html.fromHtml(getString(R.string.shop_connect_message) + " <strong>" + getLocalBluetoothName() + "</strong>."));
+                requestBluetoothDiscoverable();
             } else {
                 requestActivateBluetooth();
             }
@@ -126,7 +136,6 @@ public class ShopCapacityFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
         mCallback = (OnShopCapacityListener) getActivity();
     }
 
@@ -136,6 +145,7 @@ public class ShopCapacityFragment extends Fragment {
         if (requestCode == BLUETOOTH_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 shop_bluetooth_name.setText(Html.fromHtml(getString(R.string.shop_connect_message) + " <strong>" + getLocalBluetoothName() + "</strong>."));
+                requestBluetoothDiscoverable();
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bluetooth_needed_message), Snackbar.LENGTH_INDEFINITE);
                 snackbar.setAction(R.string.activate, new View.OnClickListener() {
@@ -147,12 +157,34 @@ public class ShopCapacityFragment extends Fragment {
                 });
                 snackbar.show();
             }
+        } else if (requestCode == BLUETOOTH_REQUEST_DISCOVERABLE) {
+            Log.e("BLUETOOTH", "Activado visisbilidad" + resultCode);
+            if (resultCode == Activity.RESULT_CANCELED) {
+                Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bluetooth_discoverable_message), Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction(R.string.activate, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackbar.dismiss();
+                        requestActivateBluetooth();
+                    }
+                });
+                snackbar.show();
+            } else {
+                startBluetoothSever();
+            }
         }
     }
 
     private void requestActivateBluetooth() {
         Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         startActivityForResult(enableBtIntent, BLUETOOTH_REQUEST_CODE);
+    }
+
+    private void requestBluetoothDiscoverable() {
+        Intent discoverableIntent =
+                new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
+        startActivityForResult(discoverableIntent, BLUETOOTH_REQUEST_DISCOVERABLE);
     }
 
     private String getLocalBluetoothName() {
@@ -165,6 +197,47 @@ public class ShopCapacityFragment extends Fragment {
         }
         return name;
     }
+
+    private void startBluetoothSever() {
+        BluetoothServerSocket tmp = null;
+        Log.e("BLUETOOTH", "comenzando servidor");
+        try {
+            tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("MYYAPP", MY_UUID_SECURE);
+        } catch (IOException e) {
+            Log.e("BLUETOOTH", "Socket's listen() method failed", e);
+        }
+        mBluetoothServerSocket = tmp;
+        run();
+    }
+
+    public void run() {
+        BluetoothSocket socket = null;
+        Log.e("BLUETOOTH", "Comienzo servidor");
+        while (true) {
+            Log.e("BLUETOOTH", "Escuchando");
+            try {
+                socket = mBluetoothServerSocket.accept();
+            } catch (IOException e) {
+                Log.e("BLUETOOTH", "Socket's accept() method failed", e);
+                break;
+            }
+            if (socket != null) {
+                Log.e("BLUETOOTH", "Nueva conexión");
+                // do entry
+                // mBluetoothServerSocket.close();
+                break;
+            }
+        }
+    }
+
+    public void cancel() {
+        try {
+            mBluetoothServerSocket.close();
+        } catch (IOException e) {
+            Log.e("BLUETOOTH", "Could not close the connect socket", e);
+        }
+    }
+
 
     private void showPreCloseDialog(ConstraintLayout parent) {
 
@@ -193,12 +266,12 @@ public class ShopCapacityFragment extends Fragment {
         RequestUtils.sendStringRequest(getContext(), Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                pd.hide();
+                pd.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                pd.hide();
+                pd.dismiss();
                 if (error instanceof TimeoutError) {
                     Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_connect_server), Snackbar.LENGTH_INDEFINITE);
                     snackbar.setAction(R.string.retry, new View.OnClickListener() {
@@ -233,13 +306,13 @@ public class ShopCapacityFragment extends Fragment {
         RequestUtils.sendStringRequest(getContext(), Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                pd.hide();
+                pd.dismiss();
                 mCallback.shopClosed();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                pd.hide();
+                pd.dismiss();
                 if (error instanceof TimeoutError) {
                     Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_connect_server), Snackbar.LENGTH_INDEFINITE);
                     snackbar.setAction(R.string.retry, new View.OnClickListener() {

@@ -28,4 +28,5 @@
     <string name="shop_connect_message">Para poder entrar en la tienda es necesario conectarse por bluetooth al dispositivo:</string>
     <string name="activate">Activar</string>
     <string name="bluetooth_needed_message">Para que los clientes entren a la tienda es necesario tener Bluetooth activado</string>
+    <string name="bluetooth_discoverable_message">Es necesario establecer el dispositivo como visible para que los clientes se puedan conectar</string>
 </resources>

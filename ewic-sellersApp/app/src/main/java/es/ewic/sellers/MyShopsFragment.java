@@ -121,7 +121,7 @@ public class MyShopsFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                pd.hide();
+                pd.dismiss();
                 if (error instanceof TimeoutError) {
                     Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_connect_server), Snackbar.LENGTH_INDEFINITE);
                     snackbar.setAction(R.string.retry, new View.OnClickListener() {
