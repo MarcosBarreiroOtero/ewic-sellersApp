@@ -149,7 +149,6 @@ public class LoginFragment extends Fragment {
         }
 
         String url = BackEndEndpoints.SELLER_LOGIN + "?loginName=" + username + "&password=" + password;
-        Log.e("HTTP", url);
         ProgressDialog pd = FormUtils.showProgressDialog(getContext(), getResources(), R.string.connecting_server, R.string.please_wait);
 
         RequestUtils.sendJsonObjectRequest(getContext(), Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

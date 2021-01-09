@@ -31,14 +31,17 @@ import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import com.ramijemli.percentagechartview.PercentageChartView;
 
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.UUID;
 
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.BackEndEndpoints;
 import es.ewic.sellers.utils.FormUtils;
+import es.ewic.sellers.utils.ModelConverter;
 import es.ewic.sellers.utils.RequestUtils;
 
 /**
@@ -158,7 +161,6 @@ public class ShopCapacityFragment extends Fragment {
                 snackbar.show();
             }
         } else if (requestCode == BLUETOOTH_REQUEST_DISCOVERABLE) {
-            Log.e("BLUETOOTH", "Activado visisbilidad" + resultCode);
             if (resultCode == Activity.RESULT_CANCELED) {
                 Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bluetooth_discoverable_message), Snackbar.LENGTH_INDEFINITE);
                 snackbar.setAction(R.string.activate, new View.OnClickListener() {
@@ -191,9 +193,7 @@ public class ShopCapacityFragment extends Fragment {
 
         String name = mBluetoothAdapter.getName();
         if (name == null) {
-            System.out.println("Name is null!");
             name = mBluetoothAdapter.getAddress();
-            Log.e("BLUETOOTH", "Adress: " + name);
         }
         return name;
     }
@@ -217,12 +217,21 @@ public class ShopCapacityFragment extends Fragment {
             Log.e("BLUETOOTH", "Escuchando");
             try {
                 socket = mBluetoothServerSocket.accept();
+
             } catch (IOException e) {
                 Log.e("BLUETOOTH", "Socket's accept() method failed", e);
                 break;
             }
             if (socket != null) {
                 Log.e("BLUETOOTH", "Nueva conexión");
+
+                try {
+                    OutputStream outputStream = socket.getOutputStream();
+                    JSONObject shopJson = ModelConverter.shopToJsonObject(shopData);
+                    outputStream.write(shopJson.toString().getBytes());
+                } catch (IOException e) {
+                    break;
+                }
                 // do entry
                 // mBluetoothServerSocket.close();
                 break;
