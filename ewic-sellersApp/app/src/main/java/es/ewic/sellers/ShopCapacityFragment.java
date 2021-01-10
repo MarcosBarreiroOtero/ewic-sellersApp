@@ -38,6 +38,10 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import es.ewic.sellers.model.Shop;
@@ -66,6 +70,8 @@ public class ShopCapacityFragment extends Fragment {
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothServerSocket mBluetoothServerSocket;
     private static final UUID MY_UUID_SECURE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+    private AcceptThread thread;
 
     public interface OnShopCapacityListener {
         public void shopClosed();
@@ -196,70 +202,13 @@ public class ShopCapacityFragment extends Fragment {
     }
 
     private void startBluetoothSever() {
-        BluetoothServerSocket tmp = null;
-        Log.e("BLUETOOTH", "comenzando servidor");
-        try {
-            tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("MYYAPP", MY_UUID_SECURE);
-        } catch (IOException e) {
-            Log.e("BLUETOOTH", "Socket's listen() method failed", e);
-        }
-        mBluetoothServerSocket = tmp;
-        run();
-    }
-
-    public void run() {
-        BluetoothSocket socket = null;
-        Log.e("BLUETOOTH", "Comienzo servidor");
-        while (true) {
-            Log.e("BLUETOOTH", "Escuchando");
-            try {
-                socket = mBluetoothServerSocket.accept();
-
-            } catch (IOException e) {
-                Log.e("BLUETOOTH", "Socket's accept() method failed", e);
-                break;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                thread = new AcceptThread();
+                thread.run();
             }
-            if (socket != null) {
-                Log.e("BLUETOOTH", "Nueva conexión");
-                try {
-                    String idGoogleLogin = null;
-                    //Read idGoogleLogin
-                    InputStream inputStream = socket.getInputStream();
-                    byte[] mBuffer = new byte[1024];
-                    int numBytes;
-
-                    while (true) {
-                        numBytes = inputStream.read(mBuffer);
-                        idGoogleLogin = new String(mBuffer).trim();
-                        break;
-                    }
-                    Log.e("BLUETOOTH", "idGoogleLogin: " + idGoogleLogin);
-                    registerEntryClient(idGoogleLogin);
-
-                    OutputStream outputStream = socket.getOutputStream();
-                    JSONObject shopJson = new JSONObject();
-                    try {
-                        shopJson.putOpt("name", shopData.getName());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    outputStream.write(shopJson.toString().getBytes());
-                } catch (IOException e) {
-                    break;
-                }
-                // do entry
-                // mBluetoothServerSocket.close();
-                break;
-            }
-        }
-    }
-
-    public void cancel() {
-        try {
-            mBluetoothServerSocket.close();
-        } catch (IOException e) {
-            Log.e("BLUETOOTH", "Could not close the connect socket", e);
-        }
+        }).start();
     }
 
     private void updateShopCapacityText() {
@@ -373,35 +322,174 @@ public class ShopCapacityFragment extends Fragment {
         });
     }
 
-    private void registerEntryClient(String idGoogleLogin) {
+    private class AcceptThread extends Thread {
+        private final BluetoothServerSocket mServerSocket;
+        private ProgressDialog mRegisteringEntryDialog;
+        private List<BluetoothSocket> connections;
 
-        String url = BackEndEndpoints.ENTRY_CLIENT(shopData.getIdShop(), idGoogleLogin);
-        ProgressDialog pd = FormUtils.showProgressDialog(getContext(), getResources(), R.string.registering_entry, R.string.please_wait);
-        RequestUtils.sendStringRequest(getContext(), Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                pd.dismiss();
-                Log.e("BLUETOOTH", "Entrada registrada:" + response);
-                Snackbar.make(getView(), getString(R.string.new_entry), Snackbar.LENGTH_LONG).show();
-                shopData.setActualCapacity(shopData.getActualCapacity() + 1);
-                float percentage = ((float) shopData.getActualCapacity() / shopData.getMaxCapacity()) * 100;
-                percentageChartView.setProgress(percentage, true);
-                updateShopCapacityText();
+        public AcceptThread() {
+            // Use a temporary object that is later assigned to mmServerSocket
+            // because mmServerSocket is final.
+            BluetoothServerSocket tmp = null;
+            try {
+                // MY_UUID is the app's UUID string, also used by the client code.
+                tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("MYYAPP", MY_UUID_SECURE);
+            } catch (IOException e) {
+                Log.e("BLUETOOTH", "Socket's listen() method failed", e);
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("BLUETOOTH", "Http error");
-                pd.dismiss();
-                if (error instanceof TimeoutError) {
-                    Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_connect_server), Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                } else {
-                    Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_server), Snackbar.LENGTH_LONG);
-                    snackbar.show();
+            mServerSocket = tmp;
+
+            connections = new ArrayList<>();
+        }
+
+        private String readIdGoogleLoginFromClient(BluetoothSocket socket) {
+            try {
+                InputStream inputStream = socket.getInputStream();
+                byte[] mBuffer = new byte[1024];
+                int numBytes;
+
+                while (true) {
+                    numBytes = inputStream.read(mBuffer);
+                    String bufferContent = new String(mBuffer).trim();
+
+                    if (!bufferContent.isEmpty()) {
+                        return bufferContent;
+                    }
+                }
+            } catch (IOException e) {
+                Log.e("BLUETOOTH", "Can't read input stream for idGoogleLogin", e);
+                return null;
+            }
+
+        }
+
+        private void writeShopNameAndEntryNumber(BluetoothSocket socket, String response) {
+            try {
+                OutputStream outputStream = socket.getOutputStream();
+                JSONObject shopJson = new JSONObject();
+                try {
+                    shopJson.putOpt("name", shopData.getName());
+                    if (response != null) {
+                        shopJson.putOpt("nEntry", response);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                outputStream.write(shopJson.toString().getBytes());
+            } catch (IOException e) {
+                Log.e("BLUETOOTH", "Error output stream", e);
+                e.printStackTrace();
+            }
+        }
+
+        private void closeSocket(BluetoothSocket socket) {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                Log.e("BLUETOOTH", "Can't close socket error 404");
+            }
+        }
+
+        private void registerEntryClient(String idGoogleLogin, BluetoothSocket socket) {
+            String url = BackEndEndpoints.ENTRY_CLIENT(shopData.getIdShop(), idGoogleLogin);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mRegisteringEntryDialog = FormUtils.showProgressDialog(getContext(), getResources(), R.string.registering_entry, R.string.please_wait);
+                }
+            });
+
+            RequestUtils.sendStringRequest(getContext(), Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.e("BLUETOOTH", "Entrada registrada:" + response);
+                            Snackbar.make(getView(), getString(R.string.new_entry), Snackbar.LENGTH_LONG).show();
+                            shopData.setActualCapacity(shopData.getActualCapacity() + 1);
+                            float percentage = ((float) shopData.getActualCapacity() / shopData.getMaxCapacity()) * 100;
+                            percentageChartView.setProgress(percentage, true);
+                            updateShopCapacityText();
+                            mRegisteringEntryDialog.dismiss();
+                        }
+                    });
+                    writeShopNameAndEntryNumber(socket, response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("BLUETOOTH", "Http error");
+                    if (error instanceof TimeoutError) {
+                        //TODO close socket
+                    } else {
+                        int responseCode = RequestUtils.getErrorCodeRequest(error);
+                        // 404 not found shop or client  (should not happen)
+                        // 400 entry duplicate, send shop name and keep socket
+                        // 202 max capacity, close socket
+                        // 401 shop not open, close socket (should not happen)
+                        // 401 client already entered, send shop name and keep socket
+                        // unknow code close socket
+                        switch (responseCode) {
+                            case 404:
+                                closeSocket(socket);
+                                break;
+                            case 400:
+                                Log.e("BLUETOOTH", "Entry duplicated");
+                                writeShopNameAndEntryNumber(socket, null);
+                                break;
+                            case 202:
+                                Log.e("BLUETOOTH", "Max capacity");
+                                closeSocket(socket);
+                                break;
+                            case 401:
+                                String errorMessage = RequestUtils.getErrorMessageRequest(error);
+                                Log.e("BLUETOOTH", "Error: " + errorMessage);
+                                if (errorMessage.contains(RequestUtils.CLIENT_ALREADY_ENTERED)) {
+                                    Log.e("BLUETOOTH", "Already entered");
+                                    writeShopNameAndEntryNumber(socket, null);
+                                } else {
+                                    //Shop closed
+                                    Log.e("BLUETOOTH", "Shop not opened");
+                                    closeSocket(socket);
+                                }
+                                break;
+                            default:
+                                closeSocket(socket);
+                                break;
+                        }
+                    }
+                }
+            });
+
+        }
+
+        public void run() {
+            BluetoothSocket socket = null;
+            // Keep listening until exception occurs or a socket is returned.
+            while (true) {
+                try {
+                    socket = mServerSocket.accept();
+                } catch (IOException e) {
+                    Log.e("BLUETOOTH", "Socket's accept() method failed", e);
+                    break;
+                }
+
+                if (socket != null) {
+                    Log.e("BLUETOOTH", "Nueva conexión");
+                    final BluetoothSocket socketFinal = socket;
+
+                    //Read idGoogleLogin
+                    String idGoogleLogin = readIdGoogleLoginFromClient(socketFinal);
+                    Log.e("BLUETOOTH", "idGoogleLogin: " + idGoogleLogin);
+
+                    if (idGoogleLogin != null) {
+                        //Try to make entry
+                        registerEntryClient(idGoogleLogin, socketFinal);
+                    }
                 }
             }
-        });
+        }
 
     }
 }
