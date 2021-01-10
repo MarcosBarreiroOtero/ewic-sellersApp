@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -41,6 +44,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -70,6 +74,7 @@ public class ShopCapacityFragment extends Fragment {
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothServerSocket mBluetoothServerSocket;
     private static final UUID MY_UUID_SECURE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private BroadcastReceiver mBroadcastReceiver;
 
     private AcceptThread thread;
 
@@ -136,6 +141,14 @@ public class ShopCapacityFragment extends Fragment {
             }
         }
         return parent;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mBroadcastReceiver != null) {
+            requireActivity().unregisterReceiver(mBroadcastReceiver);
+        }
     }
 
 
@@ -209,6 +222,20 @@ public class ShopCapacityFragment extends Fragment {
                 thread.run();
             }
         }).start();
+
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    Log.e("BLUETOOTH", "Disconnect : " + device.getName());
+                    thread.registerDisconnect(device);
+                }
+            }
+        };
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        getActivity().registerReceiver(mBroadcastReceiver, filter);
     }
 
     private void updateShopCapacityText() {
@@ -325,7 +352,8 @@ public class ShopCapacityFragment extends Fragment {
     private class AcceptThread extends Thread {
         private final BluetoothServerSocket mServerSocket;
         private ProgressDialog mRegisteringEntryDialog;
-        private List<BluetoothSocket> connections;
+        private HashMap<String, Integer> socketConnections;
+
 
         public AcceptThread() {
             // Use a temporary object that is later assigned to mmServerSocket
@@ -339,7 +367,7 @@ public class ShopCapacityFragment extends Fragment {
             }
             mServerSocket = tmp;
 
-            connections = new ArrayList<>();
+            socketConnections = new HashMap<>();
         }
 
         private String readIdGoogleLoginFromClient(BluetoothSocket socket) {
@@ -382,6 +410,11 @@ public class ShopCapacityFragment extends Fragment {
             }
         }
 
+        private void storeSocketInMap(BluetoothSocket sokect, int idEntry) {
+            String address = sokect.getRemoteDevice().getAddress();
+            socketConnections.put(address, idEntry);
+        }
+
         private void closeSocket(BluetoothSocket socket) {
             try {
                 socket.close();
@@ -392,7 +425,7 @@ public class ShopCapacityFragment extends Fragment {
 
         private void registerEntryClient(String idGoogleLogin, BluetoothSocket socket) {
             String url = BackEndEndpoints.ENTRY_CLIENT(shopData.getIdShop(), idGoogleLogin);
-            getActivity().runOnUiThread(new Runnable() {
+            requireActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     mRegisteringEntryDialog = FormUtils.showProgressDialog(getContext(), getResources(), R.string.registering_entry, R.string.please_wait);
@@ -402,7 +435,7 @@ public class ShopCapacityFragment extends Fragment {
             RequestUtils.sendStringRequest(getContext(), Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    getActivity().runOnUiThread(new Runnable() {
+                    requireActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Log.e("BLUETOOTH", "Entrada registrada:" + response);
@@ -415,13 +448,21 @@ public class ShopCapacityFragment extends Fragment {
                         }
                     });
                     writeShopNameAndEntryNumber(socket, response);
+                    storeSocketInMap(socket, Integer.parseInt(response));
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.e("BLUETOOTH", "Http error");
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mRegisteringEntryDialog.dismiss();
+                        }
+                    });
+
                     if (error instanceof TimeoutError) {
-                        //TODO close socket
+                        closeSocket(socket);
                     } else {
                         int responseCode = RequestUtils.getErrorCodeRequest(error);
                         // 404 not found shop or client  (should not happen)
@@ -461,7 +502,41 @@ public class ShopCapacityFragment extends Fragment {
                     }
                 }
             });
+        }
 
+        private void registerExitClient(Integer idEntry) {
+            String url = BackEndEndpoints.EXIT_CLIENT(shopData.getIdShop(), idEntry);
+
+            RequestUtils.sendStringRequest(getContext(), Request.Method.PUT, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.e("BLUETOOTH", "Salida");
+                            shopData.setActualCapacity(shopData.getActualCapacity() - 1);
+                            float percentage = ((float) shopData.getActualCapacity() / shopData.getMaxCapacity()) * 100;
+                            percentageChartView.setProgress(percentage, true);
+                            updateShopCapacityText();
+                        }
+                    });
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("BLUETOOTH", "Http error");
+
+                    if (error instanceof TimeoutError) {
+                        // do nothing
+                    } else {
+                        int responseCode = RequestUtils.getErrorCodeRequest(error);
+                        // 404 not found entry, do nothing ???
+                        // 401 shop not open, do nothing ???
+                        // 401 client already exit, do nothing ???
+                        // unknow code close socket
+                    }
+                }
+            });
         }
 
         public void run() {
@@ -488,6 +563,26 @@ public class ShopCapacityFragment extends Fragment {
                         registerEntryClient(idGoogleLogin, socketFinal);
                     }
                 }
+            }
+        }
+
+        public void registerDisconnect(BluetoothDevice device) {
+            String address = device.getAddress();
+            Log.e("BLUETOOTH", "Detectando salida: " + address);
+            Integer idEntry = socketConnections.get(address);
+
+            Log.e("BLUETOOTH", "Conexiónes: " + socketConnections.size());
+            if (idEntry != null) {
+                Log.e("BLUETOOTH", "Detectando salida (entrada): " + idEntry);
+                registerExitClient(idEntry);
+            }
+        }
+
+        public void cancel() {
+            try {
+                mServerSocket.close();
+            } catch (IOException e) {
+                Log.e("BLUETOOTH", "Could not close the connect socket", e);
             }
         }
 

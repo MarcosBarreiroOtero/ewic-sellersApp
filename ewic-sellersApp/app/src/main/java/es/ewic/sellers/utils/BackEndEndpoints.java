@@ -26,5 +26,9 @@ public class BackEndEndpoints {
         return SHOP_BASE + "/" + idShop + "/entry?idGoogleLogin=" + idGoogleLogin;
     }
 
+    public static String EXIT_CLIENT(int idShop, int idEntry) {
+        return SHOP_BASE + "/" + idShop + "/exit?entryNumber=" + idEntry;
+    }
+
 
 }
