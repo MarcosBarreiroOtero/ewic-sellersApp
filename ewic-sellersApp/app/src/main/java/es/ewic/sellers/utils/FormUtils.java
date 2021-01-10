@@ -30,7 +30,7 @@ public class FormUtils {
 
         percentageChartView.drawBackgroundEnabled(false)
                 .drawBackgroundBarEnabled(true)
-                .backgroundBarThickness(150)
+                .backgroundBarThickness(125)
                 .orientation(BaseModeRenderer.ORIENTATION_CLOCKWISE)
                 .progressBarStyle(RingModeRenderer.CAP_SQUARE)
                 .progressBarThickness(75)

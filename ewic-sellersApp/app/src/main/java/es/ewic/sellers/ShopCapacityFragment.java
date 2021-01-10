@@ -31,10 +31,12 @@ import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import com.ramijemli.percentagechartview.PercentageChartView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
@@ -58,6 +60,8 @@ public class ShopCapacityFragment extends Fragment {
     private Shop shopData;
     OnShopCapacityListener mCallback;
     private TextView shop_bluetooth_name;
+    private PercentageChartView percentageChartView;
+    private TextView shop_capacity;
 
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothServerSocket mBluetoothServerSocket;
@@ -103,19 +107,12 @@ public class ShopCapacityFragment extends Fragment {
             }
         });
 
-        PercentageChartView percentageChartView = parent.findViewById(R.id.shop_percentage);
+        percentageChartView = parent.findViewById(R.id.shop_percentage);
         float percentage = ((float) shopData.getActualCapacity() / shopData.getMaxCapacity()) * 100;
         FormUtils.configureSemaphorePercentageChartView(getResources(), percentageChartView, percentage);
 
-        TextView shop_capacity = parent.findViewById(R.id.shop_capacity);
-        shop_capacity.setText(shopData.getActualCapacity() + "/" + shopData.getMaxCapacity());
-        if (percentage < 75) {
-            shop_capacity.setTextColor(getResources().getColor(R.color.semaphore_green));
-        } else if (percentage < 100) {
-            shop_capacity.setTextColor(getResources().getColor(R.color.semaphore_ambar));
-        } else {
-            shop_capacity.setTextColor(getResources().getColor(R.color.semaphore_red));
-        }
+        shop_capacity = parent.findViewById(R.id.shop_capacity);
+        updateShopCapacityText();
 
         if (!shopData.isAllowEntries()) {
             openShop();
@@ -224,10 +221,28 @@ public class ShopCapacityFragment extends Fragment {
             }
             if (socket != null) {
                 Log.e("BLUETOOTH", "Nueva conexión");
-
                 try {
+                    String idGoogleLogin = null;
+                    //Read idGoogleLogin
+                    InputStream inputStream = socket.getInputStream();
+                    byte[] mBuffer = new byte[1024];
+                    int numBytes;
+
+                    while (true) {
+                        numBytes = inputStream.read(mBuffer);
+                        idGoogleLogin = new String(mBuffer).trim();
+                        break;
+                    }
+                    Log.e("BLUETOOTH", "idGoogleLogin: " + idGoogleLogin);
+                    registerEntryClient(idGoogleLogin);
+
                     OutputStream outputStream = socket.getOutputStream();
-                    JSONObject shopJson = ModelConverter.shopToJsonObject(shopData);
+                    JSONObject shopJson = new JSONObject();
+                    try {
+                        shopJson.putOpt("name", shopData.getName());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     outputStream.write(shopJson.toString().getBytes());
                 } catch (IOException e) {
                     break;
@@ -247,6 +262,17 @@ public class ShopCapacityFragment extends Fragment {
         }
     }
 
+    private void updateShopCapacityText() {
+        float percentage = ((float) shopData.getActualCapacity() / shopData.getMaxCapacity()) * 100;
+        shop_capacity.setText(shopData.getActualCapacity() + "/" + shopData.getMaxCapacity());
+        if (percentage < 75) {
+            shop_capacity.setTextColor(getResources().getColor(R.color.semaphore_green));
+        } else if (percentage < 100) {
+            shop_capacity.setTextColor(getResources().getColor(R.color.semaphore_ambar));
+        } else {
+            shop_capacity.setTextColor(getResources().getColor(R.color.semaphore_red));
+        }
+    }
 
     private void showPreCloseDialog(ConstraintLayout parent) {
 
@@ -269,8 +295,7 @@ public class ShopCapacityFragment extends Fragment {
     }
 
     private void openShop() {
-        String url = BackEndEndpoints.SHOP_BASE + "/" + shopData.getIdShop() + BackEndEndpoints.SHOP_OPEN;
-
+        String url = BackEndEndpoints.SHOP_OPEN(shopData.getIdShop());
         ProgressDialog pd = FormUtils.showProgressDialog(getContext(), getResources(), R.string.connecting_server, R.string.please_wait);
         RequestUtils.sendStringRequest(getContext(), Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
@@ -309,8 +334,7 @@ public class ShopCapacityFragment extends Fragment {
     }
 
     private void closeShop() {
-        String url = BackEndEndpoints.SHOP_BASE + "/" + shopData.getIdShop() + BackEndEndpoints.SHOP_CLOSE;
-
+        String url = BackEndEndpoints.SHOP_CLOSE(shopData.getIdShop());
         ProgressDialog pd = FormUtils.showProgressDialog(getContext(), getResources(), R.string.connecting_server, R.string.please_wait);
         RequestUtils.sendStringRequest(getContext(), Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
@@ -347,5 +371,37 @@ public class ShopCapacityFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void registerEntryClient(String idGoogleLogin) {
+
+        String url = BackEndEndpoints.ENTRY_CLIENT(shopData.getIdShop(), idGoogleLogin);
+        ProgressDialog pd = FormUtils.showProgressDialog(getContext(), getResources(), R.string.registering_entry, R.string.please_wait);
+        RequestUtils.sendStringRequest(getContext(), Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                pd.dismiss();
+                Log.e("BLUETOOTH", "Entrada registrada:" + response);
+                Snackbar.make(getView(), getString(R.string.new_entry), Snackbar.LENGTH_LONG).show();
+                shopData.setActualCapacity(shopData.getActualCapacity() + 1);
+                float percentage = ((float) shopData.getActualCapacity() / shopData.getMaxCapacity()) * 100;
+                percentageChartView.setProgress(percentage, true);
+                updateShopCapacityText();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("BLUETOOTH", "Http error");
+                pd.dismiss();
+                if (error instanceof TimeoutError) {
+                    Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_connect_server), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                } else {
+                    Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_server), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+            }
+        });
+
     }
 }

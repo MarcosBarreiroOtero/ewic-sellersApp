@@ -29,4 +29,6 @@
     <string name="activate">Activar</string>
     <string name="bluetooth_needed_message">Para que los clientes entren a la tienda es necesario tener Bluetooth activado</string>
     <string name="bluetooth_discoverable_message">Es necesario establecer el dispositivo como visible para que los clientes se puedan conectar</string>
+    <string name="registering_entry">Registrando entranda</string>
+    <string name="new_entry">Nueva entrada</string>
 </resources>
