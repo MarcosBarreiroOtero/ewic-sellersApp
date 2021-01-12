@@ -316,6 +316,7 @@ public class ShopCapacityFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 pd.dismiss();
+                thread.cancel();
                 mCallback.shopClosed();
             }
         }, new Response.ErrorListener() {
@@ -353,6 +354,7 @@ public class ShopCapacityFragment extends Fragment {
         private final BluetoothServerSocket mServerSocket;
         private ProgressDialog mRegisteringEntryDialog;
         private HashMap<String, Integer> socketConnections;
+        private List<BluetoothSocket> socketsOpened;
 
 
         public AcceptThread() {
@@ -366,7 +368,7 @@ public class ShopCapacityFragment extends Fragment {
                 Log.e("BLUETOOTH", "Socket's listen() method failed", e);
             }
             mServerSocket = tmp;
-
+            socketsOpened = new ArrayList<>();
             socketConnections = new HashMap<>();
         }
 
@@ -413,6 +415,7 @@ public class ShopCapacityFragment extends Fragment {
         private void storeSocketInMap(BluetoothSocket sokect, int idEntry) {
             String address = sokect.getRemoteDevice().getAddress();
             socketConnections.put(address, idEntry);
+            socketsOpened.add(sokect);
         }
 
         private void closeSocket(BluetoothSocket socket) {
@@ -580,6 +583,15 @@ public class ShopCapacityFragment extends Fragment {
 
         public void cancel() {
             try {
+                Log.e("BLUETOOTH", "Closing server socket");
+                for (BluetoothSocket socket : socketsOpened) {
+                    try {
+                        Log.e("BLUETOOTH", "Closing individual socket");
+                        socket.close();
+                    } catch (IOException e) {
+                        Log.e("BLUETOOTH", "Could not close the individual socket", e);
+                    }
+                }
                 mServerSocket.close();
             } catch (IOException e) {
                 Log.e("BLUETOOTH", "Could not close the connect socket", e);
