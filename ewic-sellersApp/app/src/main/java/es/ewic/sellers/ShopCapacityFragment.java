@@ -80,6 +80,8 @@ public class ShopCapacityFragment extends Fragment {
 
     public interface OnShopCapacityListener {
         public void shopClosed();
+
+        public void bluetoothDisconnected();
     }
 
     public ShopCapacityFragment() {
@@ -355,6 +357,7 @@ public class ShopCapacityFragment extends Fragment {
         private ProgressDialog mRegisteringEntryDialog;
         private HashMap<String, Integer> socketConnections;
         private List<BluetoothSocket> socketsOpened;
+        private boolean closeShop = false;
 
 
         public AcceptThread() {
@@ -542,6 +545,16 @@ public class ShopCapacityFragment extends Fragment {
             });
         }
 
+        private void catchDisconnectedBluetooth() {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Snackbar.make(getView(), getString(R.string.bluetooth_disconnected), Snackbar.LENGTH_LONG).show();
+                    mCallback.bluetoothDisconnected();
+                }
+            });
+        }
+
         public void run() {
             BluetoothSocket socket = null;
             // Keep listening until exception occurs or a socket is returned.
@@ -549,7 +562,11 @@ public class ShopCapacityFragment extends Fragment {
                 try {
                     socket = mServerSocket.accept();
                 } catch (IOException e) {
-                    Log.e("BLUETOOTH", "Socket's accept() method failed", e);
+                    Log.e("BLUETOOTH", "Socket's accept() method failed " + closeShop, e);
+                    if (!closeShop) {
+                        //Buetooth disconnected
+                        catchDisconnectedBluetooth();
+                    }
                     break;
                 }
 
@@ -582,6 +599,7 @@ public class ShopCapacityFragment extends Fragment {
         }
 
         public void cancel() {
+            closeShop = true;
             try {
                 Log.e("BLUETOOTH", "Closing server socket");
                 for (BluetoothSocket socket : socketsOpened) {

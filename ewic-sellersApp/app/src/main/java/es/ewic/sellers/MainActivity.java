@@ -62,4 +62,16 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
             }
         }
     }
+
+    @Override
+    public void bluetoothDisconnected() {
+        if (seller != null) {
+            openShop = null;
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else {
+                FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), MyShopsFragment.newInstance(seller), false);
+            }
+        }
+    }
 }

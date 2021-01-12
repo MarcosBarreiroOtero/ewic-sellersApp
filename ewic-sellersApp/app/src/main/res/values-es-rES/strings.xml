@@ -31,4 +31,5 @@
     <string name="bluetooth_discoverable_message">Es necesario establecer el dispositivo como visible para que los clientes se puedan conectar</string>
     <string name="registering_entry">Registrando entrada</string>
     <string name="new_entry">Nueva entrada</string>
+    <string name="bluetooth_disconnected">Se ha desconectado el bluetooth. No se puede llevar a cabo un cabo el control del aforo sin tenerlo activado.</string>
 </resources>

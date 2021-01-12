@@ -31,4 +31,5 @@
     <string name="bluetooth_discoverable_message">Is necessary to make the device visible for clients to connect</string>
     <string name="registering_entry">Registering entry</string>
     <string name="new_entry">New Entry</string>
+    <string name="bluetooth_disconnected">Bluetooth has been disconnected. A capacity control cannot be carried out without having it activated.</string>
 </resources>
