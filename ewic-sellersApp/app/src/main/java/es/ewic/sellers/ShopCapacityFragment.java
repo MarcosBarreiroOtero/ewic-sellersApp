@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -233,10 +234,24 @@ public class ShopCapacityFragment extends Fragment {
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     Log.e("BLUETOOTH", "Disconnect : " + device.getName());
                     thread.registerDisconnect(device);
+                } else if (BluetoothDevice.ACTION_PAIRING_REQUEST.equals(action)) {
+                    Log.e("BLUETOOTH", "Request pairing");
+                    //TODO revisar obtener permisos bluetooth privileges
+//                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+//                    int pin = intent.getIntExtra(BluetoothDevice.EXTRA_PAIRING_KEY, 0);
+//                    Log.d("BLUETOOTH", "PIN" + pin);
+//                    byte[] pinBytes;
+//                    pinBytes = ("" + pin).getBytes();
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//                        device.setPin(pinBytes);
+//                        device.setPairingConfirmation(true);
+//                    }
+
                 }
             }
         };
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        filter.addAction(BluetoothDevice.ACTION_PAIRING_REQUEST);
         getActivity().registerReceiver(mBroadcastReceiver, filter);
     }
 

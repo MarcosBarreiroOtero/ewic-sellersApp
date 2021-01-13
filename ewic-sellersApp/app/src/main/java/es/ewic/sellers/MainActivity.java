@@ -2,7 +2,9 @@ package es.ewic.sellers;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.view.View;
 
@@ -15,6 +17,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     private Seller seller;
     private Shop openShop;
 
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +29,10 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
         setSupportActionBar(myToolbar);
 
         FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), LoginFragment.newInstance(), false);
+
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.BLUETOOTH_PRIVILEGED},
+                REQUEST_PERMISSIONS_REQUEST_CODE);
     }
 
     @Override
