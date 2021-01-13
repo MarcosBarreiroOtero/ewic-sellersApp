@@ -576,7 +576,6 @@ public class ShopCapacityFragment extends Fragment {
 
                     //Read idGoogleLogin
                     String idGoogleLogin = readIdGoogleLoginFromClient(socketFinal);
-                    Log.e("BLUETOOTH", "idGoogleLogin: " + idGoogleLogin);
 
                     if (idGoogleLogin != null) {
                         //Try to make entry
@@ -588,10 +587,8 @@ public class ShopCapacityFragment extends Fragment {
 
         public void registerDisconnect(BluetoothDevice device) {
             String address = device.getAddress();
-            Log.e("BLUETOOTH", "Detectando salida: " + address);
             Integer idEntry = socketConnections.get(address);
 
-            Log.e("BLUETOOTH", "Conexiónes: " + socketConnections.size());
             if (idEntry != null) {
                 Log.e("BLUETOOTH", "Detectando salida (entrada): " + idEntry);
                 registerExitClient(idEntry);
@@ -605,6 +602,8 @@ public class ShopCapacityFragment extends Fragment {
                 for (BluetoothSocket socket : socketsOpened) {
                     try {
                         Log.e("BLUETOOTH", "Closing individual socket");
+                        socket.getInputStream().close();
+                        socket.getOutputStream().close();
                         socket.close();
                     } catch (IOException e) {
                         Log.e("BLUETOOTH", "Could not close the individual socket", e);
