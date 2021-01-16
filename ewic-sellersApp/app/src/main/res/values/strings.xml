@@ -19,9 +19,17 @@
     <string name="startCapacityShop">To start the capacity control and for the store to appear as open, click on it\'s name.</string>
     <string name="close_shop">Close shop</string>
     <string name="warning">Warning</string>
-    <string name="pre_close_shop">You sure want to close the store. All active entries will be terminated.</string>
+    <string name="pre_close_shop">Are you sure you want to close the shop? All active entries will be terminated.</string>
     <string name="close">Close</string>
     <string name="cancel">Cancel</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="capacity">Capacity</string>
+    <string name="open">Open</string>
+    <string name="closed">Closed</string>
+    <string name="shop_connect_message">In order to enter the store it is necessary to connect via bluetooth to the device:</string>
+    <string name="activate">Activate</string>
+    <string name="bluetooth_needed_message">For customers to enter the shop it is necessary to have Bluetooth activated</string>
+    <string name="bluetooth_discoverable_message">Is necessary to make the device visible for clients to connect</string>
+    <string name="registering_entry">Registering entry</string>
+    <string name="new_entry">New Entry</string>
+    <string name="bluetooth_disconnected">Bluetooth has been disconnected. A capacity control cannot be carried out without having it activated.</string>
 </resources>

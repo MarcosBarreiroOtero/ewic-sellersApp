@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
@@ -148,7 +149,6 @@ public class LoginFragment extends Fragment {
         }
 
         String url = BackEndEndpoints.SELLER_LOGIN + "?loginName=" + username + "&password=" + password;
-
         ProgressDialog pd = FormUtils.showProgressDialog(getContext(), getResources(), R.string.connecting_server, R.string.please_wait);
 
         RequestUtils.sendJsonObjectRequest(getContext(), Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -156,15 +156,15 @@ public class LoginFragment extends Fragment {
             public void onResponse(JSONObject response) {
 
                 Seller newSeller = ModelConverter.jsonObjectToSeller(response);
-                pd.hide();
+                pd.dismiss();
                 mCallback.onLoadSellerData(newSeller);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("HTTP", "error");
-                pd.hide();
-                if (error instanceof TimeoutError) {
+                pd.dismiss();
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
                     Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_connect_server), Snackbar.LENGTH_INDEFINITE);
                     snackbar.setAction(R.string.retry, new View.OnClickListener() {
                         @Override

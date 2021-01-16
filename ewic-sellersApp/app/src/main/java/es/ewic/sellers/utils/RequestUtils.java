@@ -26,6 +26,11 @@ import es.ewic.sellers.R;
 
 public class RequestUtils {
 
+    //Error messages
+    public static final String SHOP_NOT_OPENED = "Shop not opened";
+    public static final String CLIENT_ALREADY_ENTERED = "Client already entered";
+    public static final String EXIT_ALREADY_REGISTERED = "Exit already registered";
+
     public static void sendJsonArrayRequest(Context context, int mehod, String url, JSONArray jsonRequest,
                                             Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         RequestQueue queue = Volley.newRequestQueue(context);
