@@ -58,6 +58,10 @@ public class Shop implements Serializable {
         return actualCapacity;
     }
 
+    public void setActualCapacity(int actualCapacity) {
+        this.actualCapacity = actualCapacity;
+    }
+
     public String getType() {
         return type;
     }
