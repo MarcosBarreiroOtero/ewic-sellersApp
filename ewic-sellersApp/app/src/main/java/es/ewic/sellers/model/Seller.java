@@ -6,6 +6,7 @@ public class Seller implements Serializable {
 
     private int idSeller;
     private String loginName;
+    private String password;
     private String firstName;
     private String lastName;
     private String email;
@@ -13,6 +14,14 @@ public class Seller implements Serializable {
     public Seller(int idSeller, String loginName, String firstName, String lastName, String email) {
         this.idSeller = idSeller;
         this.loginName = loginName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
+
+    public Seller(String loginName, String password, String firstName, String lastName, String email) {
+        this.loginName = loginName;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -32,6 +41,14 @@ public class Seller implements Serializable {
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstName() {

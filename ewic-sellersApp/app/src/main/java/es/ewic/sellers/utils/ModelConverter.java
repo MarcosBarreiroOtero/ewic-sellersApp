@@ -28,6 +28,18 @@ public class ModelConverter {
         }
     }
 
+    public static JSONObject sellerToJsonObject(Seller seller) {
+        try {
+            return new JSONObject().put("loginName", seller.getLoginName())
+                    .put("password", seller.getPassword())
+                    .put("firstName", seller.getFirstName())
+                    .put("lastName", seller.getLastName())
+                    .put("email", seller.getEmail());
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
     //SHOP
     public static JSONObject shopToJsonObject(Shop shop) {
         try {
