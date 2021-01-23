@@ -149,7 +149,7 @@ public class LoginFragment extends Fragment {
         access_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkLogin(parent);
+                checkLogin();
             }
         });
 
@@ -157,7 +157,7 @@ public class LoginFragment extends Fragment {
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkRegister(parent);
+                checkRegister();
             }
         });
         return parent;
@@ -170,7 +170,7 @@ public class LoginFragment extends Fragment {
         mCallback = (OnLoginListener) getActivity();
     }
 
-    private void checkLogin(ConstraintLayout parent) {
+    private void checkLogin() {
         String username = login_username_input.getText().toString().trim();
         boolean hasError = false;
         if (username == null || username.isEmpty()) {
@@ -214,7 +214,7 @@ public class LoginFragment extends Fragment {
                         public void onClick(View v) {
                             snackbar.dismiss();
                             pd.show();
-                            checkLogin(parent);
+                            checkLogin();
                         }
                     });
                     snackbar.show();
@@ -244,7 +244,7 @@ public class LoginFragment extends Fragment {
                             public void onClick(View v) {
                                 snackbar.dismiss();
                                 pd.show();
-                                checkLogin(parent);
+                                checkLogin();
                             }
                         });
                         snackbar.show();
@@ -257,7 +257,7 @@ public class LoginFragment extends Fragment {
 
     }
 
-    private void checkRegister(ConstraintLayout parent) {
+    private void checkRegister() {
 
         String username = register_username_input.getText().toString().trim();
         String password = register_password_input.getText().toString().trim();
@@ -335,6 +335,36 @@ public class LoginFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 Log.e("HTTP", "error");
                 pd.dismiss();
+
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_connect_server), Snackbar.LENGTH_INDEFINITE);
+                    snackbar.setAction(R.string.retry, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            snackbar.dismiss();
+                            pd.show();
+                            checkRegister();
+                        }
+                    });
+                    snackbar.show();
+                } else {
+                    int responseCode = RequestUtils.getErrorCodeRequest(error);
+                    //400 username duplicate
+                    if (responseCode == 400) {
+                        register_username_label.setError(getString(R.string.error_username_duplicate));
+                    } else {
+                        Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_server), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.setAction(R.string.retry, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                snackbar.dismiss();
+                                pd.show();
+                                checkRegister();
+                            }
+                        });
+                        snackbar.show();
+                    }
+                }
             }
         });
     }

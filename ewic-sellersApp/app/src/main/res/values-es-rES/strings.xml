@@ -35,8 +35,9 @@
     <string name="register">Registrarse</string>
     <string name="email">Correo electrónico</string>
     <string name="lastname">Apellidos</string>
-    <string name="firstName">Name</string>
+    <string name="firstName">Nombre</string>
     <string name="confirm_password">Confirmar contraseña</string>
     <string name="error_password_not_equals">Las contraseñas no coinciden</string>
     <string name="email_invalid_format">Formato de email no válido</string>
+    <string name="error_username_duplicate">Ya existe el nombre de usuario. Escoja otro por favor.</string>
 </resources>
