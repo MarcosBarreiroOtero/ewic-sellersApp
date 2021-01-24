@@ -473,7 +473,7 @@ public class LoginFragment extends Fragment {
             transition.addTarget(register_repassword_label);
             transition.addTarget(register_firstName_label);
             transition.addTarget(register_lastName_label);
-            transition.addTarget(register_lastName_label);
+            transition.addTarget(register_mail_label);
             transition.addTarget(access_button);
             transition.addTarget(back_button);
             transition.addTarget(register_button);
