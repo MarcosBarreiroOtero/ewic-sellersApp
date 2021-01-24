@@ -122,6 +122,14 @@ public class MyDataFragment extends Fragment {
             }
         });
 
+        Button change_password_button = parent.findViewById(R.id.button_change_password);
+        change_password_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showChangePasswordDialog(parent);
+            }
+        });
+
         return parent;
     }
 
@@ -237,8 +245,6 @@ public class MyDataFragment extends Fragment {
 
         builder.setPositiveButton(R.string.delete, (dialog, which) -> //delete seller account
         {
-
-
         });
 
         builder.setNegativeButton(R.string.cancel, (dialog, which) ->
@@ -320,6 +326,103 @@ public class MyDataFragment extends Fragment {
                 }
             }
         });
+    }
 
+    private void showChangePasswordDialog(ConstraintLayout parent) {
+        View changePassword_view = LayoutInflater.from(getContext()).inflate(R.layout.change_password_dialog, (ViewGroup) getView(), false);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setTitle(R.string.change_password);
+        builder.setView(changePassword_view);
+
+        builder.setPositiveButton(R.string.save, (dialog, which) -> //delete seller account
+        {
+        });
+
+        builder.setNegativeButton(R.string.cancel, (dialog, which) ->
+        {
+            // dialog cancelled;
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.semaphore_red));
+            }
+        });
+        dialog.show();
+
+        TextInputLayout til_old_password = changePassword_view.findViewById(R.id.change_password_old_label);
+        TextInputLayout til_new_password = changePassword_view.findViewById(R.id.change_password_new_label);
+        TextInputLayout til_re_password = changePassword_view.findViewById(R.id.change_password_re_label);
+
+        TextInputEditText tiet_old_password = changePassword_view.findViewById(R.id.change_password_old_input);
+        TextInputEditText tiet_new_password = changePassword_view.findViewById(R.id.change_password_new_input);
+        TextInputEditText tiet_re_password = changePassword_view.findViewById(R.id.change_password_re_input);
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String oldPassword = tiet_old_password.getText().toString().trim();
+                String newPassword = tiet_new_password.getText().toString().trim();
+                String rePassword = tiet_re_password.getText().toString().trim();
+
+                til_old_password.setError(null);
+                til_new_password.setError(null);
+                til_re_password.setError(null);
+                boolean hasError = false;
+                if (oldPassword.isEmpty()) {
+                    til_old_password.setError(getString(R.string.error_empty_field));
+                    hasError = true;
+                }
+                if (newPassword.isEmpty()) {
+                    til_new_password.setError(getString(R.string.error_empty_field));
+                    hasError = true;
+                }
+                if (rePassword.isEmpty()) {
+                    til_re_password.setError(getString(R.string.error_empty_field));
+                    hasError = true;
+                }
+                if (!newPassword.equals(rePassword)) {
+                    til_new_password.setError(getString(R.string.error_password_not_equals));
+                    til_re_password.setError(getString(R.string.error_password_not_equals));
+                    hasError = true;
+                }
+                if (hasError) {
+                    return;
+                }
+
+                String url = BackEndEndpoints.SELLER_CHANGE_PASSWORD + "/" + sellerData.getIdSeller() + "?newPwd=" + newPassword + "&oldPwd=" + oldPassword;
+
+                RequestUtils.sendStringRequest(getContext(), Request.Method.PUT, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // OK
+                        Snackbar snackbar = Snackbar.make(getView(), getString(R.string.password_updated_successfully), Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                        dialog.dismiss();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("HTTP", "error");
+                        if (error instanceof TimeoutError) {
+                            Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_connect_server), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                        } else {
+                            int responseCode = RequestUtils.getErrorCodeRequest(error);
+                            //404 seller not found_ should not happen
+                            //401 password incorrect
+                            if (responseCode == 401) {
+                                til_old_password.setError(getString(R.string.error_password));
+                            } else {
+                                Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_server), Snackbar.LENGTH_LONG);
+                                snackbar.show();
+                            }
+                        }
+                    }
+                });
+            }
+        });
     }
 }

@@ -50,4 +50,9 @@
     <string name="delete_password_needed">To delete the account it is necessary to enter the password.</string>
     <string name="error_password">Password incorrect</string>
     <string name="account_delete_successfully">Account delete successfully</string>
+    <string name="actual_password">Actual password</string>
+    <string name="new_password">New password</string>
+    <string name="save">Save</string>
+    <string name="change_password">Change password</string>
+    <string name="password_updated_successfully">Password updated successfully</string>
 </resources>
