@@ -40,4 +40,9 @@
     <string name="error_password_not_equals">Las contraseñas no coinciden</string>
     <string name="email_invalid_format">Formato de email no válido</string>
     <string name="error_username_duplicate">Ya existe el nombre de usuario. Escoja otro por favor.</string>
+    <string name="toolbar_menu_my_data">Mis datos</string>
+    <string name="update_my_data">Actualizar mis datos</string>
+    <string name="delete_account">Borrar cuenta</string>
+    <string name="updating_data">Actualizando datos</string>
+    <string name="update_data_successfully">Los datos se han actualizado correctamente</string>
 </resources>

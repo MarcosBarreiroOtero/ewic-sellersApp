@@ -40,4 +40,9 @@
     <string name="error_password_not_equals">Passwords do not match</string>
     <string name="email_invalid_format">Invalid email format</string>
     <string name="error_username_duplicate">Username already exists. Choose another please.</string>
+    <string name="toolbar_menu_my_data">My Data</string>
+    <string name="update_my_data">Update my data</string>
+    <string name="delete_account">Delete account</string>
+    <string name="updating_data">Updateing data</string>
+    <string name="update_data_successfully">The data has been updated successfully</string>
 </resources>
