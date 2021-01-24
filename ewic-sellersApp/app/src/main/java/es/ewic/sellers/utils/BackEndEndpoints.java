@@ -6,8 +6,8 @@ public class BackEndEndpoints {
     public static String BASE_ENDPOINT = "http://192.168.1.44:8080/ewic";
 
     //Seller
-    public static String SELLER_LOGIN = BASE_ENDPOINT + "/seller/login";
-
+    public static String SELLER_BASE = BASE_ENDPOINT + "/seller";
+    public static String SELLER_LOGIN = SELLER_BASE + "/login";
 
     //SHOP
     public static String SHOP_BASE = BASE_ENDPOINT + "/shop";

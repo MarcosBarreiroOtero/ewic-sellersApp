@@ -24,9 +24,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar myToolbar = findViewById(R.id.my_toolbar);
-        myToolbar.setVisibility(View.VISIBLE);
-        setSupportActionBar(myToolbar);
+        findViewById(R.id.my_toolbar).setVisibility(View.GONE);
 
         FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), LoginFragment.newInstance(), false);
 
@@ -47,6 +45,11 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     @Override
     public void onLoadSellerData(Seller sellerData) {
         seller = sellerData;
+
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        myToolbar.setVisibility(View.VISIBLE);
+        setSupportActionBar(myToolbar);
+
         FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), MyShopsFragment.newInstance(seller), false);
 
     }

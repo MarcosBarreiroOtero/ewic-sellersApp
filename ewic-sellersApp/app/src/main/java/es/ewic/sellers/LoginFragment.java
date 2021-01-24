@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 
 import android.transition.Slide;
@@ -29,8 +30,6 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
-
 import es.ewic.sellers.model.Seller;
 import es.ewic.sellers.utils.BackEndEndpoints;
 import es.ewic.sellers.utils.FormUtils;
@@ -45,6 +44,32 @@ import es.ewic.sellers.utils.RequestUtils;
 public class LoginFragment extends Fragment {
 
     OnLoginListener mCallback;
+
+    TextInputLayout login_username_label;
+    TextInputLayout login_password_label;
+
+    TextInputEditText login_username_input;
+    TextInputEditText login_password_input;
+
+    TextInputLayout register_username_label;
+    TextInputLayout register_password_label;
+    TextInputLayout register_repassword_label;
+    TextInputLayout register_firstName_label;
+    TextInputLayout register_lastName_label;
+    TextInputLayout register_mail_label;
+
+    TextInputEditText register_username_input;
+    TextInputEditText register_password_input;
+    TextInputEditText register_repassword_input;
+    TextInputEditText register_firstName_input;
+    TextInputEditText register_lastName_input;
+    TextInputEditText register_mail_input;
+
+    Button pre_register_button;
+    Button pre_access_button;
+    Button access_button;
+    Button register_button;
+    Button back_button;
 
     public interface OnLoginListener {
         public void onLoadSellerData(Seller sellerData);
@@ -69,14 +94,31 @@ public class LoginFragment extends Fragment {
         // Inflate the layout for this fragment
         ConstraintLayout parent = (ConstraintLayout) inflater.inflate(R.layout.fragment_login, container, false);
 
-        Button connect_local = parent.findViewById(R.id.connect_local);
-        Button connect_remote = parent.findViewById(R.id.connect_remote);
-        Button access_button = parent.findViewById(R.id.access_button);
-        Button back_button = parent.findViewById(R.id.back_button);
+        pre_register_button = parent.findViewById(R.id.pre_register_button);
+        pre_access_button = parent.findViewById(R.id.pre_access_button);
+        access_button = parent.findViewById(R.id.access_button);
+        register_button = parent.findViewById(R.id.register_button);
+        back_button = parent.findViewById(R.id.back_button);
 
-        TextInputLayout login_endpoint_label = parent.findViewById(R.id.login_endpoint_label);
-        TextInputLayout login_username_label = parent.findViewById(R.id.login_username_label);
-        TextInputLayout login_password_label = parent.findViewById(R.id.login_password_label);
+        login_username_label = parent.findViewById(R.id.login_username_label);
+        login_password_label = parent.findViewById(R.id.login_password_label);
+
+        login_username_input = parent.findViewById(R.id.login_username_input);
+        login_password_input = parent.findViewById(R.id.login_password_input);
+
+        register_username_label = parent.findViewById(R.id.register_username_label);
+        register_password_label = parent.findViewById(R.id.register_password_label);
+        register_repassword_label = parent.findViewById(R.id.register_repassword_label);
+        register_firstName_label = parent.findViewById(R.id.register_firstName_label);
+        register_lastName_label = parent.findViewById(R.id.register_lastName_label);
+        register_mail_label = parent.findViewById(R.id.register_mail_label);
+
+        register_username_input = parent.findViewById(R.id.register_username_input);
+        register_password_input = parent.findViewById(R.id.register_password_input);
+        register_repassword_input = parent.findViewById(R.id.register_repassword_input);
+        register_firstName_input = parent.findViewById(R.id.register_firstName_input);
+        register_lastName_input = parent.findViewById(R.id.register_lastName_input);
+        register_mail_input = parent.findViewById(R.id.register_mail_input);
 
         //Back
         back_button.setOnClickListener(new View.OnClickListener() {
@@ -86,16 +128,16 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        //Remote server
-        connect_remote.setOnClickListener(new View.OnClickListener() {
+        //Pre access
+        pre_access_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 animationShowServerType(parent, false);
             }
         });
 
-        //Local server
-        connect_local.setOnClickListener(new View.OnClickListener() {
+        //Pre register
+        pre_register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 animationShowServerType(parent, true);
@@ -107,7 +149,15 @@ public class LoginFragment extends Fragment {
         access_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkLogin(parent);
+                checkLogin();
+            }
+        });
+
+        //Register
+        register_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkRegister();
             }
         });
         return parent;
@@ -120,14 +170,7 @@ public class LoginFragment extends Fragment {
         mCallback = (OnLoginListener) getActivity();
     }
 
-    private void checkLogin(ConstraintLayout parent) {
-        TextInputLayout login_username_label = parent.findViewById(R.id.login_username_label);
-        TextInputLayout login_password_label = parent.findViewById(R.id.login_password_label);
-
-        TextInputEditText login_endpoint_input = parent.findViewById(R.id.login_endpoint_input);
-        TextInputEditText login_username_input = parent.findViewById(R.id.login_username_input);
-        TextInputEditText login_password_input = parent.findViewById(R.id.login_password_input);
-
+    private void checkLogin() {
         String username = login_username_input.getText().toString().trim();
         boolean hasError = false;
         if (username == null || username.isEmpty()) {
@@ -171,7 +214,7 @@ public class LoginFragment extends Fragment {
                         public void onClick(View v) {
                             snackbar.dismiss();
                             pd.show();
-                            checkLogin(parent);
+                            checkLogin();
                         }
                     });
                     snackbar.show();
@@ -201,7 +244,7 @@ public class LoginFragment extends Fragment {
                             public void onClick(View v) {
                                 snackbar.dismiss();
                                 pd.show();
-                                checkLogin(parent);
+                                checkLogin();
                             }
                         });
                         snackbar.show();
@@ -214,39 +257,168 @@ public class LoginFragment extends Fragment {
 
     }
 
-    private void animationShowServerType(ConstraintLayout parent, boolean showEndpoint) {
-        Button connect_local = parent.findViewById(R.id.connect_local);
-        Button connect_remote = parent.findViewById(R.id.connect_remote);
-        Button access_button = parent.findViewById(R.id.access_button);
-        Button back_button = parent.findViewById(R.id.back_button);
+    private void checkRegister() {
 
-        TextInputLayout login_endpoint_label = parent.findViewById(R.id.login_endpoint_label);
-        TextInputLayout login_username_label = parent.findViewById(R.id.login_username_label);
-        TextInputLayout login_password_label = parent.findViewById(R.id.login_password_label);
+        String username = register_username_input.getText().toString().trim();
+        String password = register_password_input.getText().toString().trim();
+        String repassword = register_repassword_input.getText().toString().trim();
+        String firstName = register_firstName_input.getText().toString().trim();
+        String lastName = register_lastName_input.getText().toString().trim();
+        String mail = register_mail_input.getText().toString().trim();
+
+        register_username_label.setError(null);
+        register_password_label.setError(null);
+        register_repassword_label.setError(null);
+        register_firstName_label.setError(null);
+        register_lastName_label.setError(null);
+        register_mail_label.setError(null);
+
+        boolean hashError = false;
+
+        //Username
+        if (username == null || username.isEmpty()) {
+            register_username_label.setError(getString(R.string.error_empty_field));
+            hashError = true;
+        }
+
+        //Password
+        if (password == null || password.isEmpty()) {
+            register_password_label.setError(getString(R.string.error_empty_field));
+            hashError = true;
+        }
+
+        if (repassword == null || repassword.isEmpty()) {
+            register_repassword_input.setError(getString(R.string.error_empty_field));
+            hashError = true;
+        }
+
+        if (!password.equals(repassword)) {
+            register_password_label.setError(getString(R.string.error_password_not_equals));
+            register_repassword_input.setError(getString(R.string.error_password_not_equals));
+            hashError = true;
+        }
+
+        //FirstName
+        if (firstName == null || firstName.isEmpty()) {
+            register_firstName_label.setError(getString(R.string.error_empty_field));
+            hashError = true;
+        }
+        //LastName
+
+        //Mail
+        if (mail == null || mail.isEmpty()) {
+            register_mail_label.setError(getString(R.string.error_empty_field));
+            hashError = true;
+        } else if (!FormUtils.isValidEmail(mail)) {
+            register_mail_label.setError(getString(R.string.email_invalid_format));
+            hashError = true;
+        }
+
+        if (hashError) {
+            return;
+        }
+
+        Seller seller = new Seller(username, password, firstName, lastName, mail);
+
+        String url = BackEndEndpoints.SELLER_BASE;
+        ProgressDialog pd = FormUtils.showProgressDialog(getContext(), getResources(), R.string.connecting_server, R.string.please_wait);
+
+        RequestUtils.sendJsonObjectRequest(getContext(), Request.Method.POST, url, ModelConverter.sellerToJsonObject(seller), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Seller newSeller = ModelConverter.jsonObjectToSeller(response);
+                pd.dismiss();
+                mCallback.onLoadSellerData(newSeller);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("HTTP", "error");
+                pd.dismiss();
+
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_connect_server), Snackbar.LENGTH_INDEFINITE);
+                    snackbar.setAction(R.string.retry, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            snackbar.dismiss();
+                            pd.show();
+                            checkRegister();
+                        }
+                    });
+                    snackbar.show();
+                } else {
+                    int responseCode = RequestUtils.getErrorCodeRequest(error);
+                    //400 username duplicate
+                    if (responseCode == 400) {
+                        register_username_label.setError(getString(R.string.error_username_duplicate));
+                    } else {
+                        Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_server), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.setAction(R.string.retry, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                snackbar.dismiss();
+                                pd.show();
+                                checkRegister();
+                            }
+                        });
+                        snackbar.show();
+                    }
+                }
+            }
+        });
+    }
+
+    private void animationShowServerType(ConstraintLayout parent, boolean register) {
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(parent);
+        if (register) {
+            constraintSet.connect(R.id.back_button, ConstraintSet.END, R.id.register_button, ConstraintSet.START, 24);
+        } else {
+            constraintSet.connect(R.id.back_button, ConstraintSet.END, R.id.access_button, ConstraintSet.START, 24);
+        }
+        constraintSet.applyTo(parent);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             Transition transition = new Slide(Gravity.START);
             transition.setDuration(600);
-            transition.addTarget(connect_remote);
-            transition.addTarget(connect_local);
+            transition.addTarget(pre_access_button);
+            transition.addTarget(pre_register_button);
             transition.addListener(new Transition.TransitionListener() {
                 @Override
                 public void onTransitionEnd(Transition transition) {
                     Transition transitionShow = new Slide(Gravity.END);
                     transitionShow.setDuration(600);
-                    transitionShow.addTarget(login_endpoint_label);
-                    transitionShow.addTarget(login_password_label);
-                    transitionShow.addTarget(login_username_label);
-                    transitionShow.addTarget(access_button);
+                    if (register) {
+                        transitionShow.addTarget(register_username_label);
+                        transitionShow.addTarget(register_password_label);
+                        transitionShow.addTarget(register_repassword_label);
+                        transitionShow.addTarget(register_firstName_label);
+                        transitionShow.addTarget(register_lastName_label);
+                        transitionShow.addTarget(register_mail_label);
+                        transitionShow.addTarget(register_button);
+                    } else {
+                        transitionShow.addTarget(login_password_label);
+                        transitionShow.addTarget(login_username_label);
+                        transitionShow.addTarget(access_button);
+                    }
+
                     transitionShow.addTarget(back_button);
                     TransitionManager.beginDelayedTransition(parent, transitionShow);
-                    if (showEndpoint) {
-                        login_endpoint_label.setVisibility(View.VISIBLE);
+                    if (register) {
+                        register_username_label.setVisibility(View.VISIBLE);
+                        register_password_label.setVisibility(View.VISIBLE);
+                        register_repassword_label.setVisibility(View.VISIBLE);
+                        register_firstName_label.setVisibility(View.VISIBLE);
+                        register_lastName_label.setVisibility(View.VISIBLE);
+                        register_mail_label.setVisibility(View.VISIBLE);
+                        register_button.setVisibility(View.VISIBLE);
+                    } else {
+                        login_username_label.setVisibility(View.VISIBLE);
+                        login_password_label.setVisibility(View.VISIBLE);
+                        access_button.setVisibility(View.VISIBLE);
                     }
-                    login_username_label.setVisibility(View.VISIBLE);
-                    login_password_label.setVisibility(View.VISIBLE);
                     back_button.setVisibility(View.VISIBLE);
-                    access_button.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -267,44 +439,44 @@ public class LoginFragment extends Fragment {
             });
 
             TransitionManager.beginDelayedTransition(parent, transition);
-            connect_remote.setVisibility(View.GONE);
-            connect_local.setVisibility(View.GONE);
+            pre_access_button.setVisibility(View.GONE);
+            pre_register_button.setVisibility(View.GONE);
 
         } else {
-            connect_remote.setVisibility(View.GONE);
-            connect_local.setVisibility(View.GONE);
-            if (showEndpoint) {
-                login_endpoint_label.setVisibility(View.VISIBLE);
+            pre_access_button.setVisibility(View.GONE);
+            pre_register_button.setVisibility(View.GONE);
+            if (register) {
+                register_username_label.setVisibility(View.VISIBLE);
+                register_password_label.setVisibility(View.VISIBLE);
+                register_repassword_label.setVisibility(View.VISIBLE);
+                register_firstName_label.setVisibility(View.VISIBLE);
+                register_lastName_label.setVisibility(View.VISIBLE);
+                register_mail_label.setVisibility(View.VISIBLE);
+                register_button.setVisibility(View.VISIBLE);
+            } else {
+                login_username_label.setVisibility(View.VISIBLE);
+                login_password_label.setVisibility(View.VISIBLE);
+                access_button.setVisibility(View.VISIBLE);
             }
-            login_username_label.setVisibility(View.VISIBLE);
-            login_password_label.setVisibility(View.VISIBLE);
             back_button.setVisibility(View.VISIBLE);
-            access_button.setVisibility(View.VISIBLE);
         }
     }
 
     private void animateBack(ConstraintLayout parent) {
-        Button connect_local = parent.findViewById(R.id.connect_local);
-        Button connect_remote = parent.findViewById(R.id.connect_remote);
-        Button access_button = parent.findViewById(R.id.access_button);
-        Button back_button = parent.findViewById(R.id.back_button);
-
-        TextInputLayout login_endpoint_label = parent.findViewById(R.id.login_endpoint_label);
-        TextInputLayout login_username_label = parent.findViewById(R.id.login_username_label);
-        TextInputLayout login_password_label = parent.findViewById(R.id.login_password_label);
-
-        TextInputEditText login_endpoint_input = parent.findViewById(R.id.login_endpoint_input);
-        TextInputEditText login_username_input = parent.findViewById(R.id.login_username_input);
-        TextInputEditText login_password_input = parent.findViewById(R.id.login_password_input);
-
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             Transition transition = new Slide(Gravity.END);
             transition.setDuration(600);
-            transition.addTarget(login_endpoint_label);
             transition.addTarget(login_password_label);
             transition.addTarget(login_username_label);
+            transition.addTarget(register_username_label);
+            transition.addTarget(register_password_label);
+            transition.addTarget(register_repassword_label);
+            transition.addTarget(register_firstName_label);
+            transition.addTarget(register_lastName_label);
+            transition.addTarget(register_mail_label);
             transition.addTarget(access_button);
             transition.addTarget(back_button);
+            transition.addTarget(register_button);
 
             transition.addListener(new Transition.TransitionListener() {
                 @Override
@@ -314,20 +486,30 @@ public class LoginFragment extends Fragment {
 
                 @Override
                 public void onTransitionEnd(Transition transition) {
-                    login_endpoint_input.setText("");
-                    login_endpoint_label.setError(null);
                     login_username_input.setText("");
                     login_username_label.setError(null);
                     login_password_input.setText("");
                     login_password_label.setError(null);
+                    register_username_input.setText("");
+                    register_username_label.setError(null);
+                    register_password_input.setText("");
+                    register_password_label.setError(null);
+                    register_repassword_input.setText("");
+                    register_repassword_label.setError(null);
+                    register_firstName_input.setText("");
+                    register_firstName_label.setError(null);
+                    register_lastName_input.setText("");
+                    register_lastName_label.setError(null);
+                    register_mail_input.setText("");
+                    register_mail_label.setError(null);
 
                     Transition transitionShow = new Slide(Gravity.START);
                     transitionShow.setDuration(600);
-                    transitionShow.addTarget(connect_remote);
-                    transitionShow.addTarget(connect_local);
+                    transitionShow.addTarget(pre_access_button);
+                    transitionShow.addTarget(pre_register_button);
                     TransitionManager.beginDelayedTransition(parent, transitionShow);
-                    connect_local.setVisibility(View.VISIBLE);
-                    connect_remote.setVisibility(View.VISIBLE);
+                    pre_access_button.setVisibility(View.VISIBLE);
+                    pre_register_button.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -346,27 +528,56 @@ public class LoginFragment extends Fragment {
                 }
             });
             TransitionManager.beginDelayedTransition(parent, transition);
-            login_endpoint_label.setVisibility(View.GONE);
             login_username_label.setVisibility(View.GONE);
             login_password_label.setVisibility(View.GONE);
+            register_username_label.setVisibility(View.GONE);
+            register_password_label.setVisibility(View.GONE);
+            register_repassword_label.setVisibility(View.GONE);
+            register_firstName_label.setVisibility(View.GONE);
+            register_lastName_label.setVisibility(View.GONE);
+            register_mail_label.setVisibility(View.GONE);
             back_button.setVisibility(View.GONE);
             access_button.setVisibility(View.GONE);
+            register_button.setVisibility(View.GONE);
         } else {
-            connect_local.setVisibility(View.VISIBLE);
-            connect_remote.setVisibility(View.VISIBLE);
+            pre_access_button.setVisibility(View.VISIBLE);
+            pre_register_button.setVisibility(View.VISIBLE);
 
-            login_endpoint_label.setVisibility(View.GONE);
             login_username_label.setVisibility(View.GONE);
             login_password_label.setVisibility(View.GONE);
             access_button.setVisibility(View.GONE);
+
+            register_username_label.setVisibility(View.GONE);
+            register_password_label.setVisibility(View.GONE);
+            register_repassword_label.setVisibility(View.GONE);
+            register_firstName_label.setVisibility(View.GONE);
+            register_lastName_label.setVisibility(View.GONE);
+            register_mail_label.setVisibility(View.GONE);
+            register_button.setVisibility(View.GONE);
+
             back_button.setVisibility(View.GONE);
 
-            login_endpoint_input.setText("");
-            login_endpoint_label.setError(null);
             login_username_input.setText("");
             login_username_label.setError(null);
             login_password_input.setText("");
             login_password_label.setError(null);
+
+            login_username_input.setText("");
+            login_username_label.setError(null);
+            login_password_input.setText("");
+            login_password_label.setError(null);
+            register_username_input.setText("");
+            register_username_label.setError(null);
+            register_password_input.setText("");
+            register_password_label.setError(null);
+            register_repassword_input.setText("");
+            register_repassword_label.setError(null);
+            register_firstName_input.setText("");
+            register_firstName_label.setError(null);
+            register_lastName_input.setText("");
+            register_lastName_label.setError(null);
+            register_mail_input.setText("");
+            register_mail_label.setError(null);
         }
     }
 }

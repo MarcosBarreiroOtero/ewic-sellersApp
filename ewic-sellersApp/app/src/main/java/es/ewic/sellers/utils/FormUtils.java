@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.TextUtils;
+import android.util.Patterns;
 
 import androidx.core.graphics.ColorUtils;
 
@@ -16,6 +18,10 @@ import com.ramijemli.percentagechartview.renderer.RingModeRenderer;
 import es.ewic.sellers.R;
 
 public class FormUtils {
+
+    public static boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
 
     public static ProgressDialog showProgressDialog(Context contex, Resources resources, int title, int message) {
         ProgressDialog pd = new ProgressDialog(contex);

@@ -32,4 +32,12 @@
     <string name="registering_entry">Registrando entrada</string>
     <string name="new_entry">Nueva entrada</string>
     <string name="bluetooth_disconnected">Se ha desconectado el bluetooth. No se puede llevar a cabo un cabo el control del aforo sin tenerlo activado.</string>
+    <string name="register">Registrarse</string>
+    <string name="email">Correo electrónico</string>
+    <string name="lastname">Apellidos</string>
+    <string name="firstName">Nombre</string>
+    <string name="confirm_password">Confirmar contraseña</string>
+    <string name="error_password_not_equals">Las contraseñas no coinciden</string>
+    <string name="email_invalid_format">Formato de email no válido</string>
+    <string name="error_username_duplicate">Ya existe el nombre de usuario. Escoja otro por favor.</string>
 </resources>

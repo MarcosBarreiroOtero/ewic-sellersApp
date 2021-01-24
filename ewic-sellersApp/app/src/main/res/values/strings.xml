@@ -7,7 +7,7 @@
     <string name="error_connect_server">Could not connect to server</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
-    <string name="access">Acess</string>
+    <string name="access">Log in</string>
     <string name="endpoint">Endpoint</string>
     <string name="back">Back</string>
     <string name="connecting_server">Connecting to the server</string>
@@ -32,4 +32,12 @@
     <string name="registering_entry">Registering entry</string>
     <string name="new_entry">New Entry</string>
     <string name="bluetooth_disconnected">Bluetooth has been disconnected. A capacity control cannot be carried out without having it activated.</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="lastname">Last name</string>
+    <string name="firstName">First name</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="error_password_not_equals">Passwords do not match</string>
+    <string name="email_invalid_format">Invalid email format</string>
+    <string name="error_username_duplicate">Username already exists. Choose another please.</string>
 </resources>
