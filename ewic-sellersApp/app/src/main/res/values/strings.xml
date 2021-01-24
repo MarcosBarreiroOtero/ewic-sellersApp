@@ -45,4 +45,9 @@
     <string name="delete_account">Delete account</string>
     <string name="updating_data">Updateing data</string>
     <string name="update_data_successfully">The data has been updated successfully</string>
+    <string name="pre_delete_message">Are you sure you want to delete your account? The data associated with it cannot be recovered.</string>
+    <string name="delete">Delete</string>
+    <string name="delete_password_needed">To delete the account it is necessary to enter the password.</string>
+    <string name="error_password">Password incorrect</string>
+    <string name="account_delete_successfully">Account delete successfully</string>
 </resources>

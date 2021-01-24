@@ -92,7 +92,6 @@ public class MyShopsFragment extends Fragment {
             }
         });
 
-
         return parent;
     }
 

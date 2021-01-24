@@ -45,4 +45,9 @@
     <string name="delete_account">Borrar cuenta</string>
     <string name="updating_data">Actualizando datos</string>
     <string name="update_data_successfully">Los datos se han actualizado correctamente</string>
+    <string name="pre_delete_message">¿Estás seguro de que deseas eliminar tu cuenta? Los datos asociados a ella no se podrán recuperar.</string>
+    <string name="delete">Eliminar</string>
+    <string name="delete_password_needed">Para eliminar la cuenta es necesario introducir la contraseña.</string>
+    <string name="error_password">Contraseña incorrecta</string>
+    <string name="account_delete_successfully">Cuenta eliminada correctamente</string>
 </resources>

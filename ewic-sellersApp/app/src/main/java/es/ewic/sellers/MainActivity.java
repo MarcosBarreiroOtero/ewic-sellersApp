@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -139,5 +141,13 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     @Override
     public void onUpdateSellerAccount(Seller newSeller) {
         this.seller = newSeller;
+    }
+
+    @Override
+    public void onDeleteSellerAccount() {
+        this.seller = null;
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 }

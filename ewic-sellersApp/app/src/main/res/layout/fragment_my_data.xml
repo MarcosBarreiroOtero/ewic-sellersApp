@@ -24,7 +24,8 @@
             android:id="@+id/my_data_username_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/username" />
+            android:hint="@string/username"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -44,7 +45,8 @@
             android:id="@+id/my_data_firstName_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/firstName" />
+            android:hint="@string/firstName"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -64,7 +66,8 @@
             android:id="@+id/my_data_lastName_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/lastname" />
+            android:hint="@string/lastname"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -84,7 +87,8 @@
             android:id="@+id/my_data_email_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/email" />
+            android:hint="@string/email"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -112,6 +116,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:text="@string/delete_account"
+        app:backgroundTint="@android:color/holo_red_light"
         app:icon="@drawable/ic_baseline_delete_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

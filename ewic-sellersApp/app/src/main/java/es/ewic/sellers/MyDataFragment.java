@@ -1,7 +1,9 @@
 package es.ewic.sellers;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,10 +11,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -46,6 +52,8 @@ public class MyDataFragment extends Fragment {
 
     public interface OnMyDataListener {
         void onUpdateSellerAccount(Seller newSeller);
+
+        void onDeleteSellerAccount();
     }
 
     public MyDataFragment() {
@@ -96,6 +104,24 @@ public class MyDataFragment extends Fragment {
         til_email.setText(sellerData.getEmail());
 
 
+        Button update_button = parent.findViewById(R.id.button_update_data);
+        update_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                updateSellerData(parent);
+            }
+        });
+
+        Button delete_button = parent.findViewById(R.id.button_delete_account);
+        delete_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPreDeleteDialog(parent);
+            }
+        });
+
         return parent;
     }
 
@@ -130,12 +156,12 @@ public class MyDataFragment extends Fragment {
         boolean hasError = false;
 
         if (username.isEmpty()) {
-            tiet_username.setError(getString(R.string.error_empty_field));
+            til_username.setError(getString(R.string.error_empty_field));
             hasError = true;
         }
 
         if (firstName.isEmpty()) {
-            tiet_firstName.setError(getString(R.string.error_empty_field));
+            til_firstName.setError(getString(R.string.error_empty_field));
             hasError = true;
         }
 
@@ -199,7 +225,101 @@ public class MyDataFragment extends Fragment {
                 }
             }
         });
+    }
 
+    private void showPreDeleteDialog(ConstraintLayout parent) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setTitle(R.string.warning).setMessage(R.string.pre_delete_message);
+
+        View password_dialog_view = LayoutInflater.from(getContext()).inflate(R.layout.password_dialog, (ViewGroup) getView(), false);
+        final TextInputEditText pwd = password_dialog_view.findViewById(R.id.delete_dialog_password_input);
+        final TextInputLayout pwd_label = password_dialog_view.findViewById(R.id.delete_dialog_password_label);
+        builder.setView(password_dialog_view);
+
+        builder.setPositiveButton(R.string.delete, (dialog, which) -> //delete seller account
+        {
+
+
+        });
+
+        builder.setNegativeButton(R.string.cancel, (dialog, which) ->
+        {
+            // dialog cancelled;
+        });
+        AlertDialog dialog = builder.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.semaphore_red));
+            }
+        });
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String password = pwd.getText().toString().trim();
+                if (password.isEmpty()) {
+                    Log.e("DELETE", "Contraseña vacia");
+                    pwd_label.setError(getString(R.string.error_empty_field));
+                } else {
+                    deleteSellerAccount(parent, pwd.getText().toString().trim());
+                    dialog.dismiss();
+                }
+            }
+        });
+    }
+
+    private void deleteSellerAccount(ConstraintLayout parent, String password) {
+
+        ProgressDialog pd = FormUtils.showProgressDialog(getContext(), getResources(), R.string.connecting_server, R.string.please_wait);
+
+        String url = BackEndEndpoints.SELLER_BASE + "/" + sellerData.getIdSeller() + "?pwd=" + password;
+
+        RequestUtils.sendStringRequest(getContext(), Request.Method.DELETE, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                pd.dismiss();
+                Snackbar.make(parent, getString(R.string.account_delete_successfully), Snackbar.LENGTH_SHORT)
+                        .show();
+                mCallback.onDeleteSellerAccount();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pd.dismiss();
+                if (error instanceof TimeoutError) {
+                    Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_connect_server), Snackbar.LENGTH_INDEFINITE);
+                    snackbar.setAction(R.string.retry, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            snackbar.dismiss();
+                            pd.show();
+                            deleteSellerAccount(parent, password);
+                        }
+                    });
+                    snackbar.show();
+                } else {
+                    int responseCode = RequestUtils.getErrorCodeRequest(error);
+                    //404 seller not found: should not happen
+                    //401 incorrectpassword
+                    if (responseCode == 401) {
+                        Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_password), Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                    } else {
+                        Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_server), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.setAction(R.string.retry, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                snackbar.dismiss();
+                                pd.show();
+                                deleteSellerAccount(parent, password);
+                            }
+                        });
+                        snackbar.show();
+                    }
+                }
+            }
+        });
 
     }
 }
