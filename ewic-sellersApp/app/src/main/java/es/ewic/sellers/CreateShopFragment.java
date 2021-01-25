@@ -1,5 +1,7 @@
 package es.ewic.sellers;
 
+import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -7,11 +9,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -65,6 +70,8 @@ public class CreateShopFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         ConstraintLayout parent = (ConstraintLayout) inflater.inflate(R.layout.fragment_create_shop, container, false);
+
+        ScrollView sv = parent.findViewById(R.id.create_shop_scrollView);
 
         TextView create_shop_general_text = parent.findViewById(R.id.create_shop_general_text);
         TextInputLayout til_name = parent.findViewById(R.id.create_shop_name_label);
@@ -135,9 +142,9 @@ public class CreateShopFragment extends Fragment {
                 toggleVisibilityTimetable(parent);
 
                 if (showing_timetable) {
-                    TextInputEditText tiet_sunday_end_afternoon = parent.findViewById(R.id.create_shop_saturday_end_morning_input);
-                    tiet_sunday_end_afternoon.requestFocus();
-                    tiet_sunday_end_afternoon.clearFocus();
+                    //TODO mover scroll hasta el final de la scrollView (o hacer focus sobre algún input)
+                    //extView sunday = parent.findViewById(R.id.create_shop_sunday_text);
+                    //sv.scrollTo(0, sunday.getBottom());
                 }
 
             }
@@ -148,56 +155,121 @@ public class CreateShopFragment extends Fragment {
         return parent;
     }
 
+    private void handleTimetableClick(TextInputEditText tiet) {
+        tiet.setInputType(InputType.TYPE_NULL);
+        tiet.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    String value = tiet.getText().toString().trim();
+                    int hour = value.equals("") ? 0 : Integer.parseInt(value.split(":")[0]);
+                    int minute = value.equals("") ? 0 : Integer.parseInt(value.split(":")[1]);
+
+                    TimePickerDialog picker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                            tiet.setText((hourOfDay < 10 ? "0" : "") + hourOfDay + ":" + (minute < 10 ? "0" : "") + minute);
+                            tiet.clearFocus();
+                        }
+                    }, hour, minute, true);
+                    picker.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            tiet.clearFocus();
+                        }
+                    });
+                    picker.show();
+                }
+                ;
+            }
+        });
+    }
+
     private void initTimetable(ConstraintLayout parent) {
         TextInputEditText tiet_monday_start_morning = parent.findViewById(R.id.create_shop_monday_start_morning_input);
+        handleTimetableClick(tiet_monday_start_morning);
         tiet_monday_start_morning.setText("09:30");
         TextInputEditText tiet_monday_end_morning = parent.findViewById(R.id.create_shop_monday_end_morning_input);
+        handleTimetableClick(tiet_monday_end_morning);
         tiet_monday_end_morning.setText("13:30");
         TextInputEditText tiet_monday_start_afternoon = parent.findViewById(R.id.create_shop_monday_start_afternoon_input);
+        handleTimetableClick(tiet_monday_start_afternoon);
         tiet_monday_start_afternoon.setText("16:00");
         TextInputEditText tiet_monday_end_afternoon = parent.findViewById(R.id.create_shop_monday_end_afternoon_input);
+        handleTimetableClick(tiet_monday_end_afternoon);
         tiet_monday_end_afternoon.setText("20:00");
 
         TextInputEditText tiet_tuesday_start_morning = parent.findViewById(R.id.create_shop_tuesday_start_morning_input);
+        handleTimetableClick(tiet_tuesday_start_morning);
         tiet_tuesday_start_morning.setText("09:30");
         TextInputEditText tiet_tuesday_end_morning = parent.findViewById(R.id.create_shop_tuesday_end_morning_input);
+        handleTimetableClick(tiet_tuesday_end_morning);
         tiet_tuesday_end_morning.setText("13:30");
         TextInputEditText tiet_tuesday_start_afternoon = parent.findViewById(R.id.create_shop_tuesday_start_afternoon_input);
+        handleTimetableClick(tiet_tuesday_start_afternoon);
         tiet_tuesday_start_afternoon.setText("16:00");
         TextInputEditText tiet_tuesday_end_afternoon = parent.findViewById(R.id.create_shop_tuesday_end_afternoon_input);
+        handleTimetableClick(tiet_tuesday_end_afternoon);
         tiet_tuesday_end_afternoon.setText("20:00");
 
         TextInputEditText tiet_wednesday_start_morning = parent.findViewById(R.id.create_shop_wednesday_start_morning_input);
+        handleTimetableClick(tiet_wednesday_start_morning);
         tiet_wednesday_start_morning.setText("09:30");
         TextInputEditText tiet_wednesday_end_morning = parent.findViewById(R.id.create_shop_wednesday_end_morning_input);
+        handleTimetableClick(tiet_wednesday_end_morning);
         tiet_wednesday_end_morning.setText("13:30");
         TextInputEditText tiet_wednesday_start_afternoon = parent.findViewById(R.id.create_shop_wednesday_start_afternoon_input);
+        handleTimetableClick(tiet_wednesday_start_afternoon);
         tiet_wednesday_start_afternoon.setText("16:00");
         TextInputEditText tiet_wednesday_end_afternoon = parent.findViewById(R.id.create_shop_wednesday_end_afternoon_input);
+        handleTimetableClick(tiet_wednesday_end_afternoon);
         tiet_wednesday_end_afternoon.setText("20:00");
 
         TextInputEditText tiet_thursday_start_morning = parent.findViewById(R.id.create_shop_thursday_start_morning_input);
+        handleTimetableClick(tiet_thursday_start_morning);
         tiet_thursday_start_morning.setText("09:30");
         TextInputEditText tiet_thursday_end_morning = parent.findViewById(R.id.create_shop_thursday_end_morning_input);
+        handleTimetableClick(tiet_thursday_end_morning);
         tiet_thursday_end_morning.setText("13:30");
         TextInputEditText tiet_thursday_start_afternoon = parent.findViewById(R.id.create_shop_thursday_start_afternoon_input);
+        handleTimetableClick(tiet_thursday_start_afternoon);
         tiet_thursday_start_afternoon.setText("16:00");
         TextInputEditText tiet_thursday_end_afternoon = parent.findViewById(R.id.create_shop_thursday_end_afternoon_input);
+        handleTimetableClick(tiet_thursday_end_afternoon);
         tiet_thursday_end_afternoon.setText("20:00");
 
         TextInputEditText tiet_friday_start_morning = parent.findViewById(R.id.create_shop_friday_start_morning_input);
+        handleTimetableClick(tiet_friday_start_morning);
         tiet_friday_start_morning.setText("09:30");
         TextInputEditText tiet_friday_end_morning = parent.findViewById(R.id.create_shop_friday_end_morning_input);
+        handleTimetableClick(tiet_friday_end_morning);
         tiet_friday_end_morning.setText("13:30");
         TextInputEditText tiet_friday_start_afternoon = parent.findViewById(R.id.create_shop_friday_start_afternoon_input);
+        handleTimetableClick(tiet_friday_start_afternoon);
         tiet_friday_start_afternoon.setText("16:00");
         TextInputEditText tiet_friday_end_afternoon = parent.findViewById(R.id.create_shop_friday_end_afternoon_input);
+        handleTimetableClick(tiet_friday_end_afternoon);
         tiet_friday_end_afternoon.setText("20:00");
 
         TextInputEditText tiet_saturday_start_morning = parent.findViewById(R.id.create_shop_saturday_start_morning_input);
+        handleTimetableClick(tiet_saturday_start_morning);
         tiet_saturday_start_morning.setText("09:30");
         TextInputEditText tiet_saturday_end_morning = parent.findViewById(R.id.create_shop_saturday_end_morning_input);
+        handleTimetableClick(tiet_saturday_end_morning);
         tiet_saturday_end_morning.setText("13:30");
+        TextInputEditText tiet_saturday_start_afternoon = parent.findViewById(R.id.create_shop_saturday_start_afternoon_input);
+        handleTimetableClick(tiet_saturday_start_afternoon);
+        TextInputEditText tiet_saturday_end_afternoon = parent.findViewById(R.id.create_shop_saturday_end_afternoon_input);
+        handleTimetableClick(tiet_saturday_end_afternoon);
+
+        TextInputEditText tiet_sunday_start_morning = parent.findViewById(R.id.create_shop_sunday_start_morning_input);
+        handleTimetableClick(tiet_sunday_start_morning);
+        TextInputEditText tiet_sunday_end_morning = parent.findViewById(R.id.create_shop_sunday_end_morning_input);
+        handleTimetableClick(tiet_sunday_end_morning);
+        TextInputEditText tiet_sunday_start_afternoon = parent.findViewById(R.id.create_shop_sunday_start_afternoon_input);
+        handleTimetableClick(tiet_sunday_start_afternoon);
+        TextInputEditText tiet_sunday_end_afternoon = parent.findViewById(R.id.create_shop_sunday_end_afternoon_input);
+        handleTimetableClick(tiet_sunday_end_afternoon);
     }
 
     private void toggleVisibilityTimetable(ConstraintLayout parent) {

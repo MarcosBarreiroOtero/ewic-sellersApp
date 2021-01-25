@@ -7,7 +7,7 @@
     tools:context=".CreateShopFragment">
 
     <ScrollView
-        android:id="@+id/scrollView2"
+        android:id="@+id/create_shop_scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="60dp"
@@ -353,7 +353,7 @@
                     android:id="@+id/create_shop_monday_start_morning_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -374,7 +374,7 @@
                     android:id="@+id/create_shop_monday_end_morning_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -395,7 +395,7 @@
                     android:id="@+id/create_shop_monday_start_afternoon_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -416,7 +416,7 @@
                     android:id="@+id/create_shop_monday_end_afternoon_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -452,7 +452,7 @@
                     android:id="@+id/create_shop_tuesday_start_morning_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -473,7 +473,7 @@
                     android:id="@+id/create_shop_tuesday_end_morning_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -494,7 +494,7 @@
                     android:id="@+id/create_shop_tuesday_start_afternoon_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -515,7 +515,7 @@
                     android:id="@+id/create_shop_tuesday_end_afternoon_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -551,7 +551,7 @@
                     android:id="@+id/create_shop_wednesday_start_morning_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -572,7 +572,7 @@
                     android:id="@+id/create_shop_wednesday_end_morning_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -593,7 +593,7 @@
                     android:id="@+id/create_shop_wednesday_start_afternoon_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -614,7 +614,7 @@
                     android:id="@+id/create_shop_wednesday_end_afternoon_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -650,7 +650,7 @@
                     android:id="@+id/create_shop_thursday_start_morning_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -671,7 +671,7 @@
                     android:id="@+id/create_shop_thursday_end_morning_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -692,7 +692,7 @@
                     android:id="@+id/create_shop_thursday_start_afternoon_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -713,7 +713,7 @@
                     android:id="@+id/create_shop_thursday_end_afternoon_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH -->
@@ -751,7 +751,7 @@
                     android:id="@+id/create_shop_friday_start_morning_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -772,7 +772,7 @@
                     android:id="@+id/create_shop_friday_end_morning_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -793,7 +793,7 @@
                     android:id="@+id/create_shop_friday_start_afternoon_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -814,7 +814,7 @@
                     android:id="@+id/create_shop_friday_end_afternoon_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -850,7 +850,7 @@
                     android:id="@+id/create_shop_saturday_start_morning_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -871,7 +871,7 @@
                     android:id="@+id/create_shop_saturday_end_morning_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -892,7 +892,7 @@
                     android:id="@+id/create_shop_saturday_start_afternoon_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -913,7 +913,7 @@
                     android:id="@+id/create_shop_saturday_end_afternoon_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -949,7 +949,7 @@
                     android:id="@+id/create_shop_sunday_start_morning_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -970,7 +970,7 @@
                     android:id="@+id/create_shop_sunday_end_morning_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -991,7 +991,7 @@
                     android:id="@+id/create_shop_sunday_start_afternoon_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -1012,7 +1012,7 @@
                     android:id="@+id/create_shop_sunday_end_afternoon_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
