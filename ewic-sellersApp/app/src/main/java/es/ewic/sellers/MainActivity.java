@@ -115,6 +115,13 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     }
 
     @Override
+    public void onCreateShop() {
+        if (seller != null) {
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), CreateShopFragment.newInstance(null), true);
+        }
+    }
+
+    @Override
     public void shopClosed() {
         if (seller != null) {
             openShop = null;
