@@ -40,4 +40,19 @@
     <string name="error_password_not_equals">Las contraseñas no coinciden</string>
     <string name="email_invalid_format">Formato de email no válido</string>
     <string name="error_username_duplicate">Ya existe el nombre de usuario. Escoja otro por favor.</string>
+    <string name="toolbar_menu_my_data">Mis datos</string>
+    <string name="update_my_data">Actualizar mis datos</string>
+    <string name="delete_account">Borrar cuenta</string>
+    <string name="updating_data">Actualizando datos</string>
+    <string name="update_data_successfully">Los datos se han actualizado correctamente</string>
+    <string name="pre_delete_message">¿Estás seguro de que deseas eliminar tu cuenta? Los datos asociados a ella no se podrán recuperar.</string>
+    <string name="delete">Eliminar</string>
+    <string name="delete_password_needed">Para eliminar la cuenta es necesario introducir la contraseña.</string>
+    <string name="error_password">Contraseña incorrecta</string>
+    <string name="account_delete_successfully">Cuenta eliminada correctamente</string>
+    <string name="actual_password">Contraseña actual</string>
+    <string name="new_password">Contaseña nueva</string>
+    <string name="save">Guardar</string>
+    <string name="change_password">Cambiar contraseña</string>
+    <string name="password_updated_successfully">Contraseña actualizada correctamente</string>
 </resources>

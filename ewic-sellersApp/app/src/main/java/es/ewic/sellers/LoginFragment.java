@@ -273,48 +273,48 @@ public class LoginFragment extends Fragment {
         register_lastName_label.setError(null);
         register_mail_label.setError(null);
 
-        boolean hashError = false;
+        boolean hasError = false;
 
         //Username
         if (username == null || username.isEmpty()) {
             register_username_label.setError(getString(R.string.error_empty_field));
-            hashError = true;
+            hasError = true;
         }
 
         //Password
         if (password == null || password.isEmpty()) {
             register_password_label.setError(getString(R.string.error_empty_field));
-            hashError = true;
+            hasError = true;
         }
 
         if (repassword == null || repassword.isEmpty()) {
-            register_repassword_input.setError(getString(R.string.error_empty_field));
-            hashError = true;
+            register_repassword_label.setError(getString(R.string.error_empty_field));
+            hasError = true;
         }
 
         if (!password.equals(repassword)) {
             register_password_label.setError(getString(R.string.error_password_not_equals));
-            register_repassword_input.setError(getString(R.string.error_password_not_equals));
-            hashError = true;
+            register_repassword_label.setError(getString(R.string.error_password_not_equals));
+            hasError = true;
         }
 
         //FirstName
         if (firstName == null || firstName.isEmpty()) {
             register_firstName_label.setError(getString(R.string.error_empty_field));
-            hashError = true;
+            hasError = true;
         }
         //LastName
 
         //Mail
         if (mail == null || mail.isEmpty()) {
             register_mail_label.setError(getString(R.string.error_empty_field));
-            hashError = true;
+            hasError = true;
         } else if (!FormUtils.isValidEmail(mail)) {
             register_mail_label.setError(getString(R.string.email_invalid_format));
-            hashError = true;
+            hasError = true;
         }
 
-        if (hashError) {
+        if (hasError) {
             return;
         }
 

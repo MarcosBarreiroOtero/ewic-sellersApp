@@ -8,6 +8,7 @@ public class BackEndEndpoints {
     //Seller
     public static String SELLER_BASE = BASE_ENDPOINT + "/seller";
     public static String SELLER_LOGIN = SELLER_BASE + "/login";
+    public static String SELLER_CHANGE_PASSWORD = SELLER_BASE + "/password";
 
     //SHOP
     public static String SHOP_BASE = BASE_ENDPOINT + "/shop";

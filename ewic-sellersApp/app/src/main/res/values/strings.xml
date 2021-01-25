@@ -40,4 +40,19 @@
     <string name="error_password_not_equals">Passwords do not match</string>
     <string name="email_invalid_format">Invalid email format</string>
     <string name="error_username_duplicate">Username already exists. Choose another please.</string>
+    <string name="toolbar_menu_my_data">My Data</string>
+    <string name="update_my_data">Update my data</string>
+    <string name="delete_account">Delete account</string>
+    <string name="updating_data">Updateing data</string>
+    <string name="update_data_successfully">The data has been updated successfully</string>
+    <string name="pre_delete_message">Are you sure you want to delete your account? The data associated with it cannot be recovered.</string>
+    <string name="delete">Delete</string>
+    <string name="delete_password_needed">To delete the account it is necessary to enter the password.</string>
+    <string name="error_password">Password incorrect</string>
+    <string name="account_delete_successfully">Account delete successfully</string>
+    <string name="actual_password">Actual password</string>
+    <string name="new_password">New password</string>
+    <string name="save">Save</string>
+    <string name="change_password">Change password</string>
+    <string name="password_updated_successfully">Password updated successfully</string>
 </resources>
