@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -32,13 +33,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.BackEndEndpoints;
+import es.ewic.sellers.utils.FormUtils;
 import es.ewic.sellers.utils.RequestUtils;
+import es.ewic.sellers.utils.TimetableUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,6 +64,76 @@ public class CreateShopFragment extends Fragment {
     private boolean showing_timetable = false;
 
     private JSONArray shop_types;
+
+    //Timetable values
+    TextInputLayout til_monday_morning_opening;
+    TextInputEditText tiet_monday_morning_opening;
+    TextInputLayout til_monday_morning_closing;
+    TextInputEditText tiet_monday_morning_closing;
+    TextInputLayout til_monday_afternoon_opening;
+    TextInputEditText tiet_monday_afternoon_opening;
+    TextInputLayout til_monday_afternoon_closing;
+    TextInputEditText tiet_monday_afternoon_closing;
+
+    //Tuesday
+    TextInputLayout til_tuesday_morning_opening;
+    TextInputEditText tiet_tuesday_morning_opening;
+    TextInputLayout til_tuesday_morning_closing;
+    TextInputEditText tiet_tuesday_morning_closing;
+    TextInputLayout til_tuesday_afternoon_opening;
+    TextInputEditText tiet_tuesday_afternoon_opening;
+    TextInputLayout til_tuesday_afternoon_closing;
+    TextInputEditText tiet_tuesday_afternoon_closing;
+
+    //Wednesday
+    TextInputLayout til_wednesday_morning_opening;
+    TextInputEditText tiet_wednesday_morning_opening;
+    TextInputLayout til_wednesday_morning_closing;
+    TextInputEditText tiet_wednesday_morning_closing;
+    TextInputLayout til_wednesday_afternoon_opening;
+    TextInputEditText tiet_wednesday_afternoon_opening;
+    TextInputLayout til_wednesday_afternoon_closing;
+    TextInputEditText tiet_wednesday_afternoon_closing;
+
+    //Thursday
+    TextInputLayout til_thursday_morning_opening;
+    TextInputEditText tiet_thursday_morning_opening;
+    TextInputLayout til_thursday_morning_closing;
+    TextInputEditText tiet_thursday_morning_closing;
+    TextInputLayout til_thursday_afternoon_opening;
+    TextInputEditText tiet_thursday_afternoon_opening;
+    TextInputLayout til_thursday_afternoon_closing;
+    TextInputEditText tiet_thursday_afternoon_closing;
+
+    //Friday
+    TextInputLayout til_friday_morning_opening;
+    TextInputEditText tiet_friday_morning_opening;
+    TextInputLayout til_friday_morning_closing;
+    TextInputEditText tiet_friday_morning_closing;
+    TextInputLayout til_friday_afternoon_opening;
+    TextInputEditText tiet_friday_afternoon_opening;
+    TextInputLayout til_friday_afternoon_closing;
+    TextInputEditText tiet_friday_afternoon_closing;
+
+    //Saturday
+    TextInputLayout til_saturday_morning_opening;
+    TextInputEditText tiet_saturday_morning_opening;
+    TextInputLayout til_saturday_morning_closing;
+    TextInputEditText tiet_saturday_morning_closing;
+    TextInputLayout til_saturday_afternoon_opening;
+    TextInputEditText tiet_saturday_afternoon_opening;
+    TextInputLayout til_saturday_afternoon_closing;
+    TextInputEditText tiet_saturday_afternoon_closing;
+
+    //Sunday
+    TextInputLayout til_sunday_morning_opening;
+    TextInputEditText tiet_sunday_morning_opening;
+    TextInputLayout til_sunday_morning_closing;
+    TextInputEditText tiet_sunday_morning_closing;
+    TextInputLayout til_sunday_afternoon_opening;
+    TextInputEditText tiet_sunday_afternoon_opening;
+    TextInputLayout til_sunday_afternoon_closing;
+    TextInputEditText tiet_sunday_afternoon_closing;
 
     public CreateShopFragment() {
         // Required empty public constructor
@@ -88,9 +165,21 @@ public class CreateShopFragment extends Fragment {
 
         ConstraintLayout parent = (ConstraintLayout) inflater.inflate(R.layout.fragment_create_shop, container, false);
 
+        linkTimetableValues(parent);
+
         getShopTypes(parent);
 
         ScrollView sv = parent.findViewById(R.id.create_shop_scrollView);
+
+        Button create_shop_button = parent.findViewById(R.id.create_shop_button);
+        create_shop_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showing_timetable = true;
+                TimetableUtils.toogleTimetableVisibility(parent, showing_timetable);
+                checkShop(parent);
+            }
+        });
 
         TextView create_shop_general_text = parent.findViewById(R.id.create_shop_general_text);
         TextInputLayout til_name = parent.findViewById(R.id.create_shop_name_label);
@@ -158,12 +247,12 @@ public class CreateShopFragment extends Fragment {
             public void onClick(View v) {
                 showing_timetable = !showing_timetable;
                 create_shop_timetable_text.setCompoundDrawablesWithIntrinsicBounds(0, 0, showing_timetable ? R.drawable.ic_baseline_keyboard_arrow_down_24 : R.drawable.ic_baseline_keyboard_arrow_up_24, 0);
-                toggleVisibilityTimetable(parent);
+                TimetableUtils.toogleTimetableVisibility(parent, showing_timetable);
 
                 if (showing_timetable) {
                     //TODO mover scroll hasta el final de la scrollView (o hacer focus sobre algún input)
                     //extView sunday = parent.findViewById(R.id.create_shop_sunday_text);
-                    //sv.scrollTo(0, sunday.getBottom());
+                    sv.scrollTo(0, parent.findViewById(R.id.constraint_layout_general).getBottom());
                 }
 
             }
@@ -171,7 +260,84 @@ public class CreateShopFragment extends Fragment {
 
         initTimetable(parent);
 
+        TextInputEditText tiet_maxCapacity = parent.findViewById(R.id.create_shop_maxCapacity_input);
+        tiet_maxCapacity.setText("1");
+
         return parent;
+    }
+
+    private void linkTimetableValues(ConstraintLayout parent) {
+
+        //Monday
+        til_monday_morning_opening = parent.findViewById(R.id.create_shop_monday_start_morning_label);
+        tiet_monday_morning_opening = parent.findViewById(R.id.create_shop_monday_start_morning_input);
+        til_monday_morning_closing = parent.findViewById(R.id.create_shop_monday_end_morning_label);
+        tiet_monday_morning_closing = parent.findViewById(R.id.create_shop_monday_end_morning_input);
+        til_monday_afternoon_opening = parent.findViewById(R.id.create_shop_monday_start_afternoon_label);
+        tiet_monday_afternoon_opening = parent.findViewById(R.id.create_shop_monday_start_afternoon_input);
+        til_monday_afternoon_closing = parent.findViewById(R.id.create_shop_monday_end_afternoon_label);
+        tiet_monday_afternoon_closing = parent.findViewById(R.id.create_shop_monday_end_afternoon_input);
+
+        //Tuesday
+        til_tuesday_morning_opening = parent.findViewById(R.id.create_shop_tuesday_start_morning_label);
+        tiet_tuesday_morning_opening = parent.findViewById(R.id.create_shop_tuesday_start_morning_input);
+        til_tuesday_morning_closing = parent.findViewById(R.id.create_shop_tuesday_end_morning_label);
+        tiet_tuesday_morning_closing = parent.findViewById(R.id.create_shop_tuesday_end_morning_input);
+        til_tuesday_afternoon_opening = parent.findViewById(R.id.create_shop_tuesday_start_afternoon_label);
+        tiet_tuesday_afternoon_opening = parent.findViewById(R.id.create_shop_tuesday_start_afternoon_input);
+        til_tuesday_afternoon_closing = parent.findViewById(R.id.create_shop_tuesday_end_afternoon_label);
+        tiet_tuesday_afternoon_closing = parent.findViewById(R.id.create_shop_tuesday_end_afternoon_input);
+
+        //Wednesday
+        til_wednesday_morning_opening = parent.findViewById(R.id.create_shop_wednesday_start_morning_label);
+        tiet_wednesday_morning_opening = parent.findViewById(R.id.create_shop_wednesday_start_morning_input);
+        til_wednesday_morning_closing = parent.findViewById(R.id.create_shop_wednesday_end_morning_label);
+        tiet_wednesday_morning_closing = parent.findViewById(R.id.create_shop_wednesday_end_morning_input);
+        til_wednesday_afternoon_opening = parent.findViewById(R.id.create_shop_wednesday_start_afternoon_label);
+        tiet_wednesday_afternoon_opening = parent.findViewById(R.id.create_shop_wednesday_start_afternoon_input);
+        til_wednesday_afternoon_closing = parent.findViewById(R.id.create_shop_wednesday_end_afternoon_label);
+        tiet_wednesday_afternoon_closing = parent.findViewById(R.id.create_shop_wednesday_end_afternoon_input);
+
+        //Thursday
+        til_thursday_morning_opening = parent.findViewById(R.id.create_shop_thursday_start_morning_label);
+        tiet_thursday_morning_opening = parent.findViewById(R.id.create_shop_thursday_start_morning_input);
+        til_thursday_morning_closing = parent.findViewById(R.id.create_shop_thursday_end_morning_label);
+        tiet_thursday_morning_closing = parent.findViewById(R.id.create_shop_thursday_end_morning_input);
+        til_thursday_afternoon_opening = parent.findViewById(R.id.create_shop_thursday_start_afternoon_label);
+        tiet_thursday_afternoon_opening = parent.findViewById(R.id.create_shop_thursday_start_afternoon_input);
+        til_thursday_afternoon_closing = parent.findViewById(R.id.create_shop_thursday_end_afternoon_label);
+        tiet_thursday_afternoon_closing = parent.findViewById(R.id.create_shop_thursday_end_afternoon_input);
+
+        //Friday
+        til_friday_morning_opening = parent.findViewById(R.id.create_shop_friday_start_morning_label);
+        tiet_friday_morning_opening = parent.findViewById(R.id.create_shop_friday_start_morning_input);
+        til_friday_morning_closing = parent.findViewById(R.id.create_shop_friday_end_morning_label);
+        tiet_friday_morning_closing = parent.findViewById(R.id.create_shop_friday_end_morning_input);
+        til_friday_afternoon_opening = parent.findViewById(R.id.create_shop_friday_start_afternoon_label);
+        tiet_friday_afternoon_opening = parent.findViewById(R.id.create_shop_friday_start_afternoon_input);
+        til_friday_afternoon_closing = parent.findViewById(R.id.create_shop_friday_end_afternoon_label);
+        tiet_friday_afternoon_closing = parent.findViewById(R.id.create_shop_friday_end_afternoon_input);
+
+        //Saturday
+        til_saturday_morning_opening = parent.findViewById(R.id.create_shop_saturday_start_morning_label);
+        tiet_saturday_morning_opening = parent.findViewById(R.id.create_shop_saturday_start_morning_input);
+        til_saturday_morning_closing = parent.findViewById(R.id.create_shop_saturday_end_morning_label);
+        tiet_saturday_morning_closing = parent.findViewById(R.id.create_shop_saturday_end_morning_input);
+        til_saturday_afternoon_opening = parent.findViewById(R.id.create_shop_saturday_start_afternoon_label);
+        tiet_saturday_afternoon_opening = parent.findViewById(R.id.create_shop_saturday_start_afternoon_input);
+        til_saturday_afternoon_closing = parent.findViewById(R.id.create_shop_saturday_end_afternoon_label);
+        tiet_saturday_afternoon_closing = parent.findViewById(R.id.create_shop_saturday_end_afternoon_input);
+
+        //Sunday
+        til_sunday_morning_opening = parent.findViewById(R.id.create_shop_sunday_start_morning_label);
+        tiet_sunday_morning_opening = parent.findViewById(R.id.create_shop_sunday_start_morning_input);
+        til_sunday_morning_closing = parent.findViewById(R.id.create_shop_sunday_end_morning_label);
+        tiet_sunday_morning_closing = parent.findViewById(R.id.create_shop_sunday_end_morning_input);
+        til_sunday_afternoon_opening = parent.findViewById(R.id.create_shop_sunday_start_afternoon_label);
+        tiet_sunday_afternoon_opening = parent.findViewById(R.id.create_shop_sunday_start_afternoon_input);
+        til_sunday_afternoon_closing = parent.findViewById(R.id.create_shop_sunday_end_afternoon_label);
+        tiet_sunday_afternoon_closing = parent.findViewById(R.id.create_shop_sunday_end_afternoon_input);
+
     }
 
     private void getShopTypes(ConstraintLayout parent) {
@@ -208,173 +374,216 @@ public class CreateShopFragment extends Fragment {
         });
     }
 
-    private void handleTimetableClick(TextInputEditText tiet) {
-        tiet.setInputType(InputType.TYPE_NULL);
-        tiet.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    String value = tiet.getText().toString().trim();
-                    int hour = value.equals("") ? 0 : Integer.parseInt(value.split(":")[0]);
-                    int minute = value.equals("") ? 0 : Integer.parseInt(value.split(":")[1]);
-
-                    TimePickerDialog picker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-                        @Override
-                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                            tiet.setText((hourOfDay < 10 ? "0" : "") + hourOfDay + ":" + (minute < 10 ? "0" : "") + minute);
-                            tiet.clearFocus();
-                        }
-                    }, hour, minute, true);
-                    picker.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            tiet.clearFocus();
-                        }
-                    });
-                    picker.show();
-                }
-                ;
-            }
-        });
-    }
-
     private void initTimetable(ConstraintLayout parent) {
-        TextInputEditText tiet_monday_start_morning = parent.findViewById(R.id.create_shop_monday_start_morning_input);
-        handleTimetableClick(tiet_monday_start_morning);
-        tiet_monday_start_morning.setText("09:30");
-        TextInputEditText tiet_monday_end_morning = parent.findViewById(R.id.create_shop_monday_end_morning_input);
-        handleTimetableClick(tiet_monday_end_morning);
-        tiet_monday_end_morning.setText("13:30");
-        TextInputEditText tiet_monday_start_afternoon = parent.findViewById(R.id.create_shop_monday_start_afternoon_input);
-        handleTimetableClick(tiet_monday_start_afternoon);
-        tiet_monday_start_afternoon.setText("16:00");
-        TextInputEditText tiet_monday_end_afternoon = parent.findViewById(R.id.create_shop_monday_end_afternoon_input);
-        handleTimetableClick(tiet_monday_end_afternoon);
-        tiet_monday_end_afternoon.setText("20:00");
 
-        TextInputEditText tiet_tuesday_start_morning = parent.findViewById(R.id.create_shop_tuesday_start_morning_input);
-        handleTimetableClick(tiet_tuesday_start_morning);
-        tiet_tuesday_start_morning.setText("09:30");
-        TextInputEditText tiet_tuesday_end_morning = parent.findViewById(R.id.create_shop_tuesday_end_morning_input);
-        handleTimetableClick(tiet_tuesday_end_morning);
-        tiet_tuesday_end_morning.setText("13:30");
-        TextInputEditText tiet_tuesday_start_afternoon = parent.findViewById(R.id.create_shop_tuesday_start_afternoon_input);
-        handleTimetableClick(tiet_tuesday_start_afternoon);
-        tiet_tuesday_start_afternoon.setText("16:00");
-        TextInputEditText tiet_tuesday_end_afternoon = parent.findViewById(R.id.create_shop_tuesday_end_afternoon_input);
-        handleTimetableClick(tiet_tuesday_end_afternoon);
-        tiet_tuesday_end_afternoon.setText("20:00");
+        //Monday
+        TimetableUtils.initTimetableDay(getActivity(), true, true,
+                til_monday_morning_opening, tiet_monday_morning_opening,
+                til_monday_morning_closing, tiet_monday_morning_closing,
+                til_monday_afternoon_opening, tiet_monday_afternoon_opening,
+                til_monday_afternoon_closing, tiet_monday_afternoon_closing);
 
-        TextInputEditText tiet_wednesday_start_morning = parent.findViewById(R.id.create_shop_wednesday_start_morning_input);
-        handleTimetableClick(tiet_wednesday_start_morning);
-        tiet_wednesday_start_morning.setText("09:30");
-        TextInputEditText tiet_wednesday_end_morning = parent.findViewById(R.id.create_shop_wednesday_end_morning_input);
-        handleTimetableClick(tiet_wednesday_end_morning);
-        tiet_wednesday_end_morning.setText("13:30");
-        TextInputEditText tiet_wednesday_start_afternoon = parent.findViewById(R.id.create_shop_wednesday_start_afternoon_input);
-        handleTimetableClick(tiet_wednesday_start_afternoon);
-        tiet_wednesday_start_afternoon.setText("16:00");
-        TextInputEditText tiet_wednesday_end_afternoon = parent.findViewById(R.id.create_shop_wednesday_end_afternoon_input);
-        handleTimetableClick(tiet_wednesday_end_afternoon);
-        tiet_wednesday_end_afternoon.setText("20:00");
+        //Tuesday
+        TimetableUtils.initTimetableDay(getActivity(), true, true,
+                til_tuesday_morning_opening, tiet_tuesday_morning_opening,
+                til_tuesday_morning_closing, tiet_tuesday_morning_closing,
+                til_tuesday_afternoon_opening, tiet_tuesday_afternoon_opening,
+                til_tuesday_afternoon_closing, tiet_tuesday_afternoon_closing);
 
-        TextInputEditText tiet_thursday_start_morning = parent.findViewById(R.id.create_shop_thursday_start_morning_input);
-        handleTimetableClick(tiet_thursday_start_morning);
-        tiet_thursday_start_morning.setText("09:30");
-        TextInputEditText tiet_thursday_end_morning = parent.findViewById(R.id.create_shop_thursday_end_morning_input);
-        handleTimetableClick(tiet_thursday_end_morning);
-        tiet_thursday_end_morning.setText("13:30");
-        TextInputEditText tiet_thursday_start_afternoon = parent.findViewById(R.id.create_shop_thursday_start_afternoon_input);
-        handleTimetableClick(tiet_thursday_start_afternoon);
-        tiet_thursday_start_afternoon.setText("16:00");
-        TextInputEditText tiet_thursday_end_afternoon = parent.findViewById(R.id.create_shop_thursday_end_afternoon_input);
-        handleTimetableClick(tiet_thursday_end_afternoon);
-        tiet_thursday_end_afternoon.setText("20:00");
+        //Wednesday
+        TimetableUtils.initTimetableDay(getActivity(), true, true,
+                til_wednesday_morning_opening, tiet_wednesday_morning_opening,
+                til_wednesday_morning_closing, tiet_wednesday_morning_closing,
+                til_wednesday_afternoon_opening, tiet_wednesday_afternoon_opening,
+                til_wednesday_afternoon_closing, tiet_wednesday_afternoon_closing);
 
-        TextInputEditText tiet_friday_start_morning = parent.findViewById(R.id.create_shop_friday_start_morning_input);
-        handleTimetableClick(tiet_friday_start_morning);
-        tiet_friday_start_morning.setText("09:30");
-        TextInputEditText tiet_friday_end_morning = parent.findViewById(R.id.create_shop_friday_end_morning_input);
-        handleTimetableClick(tiet_friday_end_morning);
-        tiet_friday_end_morning.setText("13:30");
-        TextInputEditText tiet_friday_start_afternoon = parent.findViewById(R.id.create_shop_friday_start_afternoon_input);
-        handleTimetableClick(tiet_friday_start_afternoon);
-        tiet_friday_start_afternoon.setText("16:00");
-        TextInputEditText tiet_friday_end_afternoon = parent.findViewById(R.id.create_shop_friday_end_afternoon_input);
-        handleTimetableClick(tiet_friday_end_afternoon);
-        tiet_friday_end_afternoon.setText("20:00");
+        //Thursday
+        TimetableUtils.initTimetableDay(getActivity(), true, true,
+                til_thursday_morning_opening, tiet_thursday_morning_opening,
+                til_thursday_morning_closing, tiet_thursday_morning_closing,
+                til_thursday_afternoon_opening, tiet_thursday_afternoon_opening,
+                til_thursday_afternoon_closing, tiet_thursday_afternoon_closing);
 
-        TextInputEditText tiet_saturday_start_morning = parent.findViewById(R.id.create_shop_saturday_start_morning_input);
-        handleTimetableClick(tiet_saturday_start_morning);
-        tiet_saturday_start_morning.setText("09:30");
-        TextInputEditText tiet_saturday_end_morning = parent.findViewById(R.id.create_shop_saturday_end_morning_input);
-        handleTimetableClick(tiet_saturday_end_morning);
-        tiet_saturday_end_morning.setText("13:30");
-        TextInputEditText tiet_saturday_start_afternoon = parent.findViewById(R.id.create_shop_saturday_start_afternoon_input);
-        handleTimetableClick(tiet_saturday_start_afternoon);
-        TextInputEditText tiet_saturday_end_afternoon = parent.findViewById(R.id.create_shop_saturday_end_afternoon_input);
-        handleTimetableClick(tiet_saturday_end_afternoon);
+        //Friday
+        TimetableUtils.initTimetableDay(getActivity(), true, true,
+                til_friday_morning_opening, tiet_friday_morning_opening,
+                til_friday_morning_closing, tiet_friday_morning_closing,
+                til_friday_afternoon_opening, tiet_friday_afternoon_opening,
+                til_friday_afternoon_closing, tiet_friday_afternoon_closing);
 
-        TextInputEditText tiet_sunday_start_morning = parent.findViewById(R.id.create_shop_sunday_start_morning_input);
-        handleTimetableClick(tiet_sunday_start_morning);
-        TextInputEditText tiet_sunday_end_morning = parent.findViewById(R.id.create_shop_sunday_end_morning_input);
-        handleTimetableClick(tiet_sunday_end_morning);
-        TextInputEditText tiet_sunday_start_afternoon = parent.findViewById(R.id.create_shop_sunday_start_afternoon_input);
-        handleTimetableClick(tiet_sunday_start_afternoon);
-        TextInputEditText tiet_sunday_end_afternoon = parent.findViewById(R.id.create_shop_sunday_end_afternoon_input);
-        handleTimetableClick(tiet_sunday_end_afternoon);
+        //Saturday
+        TimetableUtils.initTimetableDay(getActivity(), true, false,
+                til_saturday_morning_opening, tiet_saturday_morning_opening,
+                til_saturday_morning_closing, tiet_saturday_morning_closing,
+                til_saturday_afternoon_opening, tiet_saturday_afternoon_opening,
+                til_saturday_afternoon_closing, tiet_saturday_afternoon_closing);
+
+        //Sunday
+        TimetableUtils.initTimetableDay(getActivity(), false, false,
+                til_sunday_morning_opening, tiet_sunday_morning_opening,
+                til_sunday_morning_closing, tiet_sunday_morning_closing,
+                til_sunday_afternoon_opening, tiet_sunday_afternoon_opening,
+                til_sunday_afternoon_closing, tiet_sunday_afternoon_closing);
+
     }
 
-    private void toggleVisibilityTimetable(ConstraintLayout parent) {
-        parent.findViewById(R.id.create_shop_morning_text).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_afternoon_text).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
+    private boolean checkShop(ConstraintLayout parent) {
+        boolean hasError = false;
+        //Shop name
+        TextInputLayout til_name = parent.findViewById(R.id.create_shop_name_label);
+        til_name.setError(null);
+        TextInputEditText tiet_name = parent.findViewById(R.id.create_shop_name_input);
+        String name = tiet_name.getText().toString().trim();
+        if (name.isEmpty()) {
+            til_name.setError(getString(R.string.error_empty_field));
+            til_name.requestFocus();
+            hasError = true;
+        }
 
-        parent.findViewById(R.id.opening_morning).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.closing_morning).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
+        //Shop type
+        TextInputLayout til_type = parent.findViewById(R.id.create_shop_type_label);
+        til_type.setError(null);
+        AutoCompleteTextView actv_type = parent.findViewById(R.id.create_shop_type_input);
+        String type = actv_type.getText().toString().trim();
+        if (type.isEmpty()) {
+            til_type.setError(getString(R.string.error_empty_field));
+            if (!hasError) {
+                til_type.requestFocus();
+            }
+            hasError = true;
+        }
 
-        parent.findViewById(R.id.opening_afternoon).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.closing_afternoon).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
+        //Location
 
-        parent.findViewById(R.id.create_shop_monday_text).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_monday_start_morning_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_monday_end_morning_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_monday_start_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_monday_end_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
+        //Latitude
+        TextInputLayout til_latitude = parent.findViewById(R.id.create_shop_latitude_label);
+        til_latitude.setError(null);
+        TextInputEditText tiet_latitude = parent.findViewById(R.id.create_shop_latitude_input);
+        String latitudeText = tiet_latitude.getText().toString().trim();
+        if (latitudeText.isEmpty()) {
+            til_latitude.setError(getString(R.string.error_empty_field));
+            if (!hasError) {
+                til_latitude.requestFocus();
+            }
+            hasError = true;
 
-        parent.findViewById(R.id.create_shop_tuesday_text).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_tuesday_start_morning_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_tuesday_end_morning_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_tuesday_start_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_tuesday_end_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
+        } else {
+            Float latitude = Float.parseFloat(latitudeText);
+            if (!FormUtils.isValidLatitude(latitude)) {
+                til_latitude.setError(getString(R.string.error_invalid_latitude));
+                if (!hasError) {
+                    til_latitude.requestFocus();
+                }
+                hasError = true;
+            }
+        }
 
-        parent.findViewById(R.id.create_shop_wednesday_text).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_wednesday_start_morning_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_wednesday_end_morning_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_wednesday_start_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_wednesday_end_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
+        //Longitude
+        TextInputLayout til_longitude = parent.findViewById(R.id.create_shop_longitude_label);
+        til_longitude.setError(null);
+        TextInputEditText tiet_longitude = parent.findViewById(R.id.create_shop_longitude_input);
+        String longitudeText = tiet_latitude.getText().toString().trim();
+        if (longitudeText.isEmpty()) {
+            til_longitude.setError(getString(R.string.error_empty_field));
+            if (!hasError) {
+                til_longitude.requestFocus();
+            }
+            hasError = true;
+        } else {
+            Float longitude = Float.parseFloat(longitudeText);
+            if (!FormUtils.isValidLongitude(longitude)) {
+                til_longitude.setError(getString(R.string.error_invalid_longitude));
+                if (!hasError) {
+                    til_longitude.requestFocus();
+                }
+                hasError = true;
+            }
+        }
 
-        parent.findViewById(R.id.create_shop_thursday_text).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_thursday_start_morning_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_thursday_end_morning_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_thursday_start_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_thursday_end_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
+        // Max Capcity
+        TextInputLayout til_maxCapacity = parent.findViewById(R.id.create_shop_maxCapacity_label);
+        til_maxCapacity.setError(null);
+        TextInputEditText tiet_maxCapacity = parent.findViewById(R.id.create_shop_maxCapacity_input);
+        String maxCapacityText = tiet_maxCapacity.getText().toString().trim();
+        if (type.isEmpty()) {
+            til_maxCapacity.setError(getString(R.string.error_empty_field));
+            if (!hasError) {
+                til_maxCapacity.requestFocus();
+            }
+            hasError = true;
+        } else {
+            Integer maxCapacity = Integer.parseInt(maxCapacityText);
+            if (maxCapacity < 1) {
+                til_maxCapacity.setError(getString(R.string.error_max_capacity_below_1));
+                if (!hasError) {
+                    til_maxCapacity.requestFocus();
+                }
+                hasError = true;
+            }
+        }
 
-        parent.findViewById(R.id.create_shop_friday_text).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_friday_start_morning_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_friday_end_morning_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_friday_start_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_friday_end_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
+        //Check timetable monday
+        if (!TimetableUtils.isValidDayTimetable(getResources(),
+                til_monday_morning_opening, tiet_monday_morning_opening,
+                til_monday_morning_closing, tiet_monday_morning_closing,
+                til_monday_afternoon_opening, tiet_monday_afternoon_opening,
+                til_monday_afternoon_closing, tiet_monday_afternoon_closing)) {
+            hasError = true;
+        }
 
-        parent.findViewById(R.id.create_shop_saturday_text).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_saturday_start_morning_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_saturday_end_morning_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_saturday_start_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_saturday_end_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
+        //Check timetable tuesday
+        if (!TimetableUtils.isValidDayTimetable(getResources(),
+                til_tuesday_morning_opening, tiet_tuesday_morning_opening,
+                til_tuesday_morning_closing, tiet_tuesday_morning_closing,
+                til_tuesday_afternoon_opening, tiet_tuesday_afternoon_opening,
+                til_tuesday_afternoon_closing, tiet_tuesday_afternoon_closing)) {
+            hasError = true;
+        }
 
-        parent.findViewById(R.id.create_shop_sunday_text).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_sunday_start_morning_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_sunday_end_morning_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_sunday_start_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
-        parent.findViewById(R.id.create_shop_sunday_end_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
+        //Check timetable wednesday
+        if (!TimetableUtils.isValidDayTimetable(getResources(),
+                til_wednesday_morning_opening, tiet_wednesday_morning_opening,
+                til_wednesday_morning_closing, tiet_wednesday_morning_closing,
+                til_wednesday_afternoon_opening, tiet_wednesday_afternoon_opening,
+                til_wednesday_afternoon_closing, tiet_wednesday_afternoon_closing)) {
+            hasError = true;
+        }
+
+        //Check timetable thursday
+        if (!TimetableUtils.isValidDayTimetable(getResources(),
+                til_thursday_morning_opening, tiet_thursday_morning_opening,
+                til_thursday_morning_closing, tiet_thursday_morning_closing,
+                til_thursday_afternoon_opening, tiet_thursday_afternoon_opening,
+                til_thursday_afternoon_closing, tiet_thursday_afternoon_closing)) {
+            hasError = true;
+        }
+
+        //Check timetable friday
+        if (!TimetableUtils.isValidDayTimetable(getResources(),
+                til_friday_morning_opening, tiet_friday_morning_opening,
+                til_friday_morning_closing, tiet_friday_morning_closing,
+                til_friday_afternoon_opening, tiet_friday_afternoon_opening,
+                til_friday_afternoon_closing, tiet_friday_afternoon_closing)) {
+            hasError = true;
+        }
+
+        //Check timetable saturday
+        if (!TimetableUtils.isValidDayTimetable(getResources(),
+                til_saturday_morning_opening, tiet_saturday_morning_opening,
+                til_saturday_morning_closing, tiet_saturday_morning_closing,
+                til_saturday_afternoon_opening, tiet_saturday_afternoon_opening,
+                til_saturday_afternoon_closing, tiet_saturday_afternoon_closing)) {
+            hasError = true;
+        }
+
+        //Check timetable sunday
+        if (!TimetableUtils.isValidDayTimetable(getResources(),
+                til_sunday_morning_opening, tiet_sunday_morning_opening,
+                til_sunday_morning_closing, tiet_sunday_morning_closing,
+                til_sunday_afternoon_opening, tiet_sunday_afternoon_opening,
+                til_sunday_afternoon_closing, tiet_sunday_afternoon_closing)) {
+            hasError = true;
+        }
+        return hasError;
     }
 }

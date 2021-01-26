@@ -84,4 +84,9 @@
     <string name="sundayShort">D</string>
     <string name="morning">Mañana</string>
     <string name="afternoon">Tarde</string>
+    <string name="error_invalid_latitude">Valor de latitud no válido. Valores válidos entre -90 y 90.</string>
+    <string name="error_invalid_longitude">Valor de longitud no válido. Valores válidos entre -180 y 180.</string>
+    <string name="error_max_capacity_below_1">El aforo máximo no puede ser menor que 1.</string>
+    <string name="error_timetable">Horario no válido</string>
+    <string name="error_time_format">Formato de hora no válido. Utilice HH: mm</string>
 </resources>

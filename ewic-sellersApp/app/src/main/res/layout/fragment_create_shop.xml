@@ -155,6 +155,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="11"
                 app:layout_constraintEnd_toStartOf="@id/create_shop_longitude_label"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/create_shop_coordinates">
@@ -164,7 +166,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/latitude"
-                    android:inputType="numberSigned|numberDecimal" />
+                    android:inputType="numberSigned|numberDecimal"
+                    android:maxLength="11" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -176,6 +179,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginRight="32dp"
+                app:counterMaxLength="11"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/create_shop_latitude_label"
                 app:layout_constraintTop_toBottomOf="@+id/create_shop_coordinates">
@@ -184,7 +188,9 @@
                     android:id="@+id/create_shop_longitude_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/longitude" />
+                    android:hint="@string/longitude"
+                    android:inputType="numberSigned|number|numberDecimal"
+                    android:maxLength="11" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -1005,6 +1011,7 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginRight="32dp"
                 android:visibility="gone"
+                app:errorIconDrawable="@null"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/create_shop_sunday_start_afternoon_label"
                 app:layout_constraintTop_toBottomOf="@id/create_shop_saturday_end_afternoon_label">
@@ -1015,6 +1022,20 @@
                     android:layout_height="wrap_content"
                     android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/create_shop_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:text="@string/create_shop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_sunday_end_afternoon_label" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

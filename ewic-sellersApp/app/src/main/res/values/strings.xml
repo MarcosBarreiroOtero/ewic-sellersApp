@@ -64,7 +64,7 @@
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="capacity_control">Capacity control</string>
-    <string name="max_capacity">Max capacity</string>
+    <string name="max_capacity">Maximum capacity</string>
     <string name="opening_hours">Opening hours</string>
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>
@@ -84,4 +84,9 @@
     <string name="sundayShort">Su</string>
     <string name="morning">Morning</string>
     <string name="afternoon">Afternoon</string>
+    <string name="error_invalid_latitude">Invalid latitude value. Valid values between -90 and 90.</string>
+    <string name="error_invalid_longitude">Invalid longitude_value. Valid values between -180 and 180</string>
+    <string name="error_max_capacity_below_1">The maximum capacity cannot be less than 1.</string>
+    <string name="error_timetable">Timetable not valid</string>
+    <string name="error_time_format">Invalid time format. Use HH:mm</string>
 </resources>
