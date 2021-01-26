@@ -81,6 +81,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/create_shop_name_label">
 
                 <AutoCompleteTextView
+                    android:id="@+id/create_shop_type_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/shop_type"

@@ -13,6 +13,7 @@ public class BackEndEndpoints {
     //SHOP
     public static String SHOP_BASE = BASE_ENDPOINT + "/shop";
     public static String SELLER_SHOPS = SHOP_BASE + "/seller";
+    public static String SHOP_TYPES = SHOP_BASE + "/types";
 
     public static String SHOP_OPEN(int idShop) {
         return SHOP_BASE + "/" + idShop + "/open";

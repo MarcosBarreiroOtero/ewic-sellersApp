@@ -43,15 +43,13 @@ public class ModelConverter {
     //SHOP
     public static JSONObject shopToJsonObject(Shop shop) {
         try {
-            return new JSONObject().put("idShop", shop.getIdShop())
+            return new JSONObject()
                     .put("name", shop.getName())
                     .put("latitude", shop.getLatitude())
                     .put("longitude", shop.getLongitude())
                     .put("location", shop.getLocation())
                     .put("maxCapacity", shop.getMaxCapacity())
-                    .put("actualCapacity", shop.getActualCapacity())
                     .put("type", shop.getType())
-                    .put("allowEntries", shop.isAllowEntries())
                     .put("idSeller", shop.getIdSeller())
                     .put("timetable", shop.getTimetable());
         } catch (JSONException e) {

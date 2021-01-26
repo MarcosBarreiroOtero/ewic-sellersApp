@@ -10,20 +10,35 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import es.ewic.sellers.model.Shop;
+import es.ewic.sellers.utils.BackEndEndpoints;
+import es.ewic.sellers.utils.RequestUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,6 +55,8 @@ public class CreateShopFragment extends Fragment {
     private boolean showing_location = true;
     private boolean showing_capacity = true;
     private boolean showing_timetable = false;
+
+    private JSONArray shop_types;
 
     public CreateShopFragment() {
         // Required empty public constructor
@@ -70,6 +87,8 @@ public class CreateShopFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         ConstraintLayout parent = (ConstraintLayout) inflater.inflate(R.layout.fragment_create_shop, container, false);
+
+        getShopTypes(parent);
 
         ScrollView sv = parent.findViewById(R.id.create_shop_scrollView);
 
@@ -153,6 +172,40 @@ public class CreateShopFragment extends Fragment {
         initTimetable(parent);
 
         return parent;
+    }
+
+    private void getShopTypes(ConstraintLayout parent) {
+        String url = BackEndEndpoints.SHOP_TYPES;
+
+        RequestUtils.sendJsonArrayRequest(getContext(), Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                List<String> shop_translations = new ArrayList<>();
+                String selected = "";
+                shop_types = new JSONArray();
+                for (int i = 0; i < response.length(); i++) {
+                    String type = response.optString(i);
+                    String type_translation = getString(getResources().getIdentifier(type, "string", getActivity().getPackageName()));
+                    shop_translations.add(type_translation);
+                    try {
+                        shop_types.put(new JSONObject().put("type", type).put("translation", type_translation));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Collections.sort(shop_translations);
+                String[] types = shop_translations.toArray(new String[shop_translations.size()]);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+                        android.R.layout.simple_dropdown_item_1line, types);
+                AutoCompleteTextView actv_type = parent.findViewById(R.id.create_shop_type_input);
+                actv_type.setAdapter(adapter);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("HTTP", "error");
+            }
+        });
     }
 
     private void handleTimetableClick(TextInputEditText tiet) {
