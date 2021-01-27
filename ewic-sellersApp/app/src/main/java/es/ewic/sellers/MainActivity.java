@@ -20,7 +20,9 @@ import es.ewic.sellers.utils.FragmentUtils;
 public class MainActivity extends AppCompatActivity implements LoginFragment.OnLoginListener,
         MyShopsFragment.OnMyShopsListener,
         ShopCapacityFragment.OnShopCapacityListener,
-        MyDataFragment.OnMyDataListener, CreateShopFragment.OnCreateShopListener {
+        MyDataFragment.OnMyDataListener,
+        CreateShopFragment.OnCreateShopListener,
+        ShopInformationFragment.OnShopInformationListener {
 
     private Seller seller;
     private Shop openShop;
@@ -109,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     @Override
     public void onShopClick(Shop shop) {
         if (seller != null) {
-            openShop = shop;
-            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopCapacityFragment.newInstance(openShop), true);
+//            openShop = shop;
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopInformationFragment.newInstance(shop), true);
         }
     }
 
@@ -165,6 +167,25 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
                 getSupportFragmentManager().popBackStack();
             } else {
                 FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), MyShopsFragment.newInstance(seller), false);
+            }
+        }
+    }
+
+    @Override
+    public void shopUpdated(Shop shopUpdated) {
+        if (seller != null) {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            }
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopInformationFragment.newInstance(shopUpdated), false);
+        }
+    }
+
+    @Override
+    public void clickShopButton(Shop shop) {
+        if (seller != null) {
+            if (seller != null) {
+                FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), CreateShopFragment.newInstance(seller, shop), true);
             }
         }
     }

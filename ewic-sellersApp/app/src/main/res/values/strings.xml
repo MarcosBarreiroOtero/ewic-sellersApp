@@ -90,4 +90,9 @@
     <string name="error_timetable">Timetable not valid</string>
     <string name="error_time_format">Invalid time format. Use HH:mm</string>
     <string name="error_shop_duplicate">A store with that name, type and location already exists.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="shop">Shop</string>
+    <string name="configuration">Configuration</string>
+    <string name="bookings">Bookings</string>
+    <string name="update_shop">Update shop</string>
 </resources>
