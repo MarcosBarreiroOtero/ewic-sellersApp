@@ -14,6 +14,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -128,14 +131,14 @@ public class TimetableUtils {
         if (til_afternoon_closing.getChildCount() == 2) {
             til_afternoon_closing.getChildAt(1).setVisibility(View.GONE);
         }
-        return hasError;
+        return !hasError;
     }
 
     public static void initTimetableDay(Activity activity, boolean initMorning, boolean initAfternoon,
-                                 TextInputLayout til_morning_opening, TextInputEditText tiet_morning_opening,
-                                 TextInputLayout til_morning_closing, TextInputEditText tiet_morning_closing,
-                                 TextInputLayout til_afternoon_opening, TextInputEditText tiet_afternoon_opening,
-                                 TextInputLayout til_afternoon_closing, TextInputEditText tiet_afternoon_closing) {
+                                        TextInputLayout til_morning_opening, TextInputEditText tiet_morning_opening,
+                                        TextInputLayout til_morning_closing, TextInputEditText tiet_morning_closing,
+                                        TextInputLayout til_afternoon_opening, TextInputEditText tiet_afternoon_opening,
+                                        TextInputLayout til_afternoon_closing, TextInputEditText tiet_afternoon_closing) {
         handleTimetableClick(activity, til_morning_opening, tiet_morning_opening);
         handleTimetableClick(activity, til_morning_closing, tiet_morning_closing);
         handleTimetableClick(activity, til_afternoon_opening, tiet_afternoon_opening);
@@ -189,7 +192,7 @@ public class TimetableUtils {
         });
     }
 
-    public static void toogleTimetableVisibility(ConstraintLayout parent, boolean showing_timetable){
+    public static void toogleTimetableVisibility(ConstraintLayout parent, boolean showing_timetable) {
         parent.findViewById(R.id.create_shop_morning_text).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
         parent.findViewById(R.id.create_shop_afternoon_text).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
 
@@ -240,5 +243,38 @@ public class TimetableUtils {
         parent.findViewById(R.id.create_shop_sunday_end_morning_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
         parent.findViewById(R.id.create_shop_sunday_start_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
         parent.findViewById(R.id.create_shop_sunday_end_afternoon_label).setVisibility(showing_timetable ? View.VISIBLE : View.GONE);
+    }
+
+    public static JSONObject crateDayTimetableJSON(int weekday, TextInputEditText tiet_morning_opening, TextInputEditText tiet_morning_closing, TextInputEditText tiet_afternoon_opening, TextInputEditText tiet_afternoon_closing) {
+        String morning_opening = tiet_morning_opening.getText().toString().trim();
+        String morning_closing = tiet_morning_closing.getText().toString().trim();
+        String afternoon_opening = tiet_afternoon_opening.getText().toString().trim();
+        String afternoon_closing = tiet_afternoon_closing.getText().toString().trim();
+
+        if (morning_opening.isEmpty() && morning_closing.isEmpty() && afternoon_opening.isEmpty() && afternoon_closing.isEmpty()) {
+            return null;
+        }
+
+        try {
+            JSONObject timetableJSON = new JSONObject();
+
+            timetableJSON.putOpt("weekDay", weekday);
+
+
+            if (!morning_opening.isEmpty() && !morning_closing.isEmpty()) {
+                timetableJSON.putOpt("startMorning", morning_opening);
+                timetableJSON.putOpt("endMorning", morning_closing);
+            }
+
+            if (!afternoon_opening.isEmpty() && !afternoon_closing.isEmpty()) {
+                timetableJSON.putOpt("startAfternoon", afternoon_opening);
+                timetableJSON.putOpt("endAfternoon", afternoon_closing);
+            }
+
+            return timetableJSON;
+        } catch (JSONException e) {
+            return null;
+        }
+
     }
 }

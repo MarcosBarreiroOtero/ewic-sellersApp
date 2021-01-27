@@ -30,15 +30,13 @@ public class Shop implements Serializable {
         this.timetable = timetable;
     }
 
-    public Shop(String name, double latitude, double longitude, String location, int maxCapacity, int actualCapacity, String type, boolean allowEntries, int idSeller, String timetable) {
+    public Shop(String name, double latitude, double longitude, String location, int maxCapacity, String type, int idSeller, String timetable) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
         this.location = location;
         this.maxCapacity = maxCapacity;
-        this.actualCapacity = actualCapacity;
         this.type = type;
-        this.allowEntries = allowEntries;
         this.idSeller = idSeller;
         this.timetable = timetable;
     }

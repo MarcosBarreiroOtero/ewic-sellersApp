@@ -1,10 +1,13 @@
 package es.ewic.sellers;
 
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -22,9 +25,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -41,9 +47,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import es.ewic.sellers.model.Seller;
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.BackEndEndpoints;
 import es.ewic.sellers.utils.FormUtils;
+import es.ewic.sellers.utils.ModelConverter;
 import es.ewic.sellers.utils.RequestUtils;
 import es.ewic.sellers.utils.TimetableUtils;
 
@@ -55,8 +63,12 @@ import es.ewic.sellers.utils.TimetableUtils;
 public class CreateShopFragment extends Fragment {
 
     private static final String ARG_SHOP = "shop";
+    private static final String ARG_SELLER = "seller";
+
+    OnCreateShopListener mCallback;
 
     private Shop shop;
+    private Seller seller;
 
     private boolean showing_general = true;
     private boolean showing_location = true;
@@ -135,13 +147,20 @@ public class CreateShopFragment extends Fragment {
     TextInputLayout til_sunday_afternoon_closing;
     TextInputEditText tiet_sunday_afternoon_closing;
 
+
+    public interface OnCreateShopListener {
+        public void shopCreated();
+
+    }
+
     public CreateShopFragment() {
         // Required empty public constructor
     }
 
-    public static CreateShopFragment newInstance(Shop shopData) {
+    public static CreateShopFragment newInstance(Seller seller, Shop shopData) {
         CreateShopFragment fragment = new CreateShopFragment();
         Bundle args = new Bundle();
+        args.putSerializable(ARG_SELLER, seller);
         args.putSerializable(ARG_SHOP, shopData);
         fragment.setArguments(args);
         return fragment;
@@ -151,8 +170,15 @@ public class CreateShopFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            seller = (Seller) getArguments().getSerializable(ARG_SELLER);
             shop = (Shop) getArguments().getSerializable(ARG_SHOP);
         }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mCallback = (CreateShopFragment.OnCreateShopListener) getActivity();
     }
 
     @Override
@@ -177,7 +203,9 @@ public class CreateShopFragment extends Fragment {
             public void onClick(View v) {
                 showing_timetable = true;
                 TimetableUtils.toogleTimetableVisibility(parent, showing_timetable);
-                checkShop(parent);
+
+                createShop(parent);
+
             }
         });
 
@@ -505,7 +533,7 @@ public class CreateShopFragment extends Fragment {
         til_maxCapacity.setError(null);
         TextInputEditText tiet_maxCapacity = parent.findViewById(R.id.create_shop_maxCapacity_input);
         String maxCapacityText = tiet_maxCapacity.getText().toString().trim();
-        if (type.isEmpty()) {
+        if (maxCapacityText.isEmpty()) {
             til_maxCapacity.setError(getString(R.string.error_empty_field));
             if (!hasError) {
                 til_maxCapacity.requestFocus();
@@ -585,5 +613,145 @@ public class CreateShopFragment extends Fragment {
             hasError = true;
         }
         return hasError;
+    }
+
+    private void createShop(ConstraintLayout parent) {
+        if (!checkShop(parent)) {
+            //Name
+            TextInputEditText tiet_name = parent.findViewById(R.id.create_shop_name_input);
+            String name = tiet_name.getText().toString().trim();
+
+            //Type
+            AutoCompleteTextView actv_type = parent.findViewById(R.id.create_shop_type_input);
+            String type_translation = actv_type.getText().toString().trim();
+            String type = "";
+            for (int i = 0; i < shop_types.length(); i++) {
+                JSONObject typeData = shop_types.optJSONObject(i);
+                if (type_translation.equals(typeData.optString("translation"))) {
+                    type = typeData.optString("type");
+                    break;
+                }
+            }
+
+            //Location
+            TextInputEditText tiet_location = parent.findViewById(R.id.create_shop_location_input);
+            String location = tiet_location.getText().toString().trim();
+
+            //Latitude
+            TextInputEditText tiet_latitude = parent.findViewById(R.id.create_shop_latitude_input);
+            Float latitude = Float.parseFloat(tiet_latitude.getText().toString().trim());
+
+            //Longitude
+            TextInputEditText tiet_longitude = parent.findViewById(R.id.create_shop_latitude_input);
+            Float longitude = Float.parseFloat(tiet_longitude.getText().toString().trim());
+
+            //Max capacity
+            TextInputEditText tiet_maxCapacity = parent.findViewById(R.id.create_shop_maxCapacity_input);
+            Integer maxCapacity = Integer.parseInt(tiet_maxCapacity.getText().toString().trim());
+
+            //Timetable
+            JSONArray timetable = new JSONArray();
+
+            //monday
+            JSONObject timetable_monday = TimetableUtils.crateDayTimetableJSON(0, tiet_monday_morning_opening, tiet_monday_morning_closing, tiet_monday_afternoon_opening, tiet_monday_afternoon_closing);
+            if (timetable_monday != null) {
+                timetable.put(timetable_monday);
+            }
+
+            //tuesday
+            JSONObject timetable_tuesday = TimetableUtils.crateDayTimetableJSON(1, tiet_tuesday_morning_opening, tiet_tuesday_morning_closing, tiet_tuesday_afternoon_opening, tiet_tuesday_afternoon_closing);
+            if (timetable_tuesday != null) {
+                timetable.put(timetable_tuesday);
+            }
+
+            //wednesday
+            JSONObject timetable_wednesday = TimetableUtils.crateDayTimetableJSON(2, tiet_wednesday_morning_opening, tiet_wednesday_morning_closing, tiet_wednesday_afternoon_opening, tiet_wednesday_afternoon_closing);
+            if (timetable_wednesday != null) {
+                timetable.put(timetable_wednesday);
+            }
+
+            //thursday
+            JSONObject timetable_thursday = TimetableUtils.crateDayTimetableJSON(3, tiet_thursday_morning_opening, tiet_thursday_morning_closing, tiet_thursday_afternoon_opening, tiet_thursday_afternoon_closing);
+            if (timetable_thursday != null) {
+                timetable.put(timetable_thursday);
+            }
+
+            //friday
+            JSONObject timetable_friday = TimetableUtils.crateDayTimetableJSON(4, tiet_friday_morning_opening, tiet_friday_morning_closing, tiet_friday_afternoon_opening, tiet_friday_afternoon_closing);
+            if (timetable_friday != null) {
+                timetable.put(timetable_friday);
+            }
+
+            //saturday
+            JSONObject timetable_saturday = TimetableUtils.crateDayTimetableJSON(5, tiet_saturday_morning_opening, tiet_saturday_morning_closing, tiet_saturday_afternoon_opening, tiet_saturday_afternoon_closing);
+            if (timetable_saturday != null) {
+                timetable.put(timetable_saturday);
+            }
+
+            //sunday
+            JSONObject timetable_sunday = TimetableUtils.crateDayTimetableJSON(6, tiet_sunday_morning_opening, tiet_sunday_morning_closing, tiet_sunday_afternoon_opening, tiet_sunday_afternoon_closing);
+            if (timetable_sunday != null) {
+                timetable.put(timetable_sunday);
+            }
+
+            Shop shop = new Shop(name, latitude, longitude, location, maxCapacity, type, seller.getIdSeller(), timetable.toString());
+
+            String url = BackEndEndpoints.SHOP_BASE;
+            JSONObject shopJSON = ModelConverter.shopToJsonObject(shop);
+
+            ProgressDialog pd = FormUtils.showProgressDialog(getContext(), getResources(), R.string.connecting_server, R.string.please_wait);
+
+            RequestUtils.sendJsonObjectRequest(getContext(), Request.Method.POST, url, shopJSON, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    pd.dismiss();
+                    mCallback.shopCreated();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    pd.dismiss();
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_connect_server), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.setAction(R.string.retry, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                snackbar.dismiss();
+                                pd.show();
+                                createShop(parent);
+                            }
+                        });
+                        snackbar.show();
+                    } else {
+                        int responseCode = RequestUtils.getErrorCodeRequest(error);
+                        //404 seller not found (should not happen)
+                        //401 maxCapacity exceeded (should not happen)
+                        //400 shop duplicated
+                        if (responseCode == 401) {
+                            TextInputLayout til_maxCapacity = parent.findViewById(R.id.create_shop_maxCapacity_label);
+                            til_maxCapacity.setError(getString(R.string.error_max_capacity_below_1));
+                            til_maxCapacity.requestFocus();
+                        } else if (responseCode == 400) {
+                            Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_shop_duplicate), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            TextInputLayout til_name = parent.findViewById(R.id.create_shop_name_label);
+                            til_name.requestFocus();
+                            til_name.clearFocus();
+                        } else {
+                            Snackbar snackbar = Snackbar.make(getView(), getString(R.string.error_server), Snackbar.LENGTH_INDEFINITE);
+                            snackbar.setAction(R.string.retry, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    snackbar.dismiss();
+                                    pd.show();
+                                    createShop(parent);
+                                }
+                            });
+                            snackbar.show();
+                        }
+                    }
+                }
+            });
+        }
     }
 }

@@ -89,4 +89,5 @@
     <string name="error_max_capacity_below_1">The maximum capacity cannot be less than 1.</string>
     <string name="error_timetable">Timetable not valid</string>
     <string name="error_time_format">Invalid time format. Use HH:mm</string>
+    <string name="error_shop_duplicate">A store with that name, type and location already exists.</string>
 </resources>

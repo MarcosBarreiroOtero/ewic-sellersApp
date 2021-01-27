@@ -89,4 +89,5 @@
     <string name="error_max_capacity_below_1">El aforo máximo no puede ser menor que 1.</string>
     <string name="error_timetable">Horario no válido</string>
     <string name="error_time_format">Formato de hora no válido. Utilice HH: mm</string>
+    <string name="error_shop_duplicate">Ya existe una tienda con ese nombre, tipo y ubicación.</string>
 </resources>
