@@ -20,7 +20,7 @@ import es.ewic.sellers.utils.FragmentUtils;
 public class MainActivity extends AppCompatActivity implements LoginFragment.OnLoginListener,
         MyShopsFragment.OnMyShopsListener,
         ShopCapacityFragment.OnShopCapacityListener,
-        MyDataFragment.OnMyDataListener {
+        MyDataFragment.OnMyDataListener, CreateShopFragment.OnCreateShopListener {
 
     private Seller seller;
     private Shop openShop;
@@ -115,6 +115,13 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     }
 
     @Override
+    public void onCreateShop() {
+        if (seller != null) {
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), CreateShopFragment.newInstance(seller, null), true);
+        }
+    }
+
+    @Override
     public void shopClosed() {
         if (seller != null) {
             openShop = null;
@@ -149,5 +156,16 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
         Intent intent = getIntent();
         finish();
         startActivity(intent);
+    }
+
+    @Override
+    public void shopCreated() {
+        if (seller != null) {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else {
+                FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), MyShopsFragment.newInstance(seller), false);
+            }
+        }
     }
 }

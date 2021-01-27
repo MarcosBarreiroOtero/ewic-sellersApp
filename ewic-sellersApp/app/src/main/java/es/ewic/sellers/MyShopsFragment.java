@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
@@ -20,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -50,6 +52,8 @@ public class MyShopsFragment extends Fragment {
 
     public interface OnMyShopsListener {
         public void onShopClick(Shop shop);
+
+        public void onCreateShop();
     }
 
     public MyShopsFragment() {
@@ -75,6 +79,11 @@ public class MyShopsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
+
         // Inflate the layout for this fragment
         ConstraintLayout parent = (ConstraintLayout) inflater.inflate(R.layout.fragment_my_shops, container, false);
 
@@ -89,6 +98,14 @@ public class MyShopsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Shop selectedShop = shops.get(position);
                 mCallback.onShopClick(selectedShop);
+            }
+        });
+
+        FloatingActionButton create_shop_button = parent.findViewById(R.id.create_shop_button);
+        create_shop_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.onCreateShop();
             }
         });
 
