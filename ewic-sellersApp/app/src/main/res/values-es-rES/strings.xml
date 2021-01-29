@@ -104,4 +104,10 @@
     <string name="COMPLETED">Completada</string>
     <string name="NOT_APPEAR">Sin aparecer</string>
     <string name="CANCELLED">Cancelada</string>
+    <string name="client_name">Nombre del cliente</string>
+    <string name="date">Fecha</string>
+    <string name="hour">Hora</string>
+    <string name="remarks">Observaciones</string>
+    <string name="nClients">Número de clientes</string>
+    <string name="update_reservation">Actualizar reserva</string>
 </resources>

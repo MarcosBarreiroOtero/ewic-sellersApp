@@ -35,5 +35,8 @@ public class BackEndEndpoints {
     //RESERVATION
     public static String RESERVATION_BASE = BASE_ENDPOINT + "/reservation/seller";
 
+    //CLIENT
+    public static String CLIENT_BASE = BASE_ENDPOINT + "/client";
+
 
 }

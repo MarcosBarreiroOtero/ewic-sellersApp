@@ -44,7 +44,7 @@ public class ShopInformationFragment extends Fragment {
 
         void clickShopButton(Shop shop);
 
-        void clickReservationMManagement(Shop shop);
+        void clickReservationManagement(Shop shop);
     }
 
     public ShopInformationFragment() {
@@ -99,7 +99,7 @@ public class ShopInformationFragment extends Fragment {
         reservation_management_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback.clickReservationMManagement(shop);
+                mCallback.clickReservationManagement(shop);
             }
         });
 

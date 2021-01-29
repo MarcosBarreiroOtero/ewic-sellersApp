@@ -1,7 +1,9 @@
 package es.ewic.sellers;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -42,6 +45,12 @@ public class ReservationManagementFragment extends Fragment {
     private Shop shop;
     private List<Reservation> reservations;
 
+    OnReservationManagementFragment mCallback;
+
+    public interface OnReservationManagementFragment {
+        void onCreateNewRsv(Shop shop);
+    }
+
     public ReservationManagementFragment() {
         // Required empty public constructor
     }
@@ -52,6 +61,12 @@ public class ReservationManagementFragment extends Fragment {
         args.putSerializable(ARG_SHOP, shop);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mCallback = (ReservationManagementFragment.OnReservationManagementFragment) getActivity();
     }
 
     @Override
@@ -79,6 +94,14 @@ public class ReservationManagementFragment extends Fragment {
         });
 
         getReservations(parent, swipeRefreshLayout);
+
+        FloatingActionButton add_reservation = parent.findViewById(R.id.add_reservation);
+        add_reservation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.onCreateNewRsv(shop);
+            }
+        });
 
         return parent;
     }

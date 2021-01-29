@@ -104,4 +104,11 @@
     <string name="COMPLETED">Completed</string>
     <string name="NOT_APPEAR">Not appear</string>
     <string name="CANCELLED">Cancelled</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="client_name">Client name</string>
+    <string name="date">Date</string>
+    <string name="hour">Hour</string>
+    <string name="remarks">Remarks</string>
+    <string name="nClients">Number of clients</string>
+    <string name="update_reservation">Update reservation</string>
 </resources>

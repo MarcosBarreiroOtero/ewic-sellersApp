@@ -23,7 +23,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
         ShopCapacityFragment.OnShopCapacityListener,
         MyDataFragment.OnMyDataListener,
         CreateShopFragment.OnCreateShopListener,
-        ShopInformationFragment.OnShopInformationListener {
+        ShopInformationFragment.OnShopInformationListener,
+        ReservationManagementFragment.OnReservationManagementFragment {
 
     private Seller seller;
     private Shop openShop;
@@ -196,9 +197,16 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     }
 
     @Override
-    public void clickReservationMManagement(Shop shop) {
+    public void clickReservationManagement(Shop shop) {
         if (seller != null) {
             FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ReservationManagementFragment.newInstance(shop), true);
+        }
+    }
+
+    @Override
+    public void onCreateNewRsv(Shop shop) {
+        if (seller != null) {
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), CreateReservationFragment.newInstance(shop, null), true);
         }
     }
 }
