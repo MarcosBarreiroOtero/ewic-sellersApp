@@ -110,8 +110,6 @@ public class ReservationRowAdapter extends BaseAdapter implements ListAdapter {
 
             TextView reservationRemarks = convertView.findViewById(R.id.reservation_remarks);
             reservationRemarks.setText(reservation.getRemarks());
-
-
         }
         return convertView;
     }

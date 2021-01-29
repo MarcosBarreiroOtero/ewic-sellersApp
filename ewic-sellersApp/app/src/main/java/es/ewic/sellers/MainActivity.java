@@ -24,7 +24,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
         MyDataFragment.OnMyDataListener,
         CreateShopFragment.OnCreateShopListener,
         ShopInformationFragment.OnShopInformationListener,
-        ReservationManagementFragment.OnReservationManagementFragment {
+        ReservationManagementFragment.OnReservationManagementFragment,
+        CreateReservationFragment.OnCreateReservationListener {
 
     private Seller seller;
     private Shop openShop;
@@ -177,6 +178,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
         if (seller != null) {
             if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                 getSupportFragmentManager().popBackStack();
+            } else {
+                FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopInformationFragment.newInstance(shopUpdated), false);
             }
         }
     }
@@ -207,6 +210,17 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     public void onCreateNewRsv(Shop shop) {
         if (seller != null) {
             FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), CreateReservationFragment.newInstance(shop, null), true);
+        }
+    }
+
+    @Override
+    public void onRsvCreatedOrUpdated() {
+        if (seller != null) {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else {
+                FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), MyShopsFragment.newInstance(seller), false);
+            }
         }
     }
 }
