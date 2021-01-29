@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -111,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     @Override
     public void onShopClick(Shop shop) {
         if (seller != null) {
-//            openShop = shop;
             FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopInformationFragment.newInstance(shop), true);
         }
     }
@@ -177,16 +177,28 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
             if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                 getSupportFragmentManager().popBackStack();
             }
-            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopInformationFragment.newInstance(shopUpdated), false);
+        }
+    }
+
+    @Override
+    public void clickCapacityButton(Shop shop) {
+        if (seller != null) {
+            openShop = shop;
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopCapacityFragment.newInstance(openShop), true);
         }
     }
 
     @Override
     public void clickShopButton(Shop shop) {
         if (seller != null) {
-            if (seller != null) {
-                FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), CreateShopFragment.newInstance(seller, shop), true);
-            }
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), CreateShopFragment.newInstance(seller, shop), true);
+        }
+    }
+
+    @Override
+    public void clickReservationMManagement(Shop shop) {
+        if (seller != null) {
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ReservationManagementFragment.newInstance(shop), true);
         }
     }
 }

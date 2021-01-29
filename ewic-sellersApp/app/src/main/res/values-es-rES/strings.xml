@@ -94,4 +94,14 @@
     <string name="configuration">Configuración</string>
     <string name="bookings">Reservas</string>
     <string name="update_shop">Actualizar tienda</string>
+    <string name="reservation_management">Gestión de reservas</string>
+    <string name="add_reservation">Añadir reserva</string>
+    <string name="reservations_not_found">No hay ninguna reserva próxima. Para crear una reserva pulse en el botón.</string>
+    <string name="client">cliente</string>
+    <string name="clients">clientes</string>
+    <string name="ACTIVE">Activa</string>
+    <string name="WAITING">Esperando</string>
+    <string name="COMPLETED">Completada</string>
+    <string name="NOT_APPEAR">Sin aparecer</string>
+    <string name="CANCELLED">Cancelada</string>
 </resources>
