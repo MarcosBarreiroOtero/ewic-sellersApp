@@ -32,5 +32,8 @@ public class BackEndEndpoints {
         return SHOP_BASE + "/" + idShop + "/exit?entryNumber=" + idEntry;
     }
 
+    //RESERVATION
+    public static String RESERVATION_BASE = BASE_ENDPOINT + "/reservation/seller";
+
 
 }

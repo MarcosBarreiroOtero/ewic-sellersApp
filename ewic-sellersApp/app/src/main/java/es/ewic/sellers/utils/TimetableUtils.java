@@ -134,7 +134,7 @@ public class TimetableUtils {
         return !hasError;
     }
 
-    public static void initTimetableDay(Activity activity, boolean initMorning, boolean initAfternoon,
+    public static void initTimetableDay(Activity activity, boolean setDefault, boolean initMorning, boolean initAfternoon,
                                         TextInputLayout til_morning_opening, TextInputEditText tiet_morning_opening,
                                         TextInputLayout til_morning_closing, TextInputEditText tiet_morning_closing,
                                         TextInputLayout til_afternoon_opening, TextInputEditText tiet_afternoon_opening,
@@ -144,14 +144,16 @@ public class TimetableUtils {
         handleTimetableClick(activity, til_afternoon_opening, tiet_afternoon_opening);
         handleTimetableClick(activity, til_afternoon_closing, tiet_afternoon_closing);
 
-        if (initMorning) {
-            tiet_morning_opening.setText("09:30");
-            tiet_morning_closing.setText("13:30");
-        }
+        if (setDefault) {
+            if (initMorning) {
+                tiet_morning_opening.setText("09:30");
+                tiet_morning_closing.setText("13:30");
+            }
 
-        if (initAfternoon) {
-            tiet_afternoon_opening.setText("16:00");
-            tiet_afternoon_closing.setText("20:00");
+            if (initAfternoon) {
+                tiet_afternoon_opening.setText("16:00");
+                tiet_afternoon_closing.setText("20:00");
+            }
         }
     }
 

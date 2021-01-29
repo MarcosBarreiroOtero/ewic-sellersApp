@@ -90,4 +90,18 @@
     <string name="error_timetable">Timetable not valid</string>
     <string name="error_time_format">Invalid time format. Use HH:mm</string>
     <string name="error_shop_duplicate">A store with that name, type and location already exists.</string>
+    <string name="shop">Shop</string>
+    <string name="configuration">Configuration</string>
+    <string name="bookings">Bookings</string>
+    <string name="update_shop">Update shop</string>
+    <string name="reservation_management">Reservation management</string>
+    <string name="add_reservation">Add reservation</string>
+    <string name="reservations_not_found">There are no upcoming reservations. To create a reservation click on the button.</string>
+    <string name="client">client</string>
+    <string name="clients">clients</string>
+    <string name="ACTIVE">Active</string>
+    <string name="WAITING">Waiting</string>
+    <string name="COMPLETED">Completed</string>
+    <string name="NOT_APPEAR">Not appear</string>
+    <string name="CANCELLED">Cancelled</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +21,9 @@ import es.ewic.sellers.utils.FragmentUtils;
 public class MainActivity extends AppCompatActivity implements LoginFragment.OnLoginListener,
         MyShopsFragment.OnMyShopsListener,
         ShopCapacityFragment.OnShopCapacityListener,
-        MyDataFragment.OnMyDataListener, CreateShopFragment.OnCreateShopListener {
+        MyDataFragment.OnMyDataListener,
+        CreateShopFragment.OnCreateShopListener,
+        ShopInformationFragment.OnShopInformationListener {
 
     private Seller seller;
     private Shop openShop;
@@ -109,8 +112,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     @Override
     public void onShopClick(Shop shop) {
         if (seller != null) {
-            openShop = shop;
-            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopCapacityFragment.newInstance(openShop), true);
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopInformationFragment.newInstance(shop), true);
         }
     }
 
@@ -166,6 +168,37 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
             } else {
                 FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), MyShopsFragment.newInstance(seller), false);
             }
+        }
+    }
+
+    @Override
+    public void shopUpdated(Shop shopUpdated) {
+        if (seller != null) {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            }
+        }
+    }
+
+    @Override
+    public void clickCapacityButton(Shop shop) {
+        if (seller != null) {
+            openShop = shop;
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopCapacityFragment.newInstance(openShop), true);
+        }
+    }
+
+    @Override
+    public void clickShopButton(Shop shop) {
+        if (seller != null) {
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), CreateShopFragment.newInstance(seller, shop), true);
+        }
+    }
+
+    @Override
+    public void clickReservationMManagement(Shop shop) {
+        if (seller != null) {
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ReservationManagementFragment.newInstance(shop), true);
         }
     }
 }

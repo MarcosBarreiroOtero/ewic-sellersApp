@@ -151,6 +151,8 @@ public class CreateShopFragment extends Fragment {
     public interface OnCreateShopListener {
         public void shopCreated();
 
+        public void shopUpdated(Shop shop);
+
     }
 
     public CreateShopFragment() {
@@ -185,7 +187,12 @@ public class CreateShopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.create_shop);
+        if (shop == null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.create_shop);
+        } else {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.update_shop);
+        }
+
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -286,7 +293,14 @@ public class CreateShopFragment extends Fragment {
             }
         });
 
-        initTimetable(parent);
+        if (shop != null) {
+            initTimetable(parent, false);
+            create_shop_button.setText(getString(R.string.update_shop));
+        } else {
+            initTimetable(parent, true);
+            create_shop_button.setText(getString(R.string.create_shop));
+        }
+
 
         TextInputEditText tiet_maxCapacity = parent.findViewById(R.id.create_shop_maxCapacity_input);
         tiet_maxCapacity.setText("1");
@@ -393,6 +407,10 @@ public class CreateShopFragment extends Fragment {
                         android.R.layout.simple_dropdown_item_1line, types);
                 AutoCompleteTextView actv_type = parent.findViewById(R.id.create_shop_type_input);
                 actv_type.setAdapter(adapter);
+
+                if (shop != null) {
+                    initShopParams(parent);
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -402,52 +420,144 @@ public class CreateShopFragment extends Fragment {
         });
     }
 
-    private void initTimetable(ConstraintLayout parent) {
+    private void initShopParams(ConstraintLayout parent) {
+        //Name
+        TextInputEditText tiet_name = parent.findViewById(R.id.create_shop_name_input);
+        tiet_name.setText(shop.getName());
+
+        //Type
+        AutoCompleteTextView actv_type = parent.findViewById(R.id.create_shop_type_input);
+        String type = "";
+        for (int i = 0; i < shop_types.length(); i++) {
+            JSONObject typeData = shop_types.optJSONObject(i);
+            if (shop.getType().equals(typeData.optString("type"))) {
+                type = typeData.optString("translation");
+                break;
+            }
+        }
+        actv_type.setText(type);
+
+        //Location
+        TextInputEditText tiet_location = parent.findViewById(R.id.create_shop_location_input);
+        tiet_location.setText(shop.getLocation());
+
+        //Latitude
+        TextInputEditText tiet_latitude = parent.findViewById(R.id.create_shop_latitude_input);
+        tiet_latitude.setText(Double.toString(shop.getLatitude()));
+
+        //Longitude
+        TextInputEditText tiet_longitude = parent.findViewById(R.id.create_shop_longitude_input);
+        tiet_longitude.setText(Double.toString(shop.getLongitude()));
+
+        //Max capacity
+        TextInputEditText tiet_maxCapacity = parent.findViewById(R.id.create_shop_maxCapacity_input);
+        tiet_maxCapacity.setText(Integer.toString(shop.getMaxCapacity()));
+
+        //Timetable
+        try {
+            JSONArray timetableArray = new JSONArray(shop.getTimetable());
+            for (int i = 0; i < timetableArray.length(); i++) {
+                JSONObject timetableDay = timetableArray.getJSONObject(i);
+                int weekkDay = timetableDay.getInt("weekDay");
+                switch (weekkDay) {
+                    case 0: // monday
+                        tiet_monday_morning_opening.setText(timetableDay.optString("startMorning"));
+                        tiet_monday_morning_closing.setText(timetableDay.optString("endMorning"));
+                        tiet_monday_afternoon_opening.setText(timetableDay.optString("startAfternoon"));
+                        tiet_monday_afternoon_closing.setText(timetableDay.optString("endAfternoon"));
+                        break;
+                    case 1: //tuesday
+                        tiet_tuesday_morning_opening.setText(timetableDay.optString("startMorning"));
+                        tiet_tuesday_morning_closing.setText(timetableDay.optString("endMorning"));
+                        tiet_tuesday_afternoon_opening.setText(timetableDay.optString("startAfternoon"));
+                        tiet_tuesday_afternoon_closing.setText(timetableDay.optString("endAfternoon"));
+                        break;
+                    case 2: //wednesday
+                        tiet_wednesday_morning_opening.setText(timetableDay.optString("startMorning"));
+                        tiet_wednesday_morning_closing.setText(timetableDay.optString("endMorning"));
+                        tiet_wednesday_afternoon_opening.setText(timetableDay.optString("startAfternoon"));
+                        tiet_wednesday_afternoon_closing.setText(timetableDay.optString("endAfternoon"));
+                        break;
+                    case 3: //thursday
+                        tiet_thursday_morning_opening.setText(timetableDay.optString("startMorning"));
+                        tiet_thursday_morning_closing.setText(timetableDay.optString("endMorning"));
+                        tiet_thursday_afternoon_opening.setText(timetableDay.optString("startAfternoon"));
+                        tiet_thursday_afternoon_closing.setText(timetableDay.optString("endAfternoon"));
+                        break;
+                    case 4: //friday
+                        tiet_friday_morning_opening.setText(timetableDay.optString("startMorning"));
+                        tiet_friday_morning_closing.setText(timetableDay.optString("endMorning"));
+                        tiet_friday_afternoon_opening.setText(timetableDay.optString("startAfternoon"));
+                        tiet_friday_afternoon_closing.setText(timetableDay.optString("endAfternoon"));
+                        break;
+                    case 5: //saturday
+                        tiet_saturday_morning_opening.setText(timetableDay.optString("startMorning"));
+                        tiet_saturday_morning_closing.setText(timetableDay.optString("endMorning"));
+                        tiet_saturday_afternoon_opening.setText(timetableDay.optString("startAfternoon"));
+                        tiet_saturday_afternoon_closing.setText(timetableDay.optString("endAfternoon"));
+                        break;
+                    case 6: //sunday
+                        tiet_sunday_morning_opening.setText(timetableDay.optString("startMorning"));
+                        tiet_sunday_morning_closing.setText(timetableDay.optString("endMorning"));
+                        tiet_sunday_afternoon_opening.setText(timetableDay.optString("startAfternoon"));
+                        tiet_sunday_afternoon_closing.setText(timetableDay.optString("endAfternoon"));
+                        break;
+
+
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void initTimetable(ConstraintLayout parent, boolean setDefault) {
 
         //Monday
-        TimetableUtils.initTimetableDay(getActivity(), true, true,
+        TimetableUtils.initTimetableDay(getActivity(), setDefault, true, true,
                 til_monday_morning_opening, tiet_monday_morning_opening,
                 til_monday_morning_closing, tiet_monday_morning_closing,
                 til_monday_afternoon_opening, tiet_monday_afternoon_opening,
                 til_monday_afternoon_closing, tiet_monday_afternoon_closing);
 
         //Tuesday
-        TimetableUtils.initTimetableDay(getActivity(), true, true,
+        TimetableUtils.initTimetableDay(getActivity(), setDefault, true, true,
                 til_tuesday_morning_opening, tiet_tuesday_morning_opening,
                 til_tuesday_morning_closing, tiet_tuesday_morning_closing,
                 til_tuesday_afternoon_opening, tiet_tuesday_afternoon_opening,
                 til_tuesday_afternoon_closing, tiet_tuesday_afternoon_closing);
 
         //Wednesday
-        TimetableUtils.initTimetableDay(getActivity(), true, true,
+        TimetableUtils.initTimetableDay(getActivity(), setDefault, true, true,
                 til_wednesday_morning_opening, tiet_wednesday_morning_opening,
                 til_wednesday_morning_closing, tiet_wednesday_morning_closing,
                 til_wednesday_afternoon_opening, tiet_wednesday_afternoon_opening,
                 til_wednesday_afternoon_closing, tiet_wednesday_afternoon_closing);
 
         //Thursday
-        TimetableUtils.initTimetableDay(getActivity(), true, true,
+        TimetableUtils.initTimetableDay(getActivity(), setDefault, true, true,
                 til_thursday_morning_opening, tiet_thursday_morning_opening,
                 til_thursday_morning_closing, tiet_thursday_morning_closing,
                 til_thursday_afternoon_opening, tiet_thursday_afternoon_opening,
                 til_thursday_afternoon_closing, tiet_thursday_afternoon_closing);
 
         //Friday
-        TimetableUtils.initTimetableDay(getActivity(), true, true,
+        TimetableUtils.initTimetableDay(getActivity(), setDefault, true, true,
                 til_friday_morning_opening, tiet_friday_morning_opening,
                 til_friday_morning_closing, tiet_friday_morning_closing,
                 til_friday_afternoon_opening, tiet_friday_afternoon_opening,
                 til_friday_afternoon_closing, tiet_friday_afternoon_closing);
 
         //Saturday
-        TimetableUtils.initTimetableDay(getActivity(), true, false,
+        TimetableUtils.initTimetableDay(getActivity(), setDefault, true, false,
                 til_saturday_morning_opening, tiet_saturday_morning_opening,
                 til_saturday_morning_closing, tiet_saturday_morning_closing,
                 til_saturday_afternoon_opening, tiet_saturday_afternoon_opening,
                 til_saturday_afternoon_closing, tiet_saturday_afternoon_closing);
 
         //Sunday
-        TimetableUtils.initTimetableDay(getActivity(), false, false,
+        TimetableUtils.initTimetableDay(getActivity(), setDefault, false, false,
                 til_sunday_morning_opening, tiet_sunday_morning_opening,
                 til_sunday_morning_closing, tiet_sunday_morning_closing,
                 til_sunday_afternoon_opening, tiet_sunday_afternoon_opening,
@@ -694,18 +804,33 @@ public class CreateShopFragment extends Fragment {
                 timetable.put(timetable_sunday);
             }
 
-            Shop shop = new Shop(name, latitude, longitude, location, maxCapacity, type, seller.getIdSeller(), timetable.toString());
+            Shop newShop = new Shop(name, latitude, longitude, location, maxCapacity, type, seller.getIdSeller(), timetable.toString());
 
             String url = BackEndEndpoints.SHOP_BASE;
-            JSONObject shopJSON = ModelConverter.shopToJsonObject(shop);
+            if (shop != null) {
+                url = BackEndEndpoints.SHOP_BASE + "/" + shop.getIdShop();
+            }
+
+            int method = Request.Method.POST;
+            if (shop != null) {
+                method = Request.Method.PUT;
+            }
+
+            JSONObject shopJSON = ModelConverter.shopToJsonObject(newShop);
 
             ProgressDialog pd = FormUtils.showProgressDialog(getContext(), getResources(), R.string.connecting_server, R.string.please_wait);
 
-            RequestUtils.sendJsonObjectRequest(getContext(), Request.Method.POST, url, shopJSON, new Response.Listener<JSONObject>() {
+            RequestUtils.sendJsonObjectRequest(getContext(), method, url, shopJSON, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     pd.dismiss();
-                    mCallback.shopCreated();
+                    if (shop == null) {
+                        mCallback.shopCreated();
+                    } else {
+                        Shop shopUpdated = ModelConverter.jsonObjectToShop(response);
+                        mCallback.shopUpdated(shop);
+                    }
+
                 }
             }, new Response.ErrorListener() {
                 @Override
