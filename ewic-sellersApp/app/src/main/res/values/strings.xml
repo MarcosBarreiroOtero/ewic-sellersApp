@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Ewic - Sellers</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="connect_local">Connect to local server</string>
     <string name="connect_remote">Connect to remote server</string>
     <string name="retry">Retry</string>
@@ -104,7 +103,6 @@
     <string name="COMPLETED">Completed</string>
     <string name="NOT_APPEAR">Not appear</string>
     <string name="CANCELLED">Cancelled</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="client_name">Client name</string>
     <string name="date">Date</string>
     <string name="hour">Hour</string>
@@ -123,4 +121,6 @@
     <string name="error_reservation_shop_full">The reservation cannot be saved for the number of clients on the indicated date.</string>
     <string name="reservation_create_successfully">Reservation created successfully</string>
     <string name="reservation_update_successfully">Reservation updated successfully</string>
+    <string name="accept">Accept</string>
+    <string name="pre_cancel_reservation_message">Are you sure you want to cancel this reservation? The change cannot be redone</string>
 </resources>

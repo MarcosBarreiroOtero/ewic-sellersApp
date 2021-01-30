@@ -39,6 +39,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import es.ewic.sellers.adapters.HourAutocompleteAdapter;
 import es.ewic.sellers.model.Client;
 import es.ewic.sellers.model.Reservation;
 import es.ewic.sellers.model.Shop;
@@ -138,8 +139,6 @@ public class CreateReservationFragment extends Fragment {
                 }
             }
         }
-
-        getClientsNames(parent);
 
 
         // Hour input
@@ -311,8 +310,7 @@ public class CreateReservationFragment extends Fragment {
 
         String[] hoursValues = hours.toArray(new String[hours.size()]);
         AutoCompleteTextView act_hours = parent.findViewById(R.id.reservation_hour_input);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_dropdown_item_1line, hoursValues);
+        HourAutocompleteAdapter adapter = new HourAutocompleteAdapter(hours, CreateReservationFragment.this);
         act_hours.setAdapter(adapter);
         if (reservation != null) {
             act_hours.setText(DateUtils.formatHour(reservation.getDate()));

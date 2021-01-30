@@ -122,4 +122,6 @@
     <string name="error_reservation_shop_full">No se puede guardar la reserva para el número de clientes en la fecha indicada.</string>
     <string name="reservation_create_successfully">Reserva creada correctamente</string>
     <string name="reservation_update_successfully">Reserva actualizada correctamente</string>
+    <string name="accept">Aceptar</string>
+    <string name="pre_cancel_reservation_message">¿Está seguro de que quiere cancelar la reserva? El cambio no se podrá rehacer</string>
 </resources>

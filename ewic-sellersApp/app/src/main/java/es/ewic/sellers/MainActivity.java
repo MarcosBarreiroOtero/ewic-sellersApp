@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import es.ewic.sellers.adapters.ReservationRowAdapter;
+import es.ewic.sellers.model.Reservation;
 import es.ewic.sellers.model.Seller;
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.FragmentUtils;
@@ -25,7 +27,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
         CreateShopFragment.OnCreateShopListener,
         ShopInformationFragment.OnShopInformationListener,
         ReservationManagementFragment.OnReservationManagementFragment,
-        CreateReservationFragment.OnCreateReservationListener {
+        CreateReservationFragment.OnCreateReservationListener,
+        ReservationRowAdapter.OnEditReservationListener {
 
     private Seller seller;
     private Shop openShop;
@@ -202,7 +205,14 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     @Override
     public void clickReservationManagement(Shop shop) {
         if (seller != null) {
-            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ReservationManagementFragment.newInstance(shop), true);
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ReservationManagementFragment.newInstance(shop, seller), true);
+        }
+    }
+
+    @Override
+    public void clickAddReservation(Shop shop) {
+        if (seller != null) {
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), CreateReservationFragment.newInstance(shop, null), true);
         }
     }
 
@@ -221,6 +231,13 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
             } else {
                 FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), MyShopsFragment.newInstance(seller), false);
             }
+        }
+    }
+
+    @Override
+    public void editReservation(Reservation reservation, Shop shop) {
+        if (seller != null) {
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), CreateReservationFragment.newInstance(shop, reservation), true);
         }
     }
 }

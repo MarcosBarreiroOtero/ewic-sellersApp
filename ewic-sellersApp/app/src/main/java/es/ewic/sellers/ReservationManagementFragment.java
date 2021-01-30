@@ -28,6 +28,7 @@ import java.util.List;
 
 import es.ewic.sellers.adapters.ReservationRowAdapter;
 import es.ewic.sellers.model.Reservation;
+import es.ewic.sellers.model.Seller;
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.BackEndEndpoints;
 import es.ewic.sellers.utils.ModelConverter;
@@ -41,7 +42,9 @@ import es.ewic.sellers.utils.RequestUtils;
 public class ReservationManagementFragment extends Fragment {
 
     private static final String ARG_SHOP = "shop";
+    private static final String ARG_SELLER = "seller";
 
+    private Seller seller;
     private Shop shop;
     private List<Reservation> reservations;
 
@@ -55,10 +58,11 @@ public class ReservationManagementFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static ReservationManagementFragment newInstance(Shop shop) {
+    public static ReservationManagementFragment newInstance(Shop shopData, Seller sellerData) {
         ReservationManagementFragment fragment = new ReservationManagementFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_SHOP, shop);
+        args.putSerializable(ARG_SHOP, shopData);
+        args.putSerializable(ARG_SELLER, sellerData);
         fragment.setArguments(args);
         return fragment;
     }
@@ -74,6 +78,7 @@ public class ReservationManagementFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             shop = (Shop) getArguments().getSerializable(ARG_SHOP);
+            seller = (Seller) getArguments().getSerializable(ARG_SELLER);
         }
     }
 
@@ -116,7 +121,7 @@ public class ReservationManagementFragment extends Fragment {
             public void onResponse(JSONArray response) {
                 reservations = ModelConverter.jsonArrayToReservationList(response);
                 ListView reservationsList = parent.findViewById(R.id.reservations_list);
-                ReservationRowAdapter reservationRowAdapter = new ReservationRowAdapter(reservations, shop, ReservationManagementFragment.this, getResources(), getActivity().getPackageName());
+                ReservationRowAdapter reservationRowAdapter = new ReservationRowAdapter(reservations, shop, seller, ReservationManagementFragment.this, getResources(), getActivity().getPackageName());
                 reservationsList.setAdapter(reservationRowAdapter);
                 swipe.setRefreshing(false);
                 TextView reservations_not_found = parent.findViewById(R.id.reservations_not_found);

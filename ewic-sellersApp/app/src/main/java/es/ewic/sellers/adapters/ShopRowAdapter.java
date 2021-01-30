@@ -1,5 +1,6 @@
 package es.ewic.sellers.adapters;
 
+import android.app.VoiceInteractor;
 import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,20 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
 import org.w3c.dom.Text;
 
 import java.util.List;
 
 import es.ewic.sellers.R;
+import es.ewic.sellers.model.Reservation;
+import es.ewic.sellers.model.Seller;
 import es.ewic.sellers.model.Shop;
+import es.ewic.sellers.utils.BackEndEndpoints;
+import es.ewic.sellers.utils.RequestUtils;
 
 public class ShopRowAdapter extends BaseAdapter implements ListAdapter {
 
