@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import es.ewic.sellers.adapters.ReservationRowAdapter;
+import es.ewic.sellers.model.Reservation;
 import es.ewic.sellers.model.Seller;
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.FragmentUtils;
@@ -23,7 +25,10 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
         ShopCapacityFragment.OnShopCapacityListener,
         MyDataFragment.OnMyDataListener,
         CreateShopFragment.OnCreateShopListener,
-        ShopInformationFragment.OnShopInformationListener {
+        ShopInformationFragment.OnShopInformationListener,
+        ReservationManagementFragment.OnReservationManagementFragment,
+        CreateReservationFragment.OnCreateReservationListener,
+        ReservationRowAdapter.OnEditReservationListener {
 
     private Seller seller;
     private Shop openShop;
@@ -176,6 +181,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
         if (seller != null) {
             if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                 getSupportFragmentManager().popBackStack();
+            } else {
+                FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopInformationFragment.newInstance(shopUpdated), false);
             }
         }
     }
@@ -196,9 +203,41 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     }
 
     @Override
-    public void clickReservationMManagement(Shop shop) {
+    public void clickReservationManagement(Shop shop) {
         if (seller != null) {
-            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ReservationManagementFragment.newInstance(shop), true);
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ReservationManagementFragment.newInstance(shop, seller), true);
+        }
+    }
+
+    @Override
+    public void clickAddReservation(Shop shop) {
+        if (seller != null) {
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), CreateReservationFragment.newInstance(shop, null), true);
+        }
+    }
+
+    @Override
+    public void onCreateNewRsv(Shop shop) {
+        if (seller != null) {
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), CreateReservationFragment.newInstance(shop, null), true);
+        }
+    }
+
+    @Override
+    public void onRsvCreatedOrUpdated() {
+        if (seller != null) {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else {
+                FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), MyShopsFragment.newInstance(seller), false);
+            }
+        }
+    }
+
+    @Override
+    public void editReservation(Reservation reservation, Shop shop) {
+        if (seller != null) {
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), CreateReservationFragment.newInstance(shop, reservation), true);
         }
     }
 }

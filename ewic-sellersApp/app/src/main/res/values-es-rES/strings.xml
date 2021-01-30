@@ -104,4 +104,24 @@
     <string name="COMPLETED">Completada</string>
     <string name="NOT_APPEAR">Sin aparecer</string>
     <string name="CANCELLED">Cancelada</string>
+    <string name="client_name">Nombre del cliente</string>
+    <string name="date">Fecha</string>
+    <string name="hour">Hora</string>
+    <string name="remarks">Observaciones</string>
+    <string name="nClients">Número de clientes</string>
+    <string name="update_reservation">Actualizar reserva</string>
+    <string name="error_shop_closed_weekDay">El día escogido la tienda está cerrada. La fecha no se ha modificado.</string>
+    <string name="error_client_not_found">Cliente no encontrado</string>
+    <string name="error_hour_invalid">Hora no válida. Por favor escoga una de la lista</string>
+    <string name="error_bad_format_hour">La hora debe seguir el formato HH:mm</string>
+    <string name="error_bad_format_date">La fecha debe seguir el formato dd/MM/yyyy</string>
+    <string name="error_past_reservation">No se pueden crear reservas en el pasado</string>
+    <string name="error_nClients_min">El número de clientes minimo es 1</string>
+    <string name="error_nClients_max">El número de clientes supera el aforo máximo de la tienda</string>
+    <string name="error_rsv_duplicate">El cliente ya tiene una reserva para esa hora. Por favor escoja otra fecha</string>
+    <string name="error_reservation_shop_full">No se puede guardar la reserva para el número de clientes en la fecha indicada.</string>
+    <string name="reservation_create_successfully">Reserva creada correctamente</string>
+    <string name="reservation_update_successfully">Reserva actualizada correctamente</string>
+    <string name="accept">Aceptar</string>
+    <string name="pre_cancel_reservation_message">¿Está seguro de que quiere cancelar la reserva? El cambio no se podrá rehacer</string>
 </resources>

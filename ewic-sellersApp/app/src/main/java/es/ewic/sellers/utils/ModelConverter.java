@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import es.ewic.sellers.model.Client;
 import es.ewic.sellers.model.Reservation;
 import es.ewic.sellers.model.Seller;
 import es.ewic.sellers.model.Shop;
@@ -134,6 +135,28 @@ public class ModelConverter {
             reservations.add(jsonObjectToReservation(reservationData));
         }
         return reservations;
+    }
+
+    //Client
+    public static Client jsonObjectToClient(JSONObject clientData) {
+        try {
+            return new Client(clientData.getInt("idClient"),
+                    clientData.getString("idGoogleLogin"),
+                    clientData.getString("firstName"),
+                    clientData.getString("lastName"),
+                    clientData.getString("email"));
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    public static List<Client> jsonArrayToClientList(JSONArray clientsData) {
+        ArrayList<Client> clients = new ArrayList<>();
+        for (int i = 0; i < clientsData.length(); i++) {
+            JSONObject clientData = clientsData.optJSONObject(i);
+            clients.add(jsonObjectToClient(clientData));
+        }
+        return clients;
     }
 
 }

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Ewic - Sellers</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="connect_local">Connect to local server</string>
     <string name="connect_remote">Connect to remote server</string>
     <string name="retry">Retry</string>
@@ -104,4 +103,24 @@
     <string name="COMPLETED">Completed</string>
     <string name="NOT_APPEAR">Not appear</string>
     <string name="CANCELLED">Cancelled</string>
+    <string name="client_name">Client name</string>
+    <string name="date">Date</string>
+    <string name="hour">Hour</string>
+    <string name="remarks">Remarks</string>
+    <string name="nClients">Number of clients</string>
+    <string name="update_reservation">Update reservation</string>
+    <string name="error_shop_closed_weekDay">On the chosen day the store is closed. The date has not changed</string>
+    <string name="error_client_not_found">Client not found</string>
+    <string name="error_hour_invalid">Invalid hour. Please choose one of the list</string>
+    <string name="error_bad_format_hour">The hour must follow the formar HH:mm</string>
+    <string name="error_bad_format_date">The date must follow the format dd/MM/yyyy</string>
+    <string name="error_past_reservation">Can\'t create reservations in the past</string>
+    <string name="error_nClients_min">The minimum number of clients is 1.</string>
+    <string name="error_nClients_max">The number of customers exceeds the maximum capacity of the store</string>
+    <string name="error_rsv_duplicate">The client already has a reservation for that time. Please choose another date</string>
+    <string name="error_reservation_shop_full">The reservation cannot be saved for the number of clients on the indicated date.</string>
+    <string name="reservation_create_successfully">Reservation created successfully</string>
+    <string name="reservation_update_successfully">Reservation updated successfully</string>
+    <string name="accept">Accept</string>
+    <string name="pre_cancel_reservation_message">Are you sure you want to cancel this reservation? The change cannot be redone</string>
 </resources>

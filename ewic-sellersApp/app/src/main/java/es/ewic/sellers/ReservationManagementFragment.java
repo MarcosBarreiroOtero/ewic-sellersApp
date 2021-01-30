@@ -1,7 +1,9 @@
 package es.ewic.sellers;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -25,6 +28,7 @@ import java.util.List;
 
 import es.ewic.sellers.adapters.ReservationRowAdapter;
 import es.ewic.sellers.model.Reservation;
+import es.ewic.sellers.model.Seller;
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.BackEndEndpoints;
 import es.ewic.sellers.utils.ModelConverter;
@@ -38,20 +42,35 @@ import es.ewic.sellers.utils.RequestUtils;
 public class ReservationManagementFragment extends Fragment {
 
     private static final String ARG_SHOP = "shop";
+    private static final String ARG_SELLER = "seller";
 
+    private Seller seller;
     private Shop shop;
     private List<Reservation> reservations;
+
+    OnReservationManagementFragment mCallback;
+
+    public interface OnReservationManagementFragment {
+        void onCreateNewRsv(Shop shop);
+    }
 
     public ReservationManagementFragment() {
         // Required empty public constructor
     }
 
-    public static ReservationManagementFragment newInstance(Shop shop) {
+    public static ReservationManagementFragment newInstance(Shop shopData, Seller sellerData) {
         ReservationManagementFragment fragment = new ReservationManagementFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_SHOP, shop);
+        args.putSerializable(ARG_SHOP, shopData);
+        args.putSerializable(ARG_SELLER, sellerData);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mCallback = (ReservationManagementFragment.OnReservationManagementFragment) getActivity();
     }
 
     @Override
@@ -59,6 +78,7 @@ public class ReservationManagementFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             shop = (Shop) getArguments().getSerializable(ARG_SHOP);
+            seller = (Seller) getArguments().getSerializable(ARG_SELLER);
         }
     }
 
@@ -80,6 +100,14 @@ public class ReservationManagementFragment extends Fragment {
 
         getReservations(parent, swipeRefreshLayout);
 
+        FloatingActionButton add_reservation = parent.findViewById(R.id.add_reservation);
+        add_reservation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.onCreateNewRsv(shop);
+            }
+        });
+
         return parent;
     }
 
@@ -93,7 +121,7 @@ public class ReservationManagementFragment extends Fragment {
             public void onResponse(JSONArray response) {
                 reservations = ModelConverter.jsonArrayToReservationList(response);
                 ListView reservationsList = parent.findViewById(R.id.reservations_list);
-                ReservationRowAdapter reservationRowAdapter = new ReservationRowAdapter(reservations, shop, ReservationManagementFragment.this, getResources(), getActivity().getPackageName());
+                ReservationRowAdapter reservationRowAdapter = new ReservationRowAdapter(reservations, shop, seller, ReservationManagementFragment.this, getResources(), getActivity().getPackageName());
                 reservationsList.setAdapter(reservationRowAdapter);
                 swipe.setRefreshing(false);
                 TextView reservations_not_found = parent.findViewById(R.id.reservations_not_found);
