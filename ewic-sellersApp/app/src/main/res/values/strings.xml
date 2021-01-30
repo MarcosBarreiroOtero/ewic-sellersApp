@@ -136,4 +136,13 @@
     <string name="minutesBetweenReservations_helper">Minute interval between available reservations. By default 15.</string>
     <string name="update_reservation_params">Update reservation params</string>
     <string name="error_min_value_1">The minimum value is 1</string>
+    <string name="minutesAfterOpeningMorning_hint">Morning opening minutes</string>
+    <string name="minutesAfterOpeningMorning_helper">Margin minutes from the morning opening</string>
+    <string name="minutesBeforeClosingMorning_hint">Morning closing minutes</string>
+    <string name="minutesBeforeClosingMorning_helper">Margin minutes from the morning closing</string>
+    <string name="minutesAfterOpeningAfternoon_hint">Afternoon opening minutes</string>
+    <string name="minutesAfterOpeningAfternoon_helper">Margin minutes from the afternoon opening</string>
+    <string name="minutesBeforeClosingAfternoon_hint">Afternoon closing minutes</string>
+    <string name="minutesBeforeClosingAfternoon_helper">Margin minutes from the afternoon closing</string>
+
 </resources>

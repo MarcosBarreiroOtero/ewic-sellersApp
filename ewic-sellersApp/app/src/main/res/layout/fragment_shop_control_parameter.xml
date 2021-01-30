@@ -177,7 +177,7 @@
                 android:id="@+id/shop_parameter_reservation_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="shop_parameter_reservationWaitMinutes,shop_parameter_minutesBetweenReservations,shop_parameter_reservation_button" />
+                app:constraint_referenced_ids="shop_parameter_minutesBeforeClosingAfternoon,shop_parameter_reservationWaitMinutes,shop_parameter_minutesBetweenReservations,shop_parameter_minutesBeforeClosingMorning,shop_parameter_minutesAfterOpeningMorning,shop_parameter_reservation_button,shop_parameter_minutesAfterOpeningAfternoon" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/shop_parameter_reservationWaitMinutes"
@@ -200,7 +200,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/reservationWaitMinutes_hint"
                     android:inputType="number"
-                    android:maxLength="45" />
+                    android:maxLength="45"
+                    android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -223,7 +224,104 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/minutesBetweenReservations_hint"
                     android:inputType="number"
-                    android:maxLength="45" />
+                    android:maxLength="45"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/shop_parameter_minutesAfterOpeningMorning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                app:helperText="@string/minutesAfterOpeningMorning_helper"
+                app:helperTextEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/shop_parameter_minutesBetweenReservations">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/minutesAfterOpeningMorning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/minutesAfterOpeningMorning_hint"
+                    android:inputType="number"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/shop_parameter_minutesBeforeClosingMorning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                app:helperText="@string/minutesBeforeClosingMorning_helper"
+                app:helperTextEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/shop_parameter_minutesAfterOpeningMorning">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/minutesBeforeClosingMorning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/minutesBeforeClosingMorning_hint"
+                    android:inputType="number"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/shop_parameter_minutesAfterOpeningAfternoon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                app:helperText="@string/minutesAfterOpeningAfternoon_helper"
+                app:helperTextEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/shop_parameter_minutesBeforeClosingMorning">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/minutesAfterOpeningAfternoon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/minutesAfterOpeningAfternoon_hint"
+                    android:inputType="number"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/shop_parameter_minutesBeforeClosingAfternoon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                app:helperText="@string/minutesBeforeClosingAfternoon_helper"
+                app:helperTextEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/shop_parameter_minutesAfterOpeningAfternoon">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/minutesBeforeClosingAfternoon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/minutesBeforeClosingAfternoon_hint"
+                    android:inputType="number"
+                    android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
@@ -238,7 +336,7 @@
                 android:text="@string/update_reservation_params"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/shop_parameter_minutesBetweenReservations" />
+                app:layout_constraintTop_toBottomOf="@id/shop_parameter_minutesBeforeClosingAfternoon" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

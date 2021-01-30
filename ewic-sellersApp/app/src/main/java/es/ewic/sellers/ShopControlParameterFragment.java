@@ -160,6 +160,18 @@ public class ShopControlParameterFragment extends Fragment {
             }
             parameters.put(new JSONObject().put("name", ConfigurationNames.MINUTES_BETWEEN_RESERVATIONS).put("value", minutesBetweenReservations));
 
+            TextInputEditText tiet_minutesAfterOpeningMorning = parent.findViewById(R.id.minutesAfterOpeningMorning);
+            parameters.put(new JSONObject().put("name", ConfigurationNames.MINUTES_AFTER_OPENING_MORNING).put("value", tiet_minutesAfterOpeningMorning.getText().toString().trim()));
+
+            TextInputEditText tiet_minutesBeforeClosingMorning = parent.findViewById(R.id.minutesBeforeClosingMorning);
+            parameters.put(new JSONObject().put("name", ConfigurationNames.MINUTES_BEFORE_CLOSING_MORNING).put("value", tiet_minutesBeforeClosingMorning.getText().toString().trim()));
+
+            TextInputEditText tiet_minutesAfterOpeningAfternoon = parent.findViewById(R.id.minutesAfterOpeningAfternoon);
+            parameters.put(new JSONObject().put("name", ConfigurationNames.MINUTES_AFTER_OPENING_AFTERNOON).put("value", tiet_minutesAfterOpeningAfternoon.getText().toString().trim()));
+
+            TextInputEditText tiet_minutesBeforeClosingAfternoon = parent.findViewById(R.id.minutesBeforeClosingAfternoon);
+            parameters.put(new JSONObject().put("name", ConfigurationNames.MINUTES_BEFORE_CLOSING_AFTERNOON).put("value", tiet_minutesBeforeClosingAfternoon.getText().toString().trim()));
+
             updateParameters(parent, parameters);
 
         } catch (JSONException e) {

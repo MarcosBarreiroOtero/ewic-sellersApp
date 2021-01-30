@@ -65,6 +65,10 @@ public class CreateReservationFragment extends Fragment {
     JSONArray timetable;
 
     private int minutesBetweenReservation = 15;
+    private int minutesAfterOpeningMorning = 0;
+    private int minutesBeforeClosingMorning = 0;
+    private int minutesAfterOpeningAfternoon = 0;
+    private int minutesBeforeClosingAfternoon = 0;
 
     private List<Client> clients;
 
@@ -291,8 +295,23 @@ public class CreateReservationFragment extends Fragment {
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject param = response.getJSONObject(i);
-                        if (param.getString("name").equals(ConfigurationNames.MINUTES_BETWEEN_RESERVATIONS)) {
-                            minutesBetweenReservation = Integer.parseInt(param.getString("value"));
+                        String value = param.getString("value");
+                        if (!value.isEmpty()) {
+                            if (param.getString("name").equals(ConfigurationNames.MINUTES_BETWEEN_RESERVATIONS)) {
+                                minutesBetweenReservation = Integer.parseInt(param.getString("value"));
+                            }
+                            if (param.getString("name").equals(ConfigurationNames.MINUTES_AFTER_OPENING_MORNING)) {
+                                minutesAfterOpeningMorning = Integer.parseInt(param.getString("value"));
+                            }
+                            if (param.getString("name").equals(ConfigurationNames.MINUTES_BEFORE_CLOSING_MORNING)) {
+                                minutesBeforeClosingMorning = Integer.parseInt(param.getString("value"));
+                            }
+                            if (param.getString("name").equals(ConfigurationNames.MINUTES_AFTER_OPENING_AFTERNOON)) {
+                                minutesAfterOpeningAfternoon = Integer.parseInt(param.getString("value"));
+                            }
+                            if (param.getString("name").equals(ConfigurationNames.MINUTES_BEFORE_CLOSING_AFTERNOON)) {
+                                minutesBeforeClosingAfternoon = Integer.parseInt(param.getString("value"));
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -322,7 +341,9 @@ public class CreateReservationFragment extends Fragment {
             if (weekDay == weekDayTimetable.optInt("weekDay")) {
                 try {
                     Calendar startMorning = DateUtils.parseDateHour(weekDayTimetable.getString("startMorning"));
+                    startMorning.add(Calendar.MINUTE, minutesAfterOpeningMorning);
                     Calendar endMorning = DateUtils.parseDateHour(weekDayTimetable.getString("endMorning"));
+                    endMorning.add(Calendar.MINUTE, -minutesBeforeClosingMorning);
                     hours.addAll(getHoursBetweenRanges(startMorning, endMorning));
                 } catch (JSONException e) {
                     // no timetable morning
@@ -330,7 +351,9 @@ public class CreateReservationFragment extends Fragment {
 
                 try {
                     Calendar startAfternoon = DateUtils.parseDateHour(weekDayTimetable.getString("startAfternoon"));
+                    startAfternoon.add(Calendar.MINUTE, minutesAfterOpeningAfternoon);
                     Calendar endAfternoon = DateUtils.parseDateHour(weekDayTimetable.getString("endAfternoon"));
+                    endAfternoon.add(Calendar.MINUTE, -minutesBeforeClosingAfternoon);
                     hours.addAll(getHoursBetweenRanges(startAfternoon, endAfternoon));
                 } catch (JSONException e) {
                     // no timetable afternoon
