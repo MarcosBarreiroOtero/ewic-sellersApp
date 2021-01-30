@@ -123,4 +123,17 @@
     <string name="reservation_update_successfully">Reservation updated successfully</string>
     <string name="accept">Accept</string>
     <string name="pre_cancel_reservation_message">Are you sure you want to cancel this reservation? The change cannot be redone</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="settings">Settings</string>
+    <string name="email_notifications">Email notifications</string>
+    <string name="host">Host</string>
+    <string name="port">Port</string>
+    <string name="update_email_params">Update mail parameters</string>
+    <string name="parameters_updated_successfully">Parameters updated successfully</string>
+    <string name="reservationWaitMinutes_hint">Reservation waiting minutes</string>
+    <string name="reservationWaitMinutes_helper">Minutes it takes for a reservation to be marked as does not appear from the time of the reservation. By default 10.</string>
+    <string name="minutesBetweenReservations_hint">Minutes between reservations</string>
+    <string name="minutesBetweenReservations_helper">Minute interval between available reservations. By default 15.</string>
+    <string name="update_reservation_params">Update reservation params</string>
+    <string name="error_min_value_1">The minimum value is 1</string>
 </resources>

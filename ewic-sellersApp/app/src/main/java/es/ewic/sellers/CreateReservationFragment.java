@@ -44,6 +44,7 @@ import es.ewic.sellers.model.Client;
 import es.ewic.sellers.model.Reservation;
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.BackEndEndpoints;
+import es.ewic.sellers.utils.ConfigurationNames;
 import es.ewic.sellers.utils.DateUtils;
 import es.ewic.sellers.utils.FormUtils;
 import es.ewic.sellers.utils.ModelConverter;
@@ -62,6 +63,8 @@ public class CreateReservationFragment extends Fragment {
     private Shop shop;
     private Reservation reservation;
     JSONArray timetable;
+
+    private int minutesBetweenReservation = 15;
 
     private List<Client> clients;
 
@@ -144,9 +147,9 @@ public class CreateReservationFragment extends Fragment {
         // Hour input
         AutoCompleteTextView act_hour = parent.findViewById(R.id.reservation_hour_input);
         if (reservation != null) {
-            setAdapterHourInput(parent, reservation.getDate(), timetable);
+            getReservationParams(parent, reservation.getDate(), timetable);
         } else {
-            setAdapterHourInput(parent, now, timetable);
+            getReservationParams(parent, now, timetable);
         }
 
         //Date input
@@ -272,10 +275,37 @@ public class CreateReservationFragment extends Fragment {
         List<String> hours = new ArrayList<>();
         while (start.before(end)) {
             hours.add(DateUtils.formatHour(start));
-            start.add(Calendar.MINUTE, 15);
+            start.add(Calendar.MINUTE, minutesBetweenReservation);
         }
         return hours;
 
+    }
+
+    private void getReservationParams(ConstraintLayout parent, Calendar date, JSONArray timetable) {
+
+        String url = BackEndEndpoints.CONFIGURATION_RESERVATION(shop.getIdShop());
+
+        RequestUtils.sendJsonArrayRequest(getContext(), Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject param = response.getJSONObject(i);
+                        if (param.getString("name").equals(ConfigurationNames.MINUTES_BETWEEN_RESERVATIONS)) {
+                            minutesBetweenReservation = Integer.parseInt(param.getString("value"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                setAdapterHourInput(parent, date, timetable);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("HTTP", "error reservation params");
+            }
+        });
     }
 
     private void setAdapterHourInput(ConstraintLayout parent, Calendar date, JSONArray timetable) {

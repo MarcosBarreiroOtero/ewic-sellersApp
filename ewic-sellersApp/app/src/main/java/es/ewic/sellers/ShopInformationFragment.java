@@ -47,6 +47,8 @@ public class ShopInformationFragment extends Fragment {
         void clickReservationManagement(Shop shop);
 
         void clickAddReservation(Shop shop);
+
+        void clickConfiguration(Shop shop);
     }
 
     public ShopInformationFragment() {
@@ -110,6 +112,14 @@ public class ShopInformationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mCallback.clickAddReservation(shop);
+            }
+        });
+
+        Button configuration_button = parent.findViewById(R.id.shop_information_configutation_button);
+        configuration_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.clickConfiguration(shop);
             }
         });
 
