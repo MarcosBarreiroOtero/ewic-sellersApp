@@ -15,7 +15,7 @@
     <string name="error_empty_field">Field can\'t be empty</string>
     <string name="error_username_login">Username and/or password incorrect</string>
     <string name="welcome">Welcome</string>
-    <string name="startCapacityShop">To start the capacity control and for the store to appear as open, click on it\'s name.</string>
+    <string name="startCapacityShop">Click on a store to show it options</string>
     <string name="close_shop">Close shop</string>
     <string name="warning">Warning</string>
     <string name="pre_close_shop">Are you sure you want to close the shop? All active entries will be terminated.</string>
@@ -155,5 +155,12 @@
     <string name="register_manual_entry">Register manual entry</string>
     <string name="max_capacity_exceeded_message">You cannot enter. Maximum capacity exceeded</string>
     <string name="registering_exit">Registering exit</string>
+    <string name="delete_shop">Delete shop</string>
+    <string name="pre_delete_shop_message">You are sure you want to delete the store. The information related to your reservations and entries will be deleted and cannot be recovered.</string>
+    <string name="delete_password_needed_shop">To delete the shop is necessary to enter the password</string>
+    <string name="delete_shop_error">The store could not be deleted.</string>
+    <string name="shop_delete_successfully">Shop deleted successfully</string>
+    <string name="log_out">Log out</string>
+    <string name="shops_not_found">You don\'t have any stores yet. Create your first store by pressing the add button.</string>
 
 </resources>

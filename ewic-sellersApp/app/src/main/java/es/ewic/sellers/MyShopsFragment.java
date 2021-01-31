@@ -89,7 +89,7 @@ public class MyShopsFragment extends Fragment {
 
         TextView seller_welcome = parent.findViewById(R.id.seller_welcome);
 
-        seller_welcome.setText(getString(R.string.welcome) + " " + sellerData.getLoginName() + ". " + getString(R.string.startCapacityShop));
+        seller_welcome.setText(getString(R.string.welcome) + " " + sellerData.getFirstName() + " " + sellerData.getLastName() + ". \n" + getString(R.string.startCapacityShop));
 
         getShops(parent);
         ListView shopList = parent.findViewById(R.id.shop_list);
@@ -130,8 +130,18 @@ public class MyShopsFragment extends Fragment {
             public void onResponse(JSONArray response) {
                 shops = ModelConverter.jsonArrayToShopList(response);
                 ListView shopList = parent.findViewById(R.id.shop_list);
-                ShopRowAdapter shopRowAdapter = new ShopRowAdapter(MyShopsFragment.this, shops, getResources(), getActivity().getPackageName());
-                shopList.setAdapter(shopRowAdapter);
+                TextView shops_not_found = parent.findViewById(R.id.shops_not_found);
+                if (shops.size() == 0) {
+                    shopList.setVisibility(View.GONE);
+                    shops_not_found.setVisibility(View.VISIBLE);
+                } else {
+                    shops_not_found.setVisibility(View.GONE);
+                    shopList.setVisibility(View.VISIBLE);
+                    ShopRowAdapter shopRowAdapter = new ShopRowAdapter(MyShopsFragment.this, shops, getResources(), getActivity().getPackageName());
+                    shopList.setAdapter(shopRowAdapter);
+                }
+
+
                 pd.dismiss();
             }
         }, new Response.ErrorListener() {

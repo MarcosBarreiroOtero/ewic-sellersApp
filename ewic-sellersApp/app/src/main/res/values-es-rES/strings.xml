@@ -16,7 +16,7 @@
     <string name="error_empty_field">El campo no puede estar vacío</string>
     <string name="error_username_login">Nombre de usuario y/o contraseña incorrecta</string>
     <string name="welcome">Bienvenido</string>
-    <string name="startCapacityShop">Para comenzar el control de aforo y que la tienda aparezca como abierta pulse sobre su nombre.</string>
+    <string name="startCapacityShop">Pulse sobre una tienda para mostrar sus opciones</string>
     <string name="close_shop">Cerrar tienda</string>
     <string name="warning">Aviso</string>
     <string name="pre_close_shop">¿Seguro que quiere cerrar la tienda? Se finalizarán todas las entradas activas.</string>
@@ -155,4 +155,11 @@
     <string name="register_manual_entry">Registrar entrada manual</string>
     <string name="max_capacity_exceeded_message">No se puede entrar. Aforo máximo superado</string>
     <string name="registering_exit">Registrando salida</string>
+    <string name="delete_shop">Borrar tienda</string>
+    <string name="pre_delete_shop_message">Está seguro de que quiere eliminar la tienda. Se borrará la información relacionada con sus reservas y entradas y no se podrá recuperar.</string>
+    <string name="delete_password_needed_shop">Para eliminar la tienda es necesario introducir la contraseña</string>
+    <string name="delete_shop_error">No se ha podido eliminar la tienda.</string>
+    <string name="shop_delete_successfully">Tienda eliminada correctamente</string>
+    <string name="log_out">Cerrar sesión</string>
+    <string name="shops_not_found">Aún no tiene ninguna tienda. Cree su primera tienda pulsando el botón de añadir.</string>
 </resources>

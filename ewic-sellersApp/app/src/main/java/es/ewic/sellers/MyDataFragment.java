@@ -265,7 +265,6 @@ public class MyDataFragment extends Fragment {
             public void onClick(View v) {
                 String password = pwd.getText().toString().trim();
                 if (password.isEmpty()) {
-                    Log.e("DELETE", "Contraseña vacia");
                     pwd_label.setError(getString(R.string.error_empty_field));
                 } else {
                     deleteSellerAccount(parent, pwd.getText().toString().trim());

@@ -76,6 +76,11 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
                     invalidateOptionsMenu();
                 }
                 return true;
+            case R.id.action_log_out:
+                this.seller = null;
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -106,11 +111,11 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     public void onLoadSellerData(Seller sellerData) {
         seller = sellerData;
 
+        FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), MyShopsFragment.newInstance(seller), false);
+
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         myToolbar.setVisibility(View.VISIBLE);
         setSupportActionBar(myToolbar);
-
-        FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), MyShopsFragment.newInstance(seller), false);
 
     }
 
@@ -220,6 +225,15 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     public void clickConfiguration(Shop shop) {
         if (seller != null) {
             FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopControlParameterFragment.newInstance(shop), true);
+        }
+    }
+
+    @Override
+    public void confirmDeleteShop() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), MyShopsFragment.newInstance(seller), false);
         }
     }
 
