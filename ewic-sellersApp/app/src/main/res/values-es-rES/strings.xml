@@ -170,4 +170,7 @@
     <string name="entries_chart_title">Número de entradas por hora</string>
     <string name="entries_chart_y">Número de entradas</string>
     <string name="entries_chart_x">Hora</string>
+    <string name="reservation_log">Registro de reservas</string>
+    <string name="log_reservations_not_found">No se han encontrado reservas. Por favor escoja otra fecha.</string>
+    <string name="reservation_state">Estado de la reservas</string>
 </resources>

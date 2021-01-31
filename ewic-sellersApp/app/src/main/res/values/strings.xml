@@ -170,4 +170,8 @@
     <string name="entries_chart_title">Number of entries per hour</string>
     <string name="entries_chart_y">Number of entries</string>
     <string name="entries_chart_x">Hour</string>
+    <string name="reservation_log">Reservation log</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="log_reservations_not_found">No reservations found. Please choose another date.</string>
+    <string name="reservation_state">Reservations state</string>
 </resources>

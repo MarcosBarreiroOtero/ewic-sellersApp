@@ -1,18 +1,16 @@
 package es.ewic.sellers;
 
+import android.Manifest;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentManager;
-
-import android.Manifest;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 
 import es.ewic.sellers.adapters.ReservationRowAdapter;
 import es.ewic.sellers.model.Reservation;
@@ -232,6 +230,13 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     public void clickEntryLog(Shop shop) {
         if (seller != null) {
             FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), EntryLogFragment.newInstance(shop), true);
+        }
+    }
+
+    @Override
+    public void clickReservationLog(Shop shop) {
+        if (seller != null) {
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ReservationLogFragment.newInstance(shop), true);
         }
     }
 

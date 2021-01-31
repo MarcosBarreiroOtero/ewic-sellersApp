@@ -3,12 +3,6 @@ package es.ewic.sellers;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.Group;
-import androidx.fragment.app.Fragment;
-
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,22 +11,21 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
+import androidx.fragment.app.Fragment;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
@@ -217,15 +210,12 @@ public class EntryLogFragment extends Fragment {
             xAxis.disableGridDashedLine();
             xAxis.setDrawGridLines(false);
             xAxis.setGranularity(1f);
-//            xAxis.setValueFormatter(new IndexAxisValueFormatter(axiss));
             xAxis.setValueFormatter(new ValueFormatter() {
                 @Override
                 public String getFormattedValue(float value) {
                     return (int) value + ":00";
                 }
             });
-//            xAxis.setAxisMinimum(0);
-//            xAxis.setAxisMaximum(23);
 
             YAxis yAxis = barChart.getAxisLeft();
             yAxis.disableAxisLineDashedLine();
