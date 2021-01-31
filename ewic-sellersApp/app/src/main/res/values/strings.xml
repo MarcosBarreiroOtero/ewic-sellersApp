@@ -144,5 +144,16 @@
     <string name="minutesAfterOpeningAfternoon_helper">Margin minutes from the afternoon opening</string>
     <string name="minutesBeforeClosingAfternoon_hint">Afternoon closing minutes</string>
     <string name="minutesBeforeClosingAfternoon_helper">Margin minutes from the afternoon closing</string>
+    <string name="manual_entry">Manual entry</string>
+    <string name="manual_exit">Manual exit</string>
+    <string name="automatic_entry_not_activate_1">Automatic process not activated. Only manual entries allowed.</string>
+    <string name="automatic_entry_not_activate_2">To activate the automatic process, click here.</string>
+    <string name="choose_entry_exit">Choose a entry  to check out</string>
+    <string name="exit_register_successfully">Exit register successfully</string>
+    <string name="manual_entry_identifier">Entry identifier</string>
+    <string name="manual_entry_identifier_helper">Entry identifier to later record its exit manually</string>
+    <string name="register_manual_entry">Register manual entry</string>
+    <string name="max_capacity_exceeded_message">You cannot enter. Maximum capacity exceeded</string>
+    <string name="registering_exit">Registering exit</string>
 
 </resources>

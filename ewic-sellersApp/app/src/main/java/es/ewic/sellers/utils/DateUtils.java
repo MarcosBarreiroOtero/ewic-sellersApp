@@ -10,6 +10,7 @@ public class DateUtils {
 
     public static SimpleDateFormat sdfLong = new SimpleDateFormat("HH:mm dd/MM/yyyy");
     public static SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
+    public static SimpleDateFormat sdfBackendDate = new SimpleDateFormat("yyyy-MM-dd");
     public static SimpleDateFormat sdfHour = new SimpleDateFormat("HH:mm");
 
     public static Calendar parseDateLong(String dateString) {
@@ -40,6 +41,12 @@ public class DateUtils {
     public static String formatDateLong(Calendar date) {
         synchronized (sdfLong) {
             return sdfLong.format(date.getTime());
+        }
+    }
+
+    public static String formatBackendDate(Calendar date) {
+        synchronized (sdfBackendDate) {
+            return sdfBackendDate.format(date.getTime());
         }
     }
 
