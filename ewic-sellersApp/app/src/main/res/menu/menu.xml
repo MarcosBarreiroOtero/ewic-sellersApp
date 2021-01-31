@@ -6,4 +6,9 @@
         android:id="@+id/action_my_data"
         android:title="@string/toolbar_menu_my_data"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_log_out"
+        android:title="@string/log_out"
+        app:showAsAction="never" />
 </menu>

@@ -160,5 +160,6 @@
     <string name="delete_password_needed_shop">To delete the shop is necessary to enter the password</string>
     <string name="delete_shop_error">The store could not be deleted.</string>
     <string name="shop_delete_successfully">Shop deleted successfully</string>
+    <string name="log_out">Log out</string>
 
 </resources>
