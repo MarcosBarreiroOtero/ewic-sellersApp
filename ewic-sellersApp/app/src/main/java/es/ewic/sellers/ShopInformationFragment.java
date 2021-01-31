@@ -1,11 +1,13 @@
 package es.ewic.sellers;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -139,6 +141,11 @@ public class ShopInformationFragment extends Fragment {
     void loadData(ConstraintLayout parent) {
         Button capacity_button = parent.findViewById(R.id.shop_information_capacity_button);
         capacity_button.setText(getString(R.string.capacity_control) + "\n" + shop.getActualCapacity() + " / " + shop.getMaxCapacity());
+
+        Drawable icon = getResources().getDrawable(shop.isAllowEntries() ? R.drawable.ic_open_24 : R.drawable.ic_close_24);
+        Drawable wrappedDrawable = DrawableCompat.wrap(icon);
+        DrawableCompat.setTint(wrappedDrawable, getResources().getColor(shop.isAllowEntries() ? R.color.semaphore_green : R.color.semaphore_red));
+        capacity_button.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
     }
 
     void getShopUpdated(ConstraintLayout parent) {
