@@ -44,6 +44,7 @@ import es.ewic.sellers.model.Client;
 import es.ewic.sellers.model.Reservation;
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.BackEndEndpoints;
+import es.ewic.sellers.utils.ConfigurationNames;
 import es.ewic.sellers.utils.DateUtils;
 import es.ewic.sellers.utils.FormUtils;
 import es.ewic.sellers.utils.ModelConverter;
@@ -62,6 +63,12 @@ public class CreateReservationFragment extends Fragment {
     private Shop shop;
     private Reservation reservation;
     JSONArray timetable;
+
+    private int minutesBetweenReservation = 15;
+    private int minutesAfterOpeningMorning = 0;
+    private int minutesBeforeClosingMorning = 0;
+    private int minutesAfterOpeningAfternoon = 0;
+    private int minutesBeforeClosingAfternoon = 0;
 
     private List<Client> clients;
 
@@ -144,9 +151,9 @@ public class CreateReservationFragment extends Fragment {
         // Hour input
         AutoCompleteTextView act_hour = parent.findViewById(R.id.reservation_hour_input);
         if (reservation != null) {
-            setAdapterHourInput(parent, reservation.getDate(), timetable);
+            getReservationParams(parent, reservation.getDate(), timetable);
         } else {
-            setAdapterHourInput(parent, now, timetable);
+            getReservationParams(parent, now, timetable);
         }
 
         //Date input
@@ -272,10 +279,52 @@ public class CreateReservationFragment extends Fragment {
         List<String> hours = new ArrayList<>();
         while (start.before(end)) {
             hours.add(DateUtils.formatHour(start));
-            start.add(Calendar.MINUTE, 15);
+            start.add(Calendar.MINUTE, minutesBetweenReservation);
         }
         return hours;
 
+    }
+
+    private void getReservationParams(ConstraintLayout parent, Calendar date, JSONArray timetable) {
+
+        String url = BackEndEndpoints.CONFIGURATION_RESERVATION(shop.getIdShop());
+
+        RequestUtils.sendJsonArrayRequest(getContext(), Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject param = response.getJSONObject(i);
+                        String value = param.getString("value");
+                        if (!value.isEmpty()) {
+                            if (param.getString("name").equals(ConfigurationNames.MINUTES_BETWEEN_RESERVATIONS)) {
+                                minutesBetweenReservation = Integer.parseInt(param.getString("value"));
+                            }
+                            if (param.getString("name").equals(ConfigurationNames.MINUTES_AFTER_OPENING_MORNING)) {
+                                minutesAfterOpeningMorning = Integer.parseInt(param.getString("value"));
+                            }
+                            if (param.getString("name").equals(ConfigurationNames.MINUTES_BEFORE_CLOSING_MORNING)) {
+                                minutesBeforeClosingMorning = Integer.parseInt(param.getString("value"));
+                            }
+                            if (param.getString("name").equals(ConfigurationNames.MINUTES_AFTER_OPENING_AFTERNOON)) {
+                                minutesAfterOpeningAfternoon = Integer.parseInt(param.getString("value"));
+                            }
+                            if (param.getString("name").equals(ConfigurationNames.MINUTES_BEFORE_CLOSING_AFTERNOON)) {
+                                minutesBeforeClosingAfternoon = Integer.parseInt(param.getString("value"));
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                setAdapterHourInput(parent, date, timetable);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("HTTP", "error reservation params");
+            }
+        });
     }
 
     private void setAdapterHourInput(ConstraintLayout parent, Calendar date, JSONArray timetable) {
@@ -292,7 +341,9 @@ public class CreateReservationFragment extends Fragment {
             if (weekDay == weekDayTimetable.optInt("weekDay")) {
                 try {
                     Calendar startMorning = DateUtils.parseDateHour(weekDayTimetable.getString("startMorning"));
+                    startMorning.add(Calendar.MINUTE, minutesAfterOpeningMorning);
                     Calendar endMorning = DateUtils.parseDateHour(weekDayTimetable.getString("endMorning"));
+                    endMorning.add(Calendar.MINUTE, -minutesBeforeClosingMorning);
                     hours.addAll(getHoursBetweenRanges(startMorning, endMorning));
                 } catch (JSONException e) {
                     // no timetable morning
@@ -300,7 +351,9 @@ public class CreateReservationFragment extends Fragment {
 
                 try {
                     Calendar startAfternoon = DateUtils.parseDateHour(weekDayTimetable.getString("startAfternoon"));
+                    startAfternoon.add(Calendar.MINUTE, minutesAfterOpeningAfternoon);
                     Calendar endAfternoon = DateUtils.parseDateHour(weekDayTimetable.getString("endAfternoon"));
+                    endAfternoon.add(Calendar.MINUTE, -minutesBeforeClosingAfternoon);
                     hours.addAll(getHoursBetweenRanges(startAfternoon, endAfternoon));
                 } catch (JSONException e) {
                     // no timetable afternoon

@@ -217,6 +217,13 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     }
 
     @Override
+    public void clickConfiguration(Shop shop) {
+        if (seller != null) {
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopControlParameterFragment.newInstance(shop), true);
+        }
+    }
+
+    @Override
     public void onCreateNewRsv(Shop shop) {
         if (seller != null) {
             FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), CreateReservationFragment.newInstance(shop, null), true);

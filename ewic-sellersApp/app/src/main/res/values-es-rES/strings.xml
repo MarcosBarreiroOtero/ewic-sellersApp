@@ -124,4 +124,24 @@
     <string name="reservation_update_successfully">Reserva actualizada correctamente</string>
     <string name="accept">Aceptar</string>
     <string name="pre_cancel_reservation_message">¿Está seguro de que quiere cancelar la reserva? El cambio no se podrá rehacer</string>
+    <string name="settings">Configuración</string>
+    <string name="email_notifications">Notificaciones de correo electrónico</string>
+    <string name="host">Host</string>
+    <string name="port">Puerto</string>
+    <string name="update_email_params">Actualizar parámetros del correo</string>
+    <string name="parameters_updated_successfully">Parámetros actualizados correctamente</string>
+    <string name="reservationWaitMinutes_hint">Minutos de espera reserva</string>
+    <string name="reservationWaitMinutes_helper">Minutos que tarda una reserva en marcarse como no aparece desde la hora de la misma. Por defecto 10.</string>
+    <string name="minutesBetweenReservations_hint">Minutos entre reservas</string>
+    <string name="minutesBetweenReservations_helper">Intervalo de minutos entre reservas disponibles. Por defecto 15.</string>
+    <string name="update_reservation_params">Actualizar parámetros de las reservas</string>
+    <string name="error_min_value_1">El valor mínimo es 1</string>
+    <string name="minutesAfterOpeningMorning_hint">Minutos de la apertura de la  mañana</string>
+    <string name="minutesAfterOpeningMorning_helper">Minutos de margen desde la apertura de la mañana</string>
+    <string name="minutesBeforeClosingMorning_hint">Minutos del cierre de la mañana</string>
+    <string name="minutesBeforeClosingMorning_helper">Minutos de margen desde el cierre de la mañana</string>
+    <string name="minutesAfterOpeningAfternoon_hint">Minutos del la apertura de la tarde</string>
+    <string name="minutesAfterOpeningAfternoon_helper">Minutos de margen desde la apertura de la tarde</string>
+    <string name="minutesBeforeClosingAfternoon_hint">Minutos del cierre de tarde</string>
+    <string name="minutesBeforeClosingAfternoon_helper">Minutos de margen desde el cierre de la tarde</string>
 </resources>

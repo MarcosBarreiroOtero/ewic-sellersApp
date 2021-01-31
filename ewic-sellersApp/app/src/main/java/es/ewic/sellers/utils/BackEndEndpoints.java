@@ -38,5 +38,16 @@ public class BackEndEndpoints {
     //CLIENT
     public static String CLIENT_BASE = BASE_ENDPOINT + "/client";
 
+    //CONFIGURATION
+    public static String CONFIGURATION_BASE = BASE_ENDPOINT + "/configuration";
+
+    public static String CONFIGURATION_BATCH(int idShop) {
+        return CONFIGURATION_BASE + "/" + idShop + "/batch";
+    }
+
+    public static String CONFIGURATION_RESERVATION(int idShop) {
+        return CONFIGURATION_BASE + "/" + idShop + "/reservation";
+    }
+
 
 }
