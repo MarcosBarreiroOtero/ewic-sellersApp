@@ -162,5 +162,12 @@
     <string name="shop_delete_successfully">Shop deleted successfully</string>
     <string name="log_out">Log out</string>
     <string name="shops_not_found">You don\'t have any stores yet. Create your first store by pressing the add button.</string>
-
+    <string name="entry_log">Entry log</string>
+    <string name="entries_not_found">No entries found. Please choose another date.</string>
+    <string name="entry_avg_duration">Average duration</string>
+    <string name="nEntries">Number of entries</string>
+    <string name="less_1_minute">Less than a minute</string>
+    <string name="entries_chart_title">Number of entries per hour</string>
+    <string name="entries_chart_y">Number of entries</string>
+    <string name="entries_chart_x">Hour</string>
 </resources>

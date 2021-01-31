@@ -42,6 +42,10 @@ public class BackEndEndpoints {
         return SHOP_BASE + "/" + idShop + "/manualEntries" + "?date=" + DateUtils.formatBackendDate(date);
     }
 
+    public static String DAILY_ENTRIES(int idShop, Calendar date){
+        return SHOP_BASE + "/" + idShop + "/dailyEntries" + "?date=" + DateUtils.formatBackendDate(date);
+    }
+
     //RESERVATION
     public static String RESERVATION_BASE = BASE_ENDPOINT + "/reservation/seller";
 

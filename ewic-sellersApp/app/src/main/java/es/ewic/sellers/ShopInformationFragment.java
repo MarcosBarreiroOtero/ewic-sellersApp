@@ -60,6 +60,8 @@ public class ShopInformationFragment extends Fragment {
 
         void clickConfiguration(Shop shop);
 
+        void clickEntryLog(Shop shop);
+
         void confirmDeleteShop();
     }
 
@@ -132,6 +134,14 @@ public class ShopInformationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mCallback.clickConfiguration(shop);
+            }
+        });
+
+        Button entry_log_button = parent.findViewById(R.id.shop_information_entry_log_button);
+        entry_log_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.clickEntryLog(shop);
             }
         });
 

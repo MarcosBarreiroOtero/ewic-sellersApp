@@ -162,4 +162,12 @@
     <string name="shop_delete_successfully">Tienda eliminada correctamente</string>
     <string name="log_out">Cerrar sesión</string>
     <string name="shops_not_found">Aún no tiene ninguna tienda. Cree su primera tienda pulsando el botón de añadir.</string>
+    <string name="entry_log">Registro de entradas</string>
+    <string name="entries_not_found">No se han encontrado entradas. Por favor escoja otra fecha.</string>
+    <string name="entry_avg_duration">Duración media</string>
+    <string name="nEntries">Número de entradas</string>
+    <string name="less_1_minute">Menos de un minuto</string>
+    <string name="entries_chart_title">Número de entradas por hora</string>
+    <string name="entries_chart_y">Número de entradas</string>
+    <string name="entries_chart_x">Hora</string>
 </resources>

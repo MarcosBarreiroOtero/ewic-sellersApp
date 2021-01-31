@@ -229,6 +229,13 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     }
 
     @Override
+    public void clickEntryLog(Shop shop) {
+        if (seller != null) {
+            FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), EntryLogFragment.newInstance(shop), true);
+        }
+    }
+
+    @Override
     public void confirmDeleteShop() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();

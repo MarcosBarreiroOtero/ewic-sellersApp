@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import es.ewic.sellers.model.Client;
+import es.ewic.sellers.model.Entry;
 import es.ewic.sellers.model.Reservation;
 import es.ewic.sellers.model.Seller;
 import es.ewic.sellers.model.Shop;
@@ -157,6 +158,39 @@ public class ModelConverter {
             clients.add(jsonObjectToClient(clientData));
         }
         return clients;
+    }
+
+    //Entry
+    public static Entry jsonObjectToEntry(JSONObject entryData) {
+        try {
+
+            Calendar startDate = DateUtils.parseDateLong(entryData.getString("start"));
+            startDate = DateUtils.changeCalendarTimezoneFromUTCToDefault(startDate);
+
+            Calendar endDate = null;
+            if (entryData.getString("end") != null) {
+                endDate = DateUtils.parseDateLong(entryData.getString("end"));
+                endDate = DateUtils.changeCalendarTimezoneFromUTCToDefault(endDate);
+            }
+
+            return new Entry(entryData.getInt("entryNumber"),
+                    startDate, endDate,
+                    entryData.getLong("duration"),
+                    entryData.getString("description"),
+                    entryData.getString("shopName"),
+                    entryData.getString("clientName"));
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    public static List<Entry> jsonArrayToEntriList(JSONArray entriesData) {
+        ArrayList<Entry> entries = new ArrayList<>();
+        for (int i = 0; i < entriesData.length(); i++) {
+            JSONObject entryData = entriesData.optJSONObject(i);
+            entries.add(jsonObjectToEntry(entryData));
+        }
+        return entries;
     }
 
 }
