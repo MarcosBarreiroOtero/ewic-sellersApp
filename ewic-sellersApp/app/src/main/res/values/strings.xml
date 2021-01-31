@@ -15,7 +15,7 @@
     <string name="error_empty_field">Field can\'t be empty</string>
     <string name="error_username_login">Username and/or password incorrect</string>
     <string name="welcome">Welcome</string>
-    <string name="startCapacityShop">To start the capacity control and for the store to appear as open, click on it\'s name.</string>
+    <string name="startCapacityShop">Click on a store to show it options</string>
     <string name="close_shop">Close shop</string>
     <string name="warning">Warning</string>
     <string name="pre_close_shop">Are you sure you want to close the shop? All active entries will be terminated.</string>
@@ -161,5 +161,6 @@
     <string name="delete_shop_error">The store could not be deleted.</string>
     <string name="shop_delete_successfully">Shop deleted successfully</string>
     <string name="log_out">Log out</string>
+    <string name="shops_not_found">You don\'t have any stores yet. Create your first store by pressing the add button.</string>
 
 </resources>
