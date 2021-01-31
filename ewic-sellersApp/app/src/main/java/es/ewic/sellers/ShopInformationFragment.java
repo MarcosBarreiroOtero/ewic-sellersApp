@@ -137,9 +137,6 @@ public class ShopInformationFragment extends Fragment {
     }
 
     void loadData(ConstraintLayout parent) {
-        TextView title = parent.findViewById(R.id.shop_information_title);
-        title.setText(shop.getName());
-
         Button capacity_button = parent.findViewById(R.id.shop_information_capacity_button);
         capacity_button.setText(getString(R.string.capacity_control) + "\n" + shop.getActualCapacity() + " / " + shop.getMaxCapacity());
     }

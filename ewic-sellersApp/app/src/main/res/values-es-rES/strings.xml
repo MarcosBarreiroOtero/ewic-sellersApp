@@ -144,4 +144,15 @@
     <string name="minutesAfterOpeningAfternoon_helper">Minutos de margen desde la apertura de la tarde</string>
     <string name="minutesBeforeClosingAfternoon_hint">Minutos del cierre de tarde</string>
     <string name="minutesBeforeClosingAfternoon_helper">Minutos de margen desde el cierre de la tarde</string>
+    <string name="manual_entry">Entrada manual</string>
+    <string name="manual_exit">Salida manual</string>
+    <string name="automatic_entry_not_activate_1">Proceso automático no activado. Solo permitidas entradas manuales.</string>
+    <string name="automatic_entry_not_activate_2">Para activar el proceso automático pulsa aquí.</string>
+    <string name="choose_entry_exit">Escoja una entrada para registrar su salida</string>
+    <string name="exit_register_successfully">Salida registrada correctamente</string>
+    <string name="manual_entry_identifier">Identificador de la entrada</string>
+    <string name="manual_entry_identifier_helper">Identificador de la entrada para registrar posteriormente su salida manualmente</string>
+    <string name="register_manual_entry">Registrar entrada manual</string>
+    <string name="max_capacity_exceeded_message">No se puede entrar. Aforo máximo superado</string>
+    <string name="registering_exit">Registrando salida</string>
 </resources>

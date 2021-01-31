@@ -1,5 +1,7 @@
 package es.ewic.sellers.utils;
 
+import java.util.Calendar;
+
 public class BackEndEndpoints {
 
     //Coruña
@@ -28,8 +30,16 @@ public class BackEndEndpoints {
         return SHOP_BASE + "/" + idShop + "/entry?idGoogleLogin=" + idGoogleLogin;
     }
 
+    public static String MANUAL_ENTRY(int idShop, String description) {
+        return SHOP_BASE + "/" + idShop + "/entry?description=" + description;
+    }
+
     public static String EXIT_CLIENT(int idShop, int idEntry) {
         return SHOP_BASE + "/" + idShop + "/exit?entryNumber=" + idEntry;
+    }
+
+    public static String MANUAL_ENTRIES(int idShop, Calendar date) {
+        return SHOP_BASE + "/" + idShop + "/manualEntries" + "?date=" + DateUtils.formatBackendDate(date);
     }
 
     //RESERVATION
