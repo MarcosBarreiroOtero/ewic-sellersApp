@@ -222,6 +222,9 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnL
     @Override
     public void clickConfiguration(Shop shop) {
         if (seller != null) {
+            getSupportActionBar().setTitle(R.string.settings);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
             FragmentUtils.getInstance().replaceFragment(getSupportFragmentManager(), ShopControlParameterFragment.newInstance(shop), true);
         }
     }
