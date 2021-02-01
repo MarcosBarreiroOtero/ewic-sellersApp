@@ -1,10 +1,12 @@
 package es.ewic.sellers.adapters;
 
-import android.app.VoiceInteractor;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -14,15 +16,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 import es.ewic.sellers.R;
-import es.ewic.sellers.model.Reservation;
-import es.ewic.sellers.model.Seller;
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.BackEndEndpoints;
+import es.ewic.sellers.utils.ImageUtils;
 import es.ewic.sellers.utils.RequestUtils;
 
 public class ShopRowAdapter extends BaseAdapter implements ListAdapter {
@@ -91,8 +90,33 @@ public class ShopRowAdapter extends BaseAdapter implements ListAdapter {
                 shop_state.setText(resources.getString(R.string.closed));
                 shop_state.setTextColor(resources.getColor(R.color.semaphore_red));
             }
+
+            ImageView image = convertView.findViewById(R.id.shop_list_image);
+            getShopImage(shop_data, image);
+
         }
 
         return convertView;
+    }
+
+    private void getShopImage(Shop shopData, ImageView image) {
+        String url = BackEndEndpoints.CONFIGURATION_IMAGE(shopData.getIdShop());
+        RequestUtils.sendStringRequest(fragment.getContext(), Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("HTTP", "ok " + response.length());
+                if (!response.isEmpty()) {
+                    String base64 = response;
+                    Bitmap map = ImageUtils.convert(base64);
+                    image.setImageBitmap(map);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("HTTP", "ok");
+                image.setVisibility(View.GONE);
+            }
+        });
     }
 }

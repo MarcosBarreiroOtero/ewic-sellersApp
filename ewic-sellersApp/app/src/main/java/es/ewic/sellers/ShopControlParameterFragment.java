@@ -338,7 +338,6 @@ public class ShopControlParameterFragment extends Fragment {
 
                 mImageView.setImageBitmap(resizedBitmap);
 
-
                 String base64Image = ImageUtils.convert(resizedBitmap);
                 sendImage(base64Image);
             } catch (FileNotFoundException e) {
