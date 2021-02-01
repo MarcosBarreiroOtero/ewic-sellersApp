@@ -173,4 +173,5 @@
     <string name="reservation_log">Registro de reservas</string>
     <string name="log_reservations_not_found">No se han encontrado reservas. Por favor escoja otra fecha.</string>
     <string name="reservation_state">Estado de la reservas</string>
+    <string name="reservations_chart_title">Número de reservas por hora</string>
 </resources>

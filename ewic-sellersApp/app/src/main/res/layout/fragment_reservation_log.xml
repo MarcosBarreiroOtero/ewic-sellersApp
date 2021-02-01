@@ -48,7 +48,7 @@
         android:id="@+id/reservation_log_data_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="reservation_log_bar_chart,reservation_log_chat_x" />
+        app:constraint_referenced_ids="reservation_log_bar_chart,reservation_log_chat_x,reservation_log_pie_chart" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/reservation_log_pie_chart"
@@ -56,14 +56,32 @@
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/reservation_log_bar_chart"
+        app:layout_constraintBottom_toTopOf="@+id/reservation_log_bar_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reservation_log_date_label" />
+
+    <TextView
+        android:id="@+id/reservation_log_bar_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center"
+        android:text="@string/reservations_chart_title"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/reservation_log_bar_chart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reservation_log_pie_chart" />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/reservation_log_bar_chart"
@@ -71,13 +89,12 @@
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         app:layout_constraintBottom_toTopOf="@+id/reservation_log_chat_x"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/reservation_log_pie_chart" />
+        app:layout_constraintTop_toBottomOf="@+id/reservation_log_bar_title" />
 
     <TextView
         android:id="@+id/reservation_log_chat_x"

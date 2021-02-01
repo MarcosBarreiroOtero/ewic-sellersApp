@@ -210,6 +210,7 @@ public class EntryLogFragment extends Fragment {
             xAxis.disableGridDashedLine();
             xAxis.setDrawGridLines(false);
             xAxis.setGranularity(1f);
+            xAxis.setTextSize(12F);
             xAxis.setValueFormatter(new ValueFormatter() {
                 @Override
                 public String getFormattedValue(float value) {
@@ -221,6 +222,7 @@ public class EntryLogFragment extends Fragment {
             yAxis.disableAxisLineDashedLine();
             yAxis.disableGridDashedLine();
             yAxis.setDrawGridLines(false);
+            yAxis.setTextSize(12F);
             barChart.getAxisRight().setEnabled(false);
 
             ArrayList<BarEntry> dataValues = new ArrayList<>();
@@ -233,6 +235,13 @@ public class EntryLogFragment extends Fragment {
             BarDataSet barDataSet = new BarDataSet(dataValues, getString(R.string.entry_log));
             barDataSet.setColor(R.color.design_default_color_primary);
             barDataSet.setDrawValues(true);
+            barDataSet.setValueTextSize(18f);
+            barDataSet.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    return Integer.toString((int) value);
+                }
+            });
 
             BarData barData = new BarData();
             barData.addDataSet(barDataSet);

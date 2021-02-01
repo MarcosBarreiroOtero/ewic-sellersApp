@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -87,7 +88,7 @@ public class ReservationLogFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.entry_log);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.reservation_log);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -214,6 +215,7 @@ public class ReservationLogFragment extends Fragment {
         xAxis.disableGridDashedLine();
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f);
+        xAxis.setTextSize(12F);
         xAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
@@ -226,6 +228,7 @@ public class ReservationLogFragment extends Fragment {
         yAxis.disableGridDashedLine();
         yAxis.setDrawGridLines(false);
         yAxis.setGranularity(1f);
+        yAxis.setTextSize(12F);
         barChart.getAxisRight().setEnabled(false);
 
         ArrayList<BarEntry> dataValues = new ArrayList<>();
@@ -238,6 +241,13 @@ public class ReservationLogFragment extends Fragment {
         BarDataSet barDataSet = new BarDataSet(dataValues, getString(R.string.entry_log));
         barDataSet.setColor(R.color.design_default_color_primary);
         barDataSet.setDrawValues(true);
+        barDataSet.setValueTextSize(18f);
+        barDataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return Integer.toString((int) value);
+            }
+        });
 
         BarData barData = new BarData();
         barData.addDataSet(barDataSet);
@@ -255,30 +265,46 @@ public class ReservationLogFragment extends Fragment {
         pieChart.getDescription().setEnabled(false);
         pieChart.setUsePercentValues(false);
         pieChart.setCenterText(getString(R.string.reservation_state));
+        pieChart.setCenterTextSize(18);
+//        pieChart.setCenterTextRadiusPercent(85);
+        pieChart.setHoleRadius(70);
+        pieChart.setDrawEntryLabels(false);
+        pieChart.setHighlightPerTapEnabled(false);
 
         ArrayList<PieEntry> dataValues = new ArrayList<>();
-        for (Map.Entry<String, Integer> entry : reservationsTypeAmount.entrySet()) {
-            String state = getString(getResources().getIdentifier(entry.getKey(), "string", getActivity().getPackageName()));
-            dataValues.add(new PieEntry(entry.getValue(), state));
-        }
+        dataValues.add(new PieEntry(reservationsTypeAmount.get("ACTIVE"), getString(getResources().getIdentifier("ACTIVE", "string", getActivity().getPackageName()))));
+        dataValues.add(new PieEntry(reservationsTypeAmount.get("WAITING"), getString(getResources().getIdentifier("WAITING", "string", getActivity().getPackageName()))));
+        dataValues.add(new PieEntry(reservationsTypeAmount.get("COMPLETED"), getString(getResources().getIdentifier("COMPLETED", "string", getActivity().getPackageName()))));
+        dataValues.add(new PieEntry(reservationsTypeAmount.get("NOT_APPEAR"), getString(getResources().getIdentifier("NOT_APPEAR", "string", getActivity().getPackageName()))));
+        dataValues.add(new PieEntry(reservationsTypeAmount.get("CANCELLED"), getString(getResources().getIdentifier("CANCELLED", "string", getActivity().getPackageName()))));
 
         int[] colorClassArray = new int[]{
-                Color.LTGRAY, Color.BLUE, Color.CYAN, Color.GREEN, Color.RED};
+                Color.GREEN, Color.YELLOW, Color.CYAN, Color.RED, Color.LTGRAY};
 
         PieDataSet pieDataSet = new PieDataSet(dataValues, "");
         pieDataSet.setColors(colorClassArray);
+        pieDataSet.setValueTextSize(18f);
+
+        pieDataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return value == 0 ? " " : Integer.toString((int) value);
+            }
+        });
+
+        Legend l = pieChart.getLegend();
+        l.setTextSize(14);
+        l.setWordWrapEnabled(true);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setDrawInside(false);
 
         PieData pieData = new PieData(pieDataSet);
         pieChart.setData(pieData);
 
         pieChart.animateXY(1500, 1500);
 
-//        Legend legend = pieChart.getLegend();
-//        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
-//        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-//        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
-//        legend.setDrawInside(false);
-//        pieChart.getLegend().setOrientation(Legend.LegendOrientation.VERTICAL);
 
         pieChart.invalidate();
 
