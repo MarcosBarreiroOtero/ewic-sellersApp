@@ -109,6 +109,8 @@ public class ShopRowAdapter extends BaseAdapter implements ListAdapter {
                     String base64 = response;
                     Bitmap map = ImageUtils.convert(base64);
                     image.setImageBitmap(map);
+                } else {
+                    image.setVisibility(View.GONE);
                 }
             }
         }, new Response.ErrorListener() {
