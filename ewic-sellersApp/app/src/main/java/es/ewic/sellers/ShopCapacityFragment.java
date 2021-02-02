@@ -12,14 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -40,16 +38,12 @@ import com.ramijemli.percentagechartview.PercentageChartView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -57,9 +51,7 @@ import java.util.UUID;
 import es.ewic.sellers.model.ManualEntry;
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.BackEndEndpoints;
-import es.ewic.sellers.utils.DateUtils;
 import es.ewic.sellers.utils.FormUtils;
-import es.ewic.sellers.utils.ModelConverter;
 import es.ewic.sellers.utils.RequestUtils;
 
 /**
@@ -83,6 +75,8 @@ public class ShopCapacityFragment extends Fragment {
     private BluetoothServerSocket mBluetoothServerSocket;
     private static final UUID MY_UUID_SECURE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private BroadcastReceiver mBroadcastReceiver;
+
+    private boolean bluetoothActivate = false;
 
     private List<ManualEntry> manualEntries = new ArrayList<>();
     private Button manual_entry_button;
@@ -125,6 +119,16 @@ public class ShopCapacityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showPreCloseDialog(parent);
+            }
+        });
+
+        TextView shop_name_text = parent.findViewById(R.id.shop_bluetooth_name);
+        shop_name_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!bluetoothActivate) {
+                    requestActivateBluetooth();
+                }
             }
         });
 
@@ -200,14 +204,17 @@ public class ShopCapacityFragment extends Fragment {
                 Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bluetooth_needed_message), Snackbar.LENGTH_LONG);
                 snackbar.show();
                 shop_bluetooth_name.setText(getString(R.string.automatic_entry_not_activate_1) + "\n" + getString(R.string.automatic_entry_not_activate_2));
+                bluetoothActivate = false;
             }
         } else if (requestCode == BLUETOOTH_REQUEST_DISCOVERABLE) {
             if (resultCode == Activity.RESULT_CANCELED) {
                 Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bluetooth_discoverable_message), Snackbar.LENGTH_LONG);
                 snackbar.show();
                 shop_bluetooth_name.setText(getString(R.string.automatic_entry_not_activate_1) + "\n" + getString(R.string.automatic_entry_not_activate_2));
+                bluetoothActivate = false;
             } else {
                 startBluetoothSever();
+                bluetoothActivate = true;
             }
         }
     }

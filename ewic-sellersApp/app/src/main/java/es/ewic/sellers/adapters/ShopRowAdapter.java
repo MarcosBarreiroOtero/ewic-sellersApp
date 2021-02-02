@@ -104,7 +104,6 @@ public class ShopRowAdapter extends BaseAdapter implements ListAdapter {
         RequestUtils.sendStringRequest(fragment.getContext(), Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e("HTTP", "ok " + response.length());
                 if (!response.isEmpty()) {
                     String base64 = response;
                     Bitmap map = ImageUtils.convert(base64);

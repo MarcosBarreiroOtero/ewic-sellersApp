@@ -323,7 +323,6 @@ public class ShopControlParameterFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("Hola", "hola " + resultCode);
         if (requestCode == PICK_IMAGE && resultCode == -1) {
             try {
                 final Uri imageUri = data.getData();
@@ -341,7 +340,7 @@ public class ShopControlParameterFragment extends Fragment {
                 String base64Image = ImageUtils.convert(resizedBitmap);
                 sendImage(base64Image);
             } catch (FileNotFoundException e) {
-                Log.e("Hola", "file not found");
+                Log.e("File", "file not found");
             }
         }
 
