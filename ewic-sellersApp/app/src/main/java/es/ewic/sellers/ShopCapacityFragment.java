@@ -382,7 +382,9 @@ public class ShopCapacityFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 pd.dismiss();
-                thread.cancel();
+                if (thread != null) {
+                    thread.cancel();
+                }
                 mCallback.shopClosed();
             }
         }, new Response.ErrorListener() {
@@ -669,6 +671,12 @@ public class ShopCapacityFragment extends Fragment {
                         Log.e("BLUETOOTH", "Max capacity");
                         closeSocket(socket);
                         Snackbar.make(getView(), getString(R.string.max_capacity_exceeded_message), Snackbar.LENGTH_LONG).show();
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mRegisteringEntryDialog.dismiss();
+                            }
+                        });
                     } else {
                         String entryNumber = response.split("@#")[0];
                         Integer actualCapacity = Integer.parseInt(response.split("@#")[1]);

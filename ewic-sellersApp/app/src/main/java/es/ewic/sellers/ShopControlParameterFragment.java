@@ -330,8 +330,8 @@ public class ShopControlParameterFragment extends Fragment {
 
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 
-                int targetW = mImageView.getWidth(); // Get the dimensions of the View
-                int targetH = mImageView.getHeight();
+                int targetW = Math.max(60, mImageView.getWidth()); // Get the dimensions of the View
+                int targetH = Math.max(60, mImageView.getHeight());
                 Bitmap resizedBitmap = Bitmap.createScaledBitmap(
                         selectedImage, targetW, targetH, false);
 
