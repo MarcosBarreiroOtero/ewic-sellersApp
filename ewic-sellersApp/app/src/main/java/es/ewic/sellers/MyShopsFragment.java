@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
@@ -20,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -50,6 +52,8 @@ public class MyShopsFragment extends Fragment {
 
     public interface OnMyShopsListener {
         public void onShopClick(Shop shop);
+
+        public void onCreateShop();
     }
 
     public MyShopsFragment() {
@@ -75,12 +79,17 @@ public class MyShopsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
+
         // Inflate the layout for this fragment
         ConstraintLayout parent = (ConstraintLayout) inflater.inflate(R.layout.fragment_my_shops, container, false);
 
         TextView seller_welcome = parent.findViewById(R.id.seller_welcome);
 
-        seller_welcome.setText(getString(R.string.welcome) + " " + sellerData.getLoginName() + ". " + getString(R.string.startCapacityShop));
+        seller_welcome.setText(getString(R.string.welcome) + " " + sellerData.getFirstName() + " " + sellerData.getLastName() + ". \n" + getString(R.string.startCapacityShop));
 
         getShops(parent);
         ListView shopList = parent.findViewById(R.id.shop_list);
@@ -92,6 +101,13 @@ public class MyShopsFragment extends Fragment {
             }
         });
 
+        FloatingActionButton create_shop_button = parent.findViewById(R.id.create_shop_button);
+        create_shop_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.onCreateShop();
+            }
+        });
 
         return parent;
     }
@@ -114,8 +130,18 @@ public class MyShopsFragment extends Fragment {
             public void onResponse(JSONArray response) {
                 shops = ModelConverter.jsonArrayToShopList(response);
                 ListView shopList = parent.findViewById(R.id.shop_list);
-                ShopRowAdapter shopRowAdapter = new ShopRowAdapter(MyShopsFragment.this, shops, getResources(), getActivity().getPackageName());
-                shopList.setAdapter(shopRowAdapter);
+                TextView shops_not_found = parent.findViewById(R.id.shops_not_found);
+                if (shops.size() == 0) {
+                    shopList.setVisibility(View.GONE);
+                    shops_not_found.setVisibility(View.VISIBLE);
+                } else {
+                    shops_not_found.setVisibility(View.GONE);
+                    shopList.setVisibility(View.VISIBLE);
+                    ShopRowAdapter shopRowAdapter = new ShopRowAdapter(MyShopsFragment.this, shops, getResources(), getActivity().getPackageName());
+                    shopList.setAdapter(shopRowAdapter);
+                }
+
+
                 pd.dismiss();
             }
         }, new Response.ErrorListener() {

@@ -11,7 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ClientsApp">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,9 +33,5 @@
     <uses-permission
         android:name="android.permission.BLUETOOTH_ADMIN"
         android:required="true" />
-    <uses-permission
-        android:name="android.permission.BLUETOOTH_PRIVILEGED"
-        android:required="true"
-        tools:ignore="ProtectedPermissions" />
 
 </manifest>

@@ -1,0 +1,1044 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreateShopFragment">
+
+    <ScrollView
+        android:id="@+id/create_shop_scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="16dp"
+        android:fadeScrollbars="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout_general"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/create_shop_general_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:gravity="start"
+                android:text="@string/shop_general_information"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:drawableEndCompat="@drawable/ic_baseline_keyboard_arrow_down_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_name_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="45"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/create_shop_general_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_name_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/name"
+                    android:maxLength="45"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_type_label"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/create_shop_name_label">
+
+                <AutoCompleteTextView
+                    android:id="@+id/create_shop_type_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/shop_type"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/create_shop_location_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:gravity="start"
+                android:text="@string/location"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:drawableEndCompat="@drawable/ic_baseline_keyboard_arrow_down_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/create_shop_type_label" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_location_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="45"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_location_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_location_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/location"
+                    android:maxLength="45"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/create_shop_coordinates"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:gravity="center"
+                android:text="@string/coordinates"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_location_label" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_latitude_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="9"
+                app:layout_constraintEnd_toStartOf="@id/create_shop_longitude_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/create_shop_coordinates">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_latitude_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/latitude"
+                    android:inputType="numberSigned|numberDecimal"
+                    android:maxLength="9" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_longitude_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_latitude_label"
+                app:layout_constraintTop_toBottomOf="@+id/create_shop_coordinates">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_longitude_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/longitude"
+                    android:inputType="numberSigned|number|numberDecimal"
+                    android:maxLength="9" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/create_shop_capacity_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:gravity="start"
+                android:text="@string/capacity_control"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:drawableEndCompat="@drawable/ic_baseline_keyboard_arrow_down_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/create_shop_latitude_label" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_maxCapacity_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/create_shop_capacity_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_maxCapacity_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:hint="@string/max_capacity"
+                    android:inputType="number"
+                    android:maxLength="4" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/create_shop_timetable_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:text="@string/opening_hours"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:drawableEndCompat="@drawable/ic_baseline_keyboard_arrow_up_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/create_shop_maxCapacity_label" />
+
+
+            <TextView
+                android:id="@+id/create_shop_morning_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/morning"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/create_shop_monday_end_morning_label"
+                app:layout_constraintStart_toStartOf="@+id/create_shop_monday_start_morning_label"
+                app:layout_constraintTop_toBottomOf="@+id/create_shop_timetable_text" />
+
+            <TextView
+                android:id="@+id/create_shop_afternoon_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/afternoon"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/create_shop_monday_end_afternoon_label"
+                app:layout_constraintStart_toStartOf="@+id/create_shop_monday_start_afternoon_label"
+                app:layout_constraintTop_toBottomOf="@+id/create_shop_timetable_text" />
+
+            <TextView
+                android:id="@+id/opening_morning"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/opening"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/create_shop_monday_start_morning_label"
+                app:layout_constraintStart_toStartOf="@+id/create_shop_monday_start_morning_label"
+                app:layout_constraintTop_toBottomOf="@+id/create_shop_morning_text" />
+
+            <TextView
+                android:id="@+id/closing_morning"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/closing"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/create_shop_monday_end_morning_label"
+                app:layout_constraintStart_toStartOf="@+id/create_shop_monday_end_morning_label"
+                app:layout_constraintTop_toBottomOf="@+id/create_shop_morning_text" />
+
+            <TextView
+                android:id="@+id/opening_afternoon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/opening"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/create_shop_monday_start_afternoon_label"
+                app:layout_constraintStart_toStartOf="@+id/create_shop_monday_start_afternoon_label"
+                app:layout_constraintTop_toBottomOf="@+id/create_shop_afternoon_text" />
+
+            <TextView
+                android:id="@+id/closing_afternoon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/closing"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/create_shop_monday_end_afternoon_label"
+                app:layout_constraintStart_toStartOf="@+id/create_shop_monday_end_afternoon_label"
+                app:layout_constraintTop_toBottomOf="@+id/create_shop_afternoon_text" />
+
+            <TextView
+                android:id="@+id/create_shop_monday_text"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/mondayShort"
+                android:textSize="18sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/create_shop_monday_start_morning_label"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_monday_start_morning_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/opening_morning" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_monday_start_morning_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_monday_end_morning_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_monday_text"
+                app:layout_constraintTop_toBottomOf="@id/opening_morning">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_monday_start_morning_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_monday_end_morning_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_monday_start_afternoon_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_monday_start_morning_label"
+                app:layout_constraintTop_toBottomOf="@id/closing_morning">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_monday_end_morning_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_monday_start_afternoon_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_monday_end_afternoon_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_monday_end_morning_label"
+                app:layout_constraintTop_toBottomOf="@id/opening_afternoon">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_monday_start_afternoon_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_monday_end_afternoon_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_monday_start_afternoon_label"
+                app:layout_constraintTop_toBottomOf="@id/closing_afternoon">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_monday_end_afternoon_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/create_shop_tuesday_text"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="8dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/tuesdayShort"
+                android:textSize="18sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/create_shop_tuesday_start_morning_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_monday_text" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_tuesday_start_morning_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_tuesday_end_morning_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_monday_text"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_monday_start_morning_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_tuesday_start_morning_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_tuesday_end_morning_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_tuesday_start_afternoon_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_tuesday_start_morning_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_monday_end_morning_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_tuesday_end_morning_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_tuesday_start_afternoon_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_tuesday_end_afternoon_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_tuesday_end_morning_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_monday_start_afternoon_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_tuesday_start_afternoon_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_tuesday_end_afternoon_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_tuesday_start_afternoon_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_monday_end_afternoon_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_tuesday_end_afternoon_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/create_shop_wednesday_text"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="8dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/wednesdayShort"
+                android:textSize="18sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/create_shop_wednesday_start_morning_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_tuesday_text" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_wednesday_start_morning_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_wednesday_end_morning_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_monday_text"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_tuesday_start_morning_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_wednesday_start_morning_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_wednesday_end_morning_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_wednesday_start_afternoon_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_wednesday_start_morning_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_tuesday_end_morning_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_wednesday_end_morning_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_wednesday_start_afternoon_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_wednesday_end_afternoon_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_wednesday_end_morning_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_tuesday_start_afternoon_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_wednesday_start_afternoon_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_wednesday_end_afternoon_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_wednesday_start_afternoon_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_tuesday_end_afternoon_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_wednesday_end_afternoon_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/create_shop_thursday_text"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="8dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/thursdayShort"
+                android:textSize="18sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/create_shop_thursday_start_morning_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_wednesday_text" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_thursday_start_morning_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_thursday_end_morning_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_monday_text"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_wednesday_start_morning_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_thursday_start_morning_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_thursday_end_morning_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_thursday_start_afternoon_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_thursday_start_morning_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_wednesday_end_morning_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_thursday_end_morning_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_thursday_start_afternoon_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_thursday_end_afternoon_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_thursday_end_morning_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_wednesday_start_afternoon_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_thursday_start_afternoon_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_thursday_end_afternoon_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_thursday_start_afternoon_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_wednesday_end_afternoon_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_thursday_end_afternoon_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH -->
+
+            <TextView
+                android:id="@+id/create_shop_friday_text"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="8dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/fridayShort"
+                android:textSize="18sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/create_shop_friday_start_morning_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_thursday_text" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_friday_start_morning_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_friday_end_morning_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_monday_text"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_thursday_start_morning_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_friday_start_morning_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_friday_end_morning_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_friday_start_afternoon_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_friday_start_morning_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_thursday_end_morning_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_friday_end_morning_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_friday_start_afternoon_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_friday_end_afternoon_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_friday_end_morning_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_thursday_start_afternoon_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_friday_start_afternoon_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_friday_end_afternoon_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_friday_start_afternoon_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_thursday_end_afternoon_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_friday_end_afternoon_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/create_shop_saturday_text"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="8dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/saturdayShort"
+                android:textSize="18sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/create_shop_saturday_start_morning_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_friday_text" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_saturday_start_morning_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_saturday_end_morning_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_monday_text"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_friday_start_morning_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_saturday_start_morning_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_saturday_end_morning_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_saturday_start_afternoon_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_saturday_start_morning_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_friday_end_morning_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_saturday_end_morning_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_saturday_start_afternoon_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_saturday_end_afternoon_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_saturday_end_morning_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_friday_start_afternoon_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_saturday_start_afternoon_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_saturday_end_afternoon_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_saturday_start_afternoon_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_friday_end_afternoon_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_saturday_end_afternoon_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/create_shop_sunday_text"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="8dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/sundayShort"
+                android:textSize="18sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/create_shop_sunday_start_morning_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_saturday_text" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_sunday_start_morning_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_sunday_end_morning_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_monday_text"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_saturday_start_morning_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_sunday_start_morning_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_sunday_end_morning_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_sunday_start_afternoon_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_sunday_start_morning_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_saturday_end_morning_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_sunday_end_morning_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_sunday_start_afternoon_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/create_shop_sunday_end_afternoon_label"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_sunday_end_morning_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_saturday_start_afternoon_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_sunday_start_afternoon_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_shop_sunday_end_afternoon_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:visibility="gone"
+                app:errorIconDrawable="@null"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/create_shop_sunday_start_afternoon_label"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_saturday_end_afternoon_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/create_shop_sunday_end_afternoon_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/create_shop_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:text="@string/create_shop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/create_shop_sunday_end_afternoon_label" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,14 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,31 +21,37 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.ramijemli.percentagechartview.PercentageChartView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
-import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import es.ewic.sellers.model.ManualEntry;
 import es.ewic.sellers.model.Shop;
 import es.ewic.sellers.utils.BackEndEndpoints;
 import es.ewic.sellers.utils.FormUtils;
-import es.ewic.sellers.utils.ModelConverter;
 import es.ewic.sellers.utils.RequestUtils;
 
 /**
@@ -76,6 +75,11 @@ public class ShopCapacityFragment extends Fragment {
     private BluetoothServerSocket mBluetoothServerSocket;
     private static final UUID MY_UUID_SECURE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private BroadcastReceiver mBroadcastReceiver;
+
+    private boolean bluetoothActivate = false;
+
+    private List<ManualEntry> manualEntries = new ArrayList<>();
+    private Button manual_entry_button;
 
     private AcceptThread thread;
 
@@ -110,14 +114,21 @@ public class ShopCapacityFragment extends Fragment {
                              Bundle savedInstanceState) {
         ConstraintLayout parent = (ConstraintLayout) inflater.inflate(R.layout.fragment_shop_capacity, container, false);
 
-        TextView shop_name = parent.findViewById(R.id.shop_name);
-        shop_name.setText(shopData.getName());
-
         Button close_shop_button = parent.findViewById(R.id.close_shop_button);
         close_shop_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showPreCloseDialog(parent);
+            }
+        });
+
+        TextView shop_name_text = parent.findViewById(R.id.shop_bluetooth_name);
+        shop_name_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!bluetoothActivate) {
+                    requestActivateBluetooth();
+                }
             }
         });
 
@@ -137,12 +148,33 @@ public class ShopCapacityFragment extends Fragment {
         shop_bluetooth_name = parent.findViewById(R.id.shop_bluetooth_name);
         if (mBluetoothAdapter != null) {
             if (mBluetoothAdapter.isEnabled()) {
-                shop_bluetooth_name.setText(Html.fromHtml(getString(R.string.shop_connect_message) + " <strong>" + getLocalBluetoothName() + "</strong>."));
+                shop_bluetooth_name.setText(Html.fromHtml(getString(R.string.shop_connect_message) + "<br> <strong>" + getLocalBluetoothName() + "</strong>"));
                 requestBluetoothDiscoverable();
             } else {
                 requestActivateBluetooth();
             }
         }
+
+        //Manual entries
+
+        manual_entry_button = parent.findViewById(R.id.manual_entry_button);
+        manual_entry_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showManuelEntryDialog();
+            }
+        });
+
+        Button manual_exit = parent.findViewById(R.id.manual_exit_entry);
+        manual_exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showManualExitDialog();
+            }
+        });
+
+        getManualEntries();
+
         return parent;
     }
 
@@ -166,32 +198,23 @@ public class ShopCapacityFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == BLUETOOTH_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                shop_bluetooth_name.setText(Html.fromHtml(getString(R.string.shop_connect_message) + " <strong>" + getLocalBluetoothName() + "</strong>."));
+                shop_bluetooth_name.setText(Html.fromHtml(getString(R.string.shop_connect_message) + "<br> <strong>" + getLocalBluetoothName() + "</strong>"));
                 requestBluetoothDiscoverable();
             } else if (resultCode == Activity.RESULT_CANCELED) {
-                Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bluetooth_needed_message), Snackbar.LENGTH_INDEFINITE);
-                snackbar.setAction(R.string.activate, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        snackbar.dismiss();
-                        requestActivateBluetooth();
-                    }
-                });
+                Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bluetooth_needed_message), Snackbar.LENGTH_LONG);
                 snackbar.show();
+                shop_bluetooth_name.setText(getString(R.string.automatic_entry_not_activate_1) + "\n" + getString(R.string.automatic_entry_not_activate_2));
+                bluetoothActivate = false;
             }
         } else if (requestCode == BLUETOOTH_REQUEST_DISCOVERABLE) {
             if (resultCode == Activity.RESULT_CANCELED) {
-                Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bluetooth_discoverable_message), Snackbar.LENGTH_INDEFINITE);
-                snackbar.setAction(R.string.activate, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        snackbar.dismiss();
-                        requestActivateBluetooth();
-                    }
-                });
+                Snackbar snackbar = Snackbar.make(getView(), getString(R.string.bluetooth_discoverable_message), Snackbar.LENGTH_LONG);
                 snackbar.show();
+                shop_bluetooth_name.setText(getString(R.string.automatic_entry_not_activate_1) + "\n" + getString(R.string.automatic_entry_not_activate_2));
+                bluetoothActivate = false;
             } else {
                 startBluetoothSever();
+                bluetoothActivate = true;
             }
         }
     }
@@ -326,6 +349,32 @@ public class ShopCapacityFragment extends Fragment {
         });
     }
 
+    private void getManualEntries() {
+
+        String url = BackEndEndpoints.MANUAL_ENTRIES(shopData.getIdShop(), Calendar.getInstance());
+
+        RequestUtils.sendJsonArrayRequest(getContext(), Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject manualEntryJSON = response.getJSONObject(i);
+                        ManualEntry manualEntry = new ManualEntry(manualEntryJSON.getInt("entryNumber"), manualEntryJSON.getString("description"));
+                        manualEntries.add(manualEntry);
+                    } catch (JSONException e) {
+                        // omit entry
+                    }
+                }
+                manual_entry_button.setText(getString(R.string.manual_entry) + " (" + manualEntries.size() + ")");
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("HTTP", "error manual entries");
+            }
+        });
+    }
+
     private void closeShop() {
         String url = BackEndEndpoints.SHOP_CLOSE(shopData.getIdShop());
         ProgressDialog pd = FormUtils.showProgressDialog(getContext(), getResources(), R.string.connecting_server, R.string.please_wait);
@@ -333,7 +382,9 @@ public class ShopCapacityFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 pd.dismiss();
-                thread.cancel();
+                if (thread != null) {
+                    thread.cancel();
+                }
                 mCallback.shopClosed();
             }
         }, new Response.ErrorListener() {
@@ -362,6 +413,166 @@ public class ShopCapacityFragment extends Fragment {
                         }
                     });
                     snackbar.show();
+                }
+            }
+        });
+    }
+
+    private void showManuelEntryDialog() {
+
+        View manualEntry_View = LayoutInflater.from(getContext()).inflate(R.layout.manual_entry_dialog, (ViewGroup) getView(), false);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setTitle(R.string.register_manual_entry);
+        builder.setView(manualEntry_View);
+        builder.setPositiveButton(R.string.accept, ((dialog, which) -> {
+        }));
+
+        builder.setNegativeButton(R.string.cancel, (dialog, which) ->
+        {
+            dialog.dismiss();
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.semaphore_red));
+            }
+        });
+        dialog.show();
+
+        TextInputLayout til_description = manualEntry_View.findViewById(R.id.manual_entry_description_label);
+        TextInputEditText tiet_description = manualEntry_View.findViewById(R.id.manual_entry_description_input);
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String description = tiet_description.getText().toString().trim();
+                til_description.setError(null);
+                if (description.isEmpty()) {
+                    til_description.setError(getString(R.string.error_empty_field));
+                    return;
+                }
+
+                registerManualEntryClient(description);
+                dialog.dismiss();
+
+            }
+        });
+    }
+
+    private void registerManualEntryClient(String description) {
+
+        String url = BackEndEndpoints.MANUAL_ENTRY(shopData.getIdShop(), description);
+
+        ProgressDialog pd = FormUtils.showProgressDialog(getContext(), getResources(), R.string.registering_entry, R.string.please_wait);
+
+        RequestUtils.sendStringRequest(getContext(), Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (!response.contains("@#")) {
+                    Snackbar.make(getView(), getString(R.string.max_capacity_exceeded_message), Snackbar.LENGTH_LONG).show();
+                } else {
+                    String entryNumber = response.split("@#")[0];
+                    Integer actualCapacity = Integer.parseInt(response.split("@#")[1]);
+
+                    Log.e("BLUETOOTH", "Entrada registrada:" + response);
+                    Snackbar.make(getView(), getString(R.string.new_entry), Snackbar.LENGTH_LONG).show();
+
+                    shopData.setActualCapacity(actualCapacity);
+                    float percentage = ((float) shopData.getActualCapacity() / shopData.getMaxCapacity()) * 100;
+                    percentageChartView.setProgress(percentage, true);
+                    updateShopCapacityText();
+
+                    manualEntries.add(new ManualEntry(Integer.parseInt(entryNumber), description));
+                    manual_entry_button.setText(getString(R.string.manual_entry) + " (" + manualEntries.size() + ")");
+                }
+
+                pd.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pd.dismiss();
+                if (error instanceof TimeoutError) {
+
+                } else {
+                }
+            }
+
+        });
+
+
+    }
+
+    private void showManualExitDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        List<String> descriptions = new ArrayList<>();
+        for (ManualEntry manualEntry : manualEntries) {
+            descriptions.add(manualEntry.getDescription());
+        }
+        builder.setTitle(R.string.choose_entry_exit).setItems(descriptions.toArray(new CharSequence[descriptions.size()]), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ManualEntry manualEntry = manualEntries.get(which);
+                registerExitClient(manualEntry.getEntryNumber(), true);
+            }
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.create().show();
+    }
+
+    private void registerExitClient(Integer idEntry, boolean manual) {
+
+        ProgressDialog pd = FormUtils.showProgressDialog(getContext(), getResources(), R.string.registering_exit, R.string.please_wait);
+
+        String url = BackEndEndpoints.EXIT_CLIENT(shopData.getIdShop(), idEntry);
+
+        RequestUtils.sendStringRequest(getContext(), Request.Method.PUT, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                int actualCapacity = Integer.parseInt(response);
+                shopData.setActualCapacity(actualCapacity);
+                float percentage = ((float) shopData.getActualCapacity() / shopData.getMaxCapacity()) * 100;
+                percentageChartView.setProgress(percentage, true);
+                updateShopCapacityText();
+
+                if (manual) {
+                    for (int i = 0; i < manualEntries.size(); i++) {
+                        ManualEntry manualEntry = manualEntries.get(i);
+                        if (manualEntry.getEntryNumber() == idEntry) {
+                            manualEntries.remove(manualEntry);
+                            break;
+                        }
+                    }
+                    manual_entry_button.setText(getString(R.string.manual_entry) + " (" + manualEntries.size() + ")");
+                }
+
+                pd.dismiss();
+                Snackbar.make(getView(), getString(R.string.exit_register_successfully), Snackbar.LENGTH_LONG).show();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("BLUETOOTH", "Http error");
+                pd.dismiss();
+
+                if (error instanceof TimeoutError) {
+                    // do nothing
+                } else {
+                    int responseCode = RequestUtils.getErrorCodeRequest(error);
+                    // 404 not found entry, do nothing ???
+                    // 401 shop not open, do nothing ???
+                    // 401 client already exit, do nothing ???
+                    // unknow code close socket
                 }
             }
         });
@@ -456,20 +667,35 @@ public class ShopCapacityFragment extends Fragment {
             RequestUtils.sendStringRequest(getContext(), Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    requireActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.e("BLUETOOTH", "Entrada registrada:" + response);
-                            Snackbar.make(getView(), getString(R.string.new_entry), Snackbar.LENGTH_LONG).show();
-                            shopData.setActualCapacity(shopData.getActualCapacity() + 1);
-                            float percentage = ((float) shopData.getActualCapacity() / shopData.getMaxCapacity()) * 100;
-                            percentageChartView.setProgress(percentage, true);
-                            updateShopCapacityText();
-                            mRegisteringEntryDialog.dismiss();
-                        }
-                    });
-                    writeShopNameAndEntryNumber(socket, response);
-                    storeSocketInMap(socket, Integer.parseInt(response));
+                    if (!response.contains("@#")) {
+                        Log.e("BLUETOOTH", "Max capacity");
+                        closeSocket(socket);
+                        Snackbar.make(getView(), getString(R.string.max_capacity_exceeded_message), Snackbar.LENGTH_LONG).show();
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mRegisteringEntryDialog.dismiss();
+                            }
+                        });
+                    } else {
+                        String entryNumber = response.split("@#")[0];
+                        Integer actualCapacity = Integer.parseInt(response.split("@#")[1]);
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.e("BLUETOOTH", "Entrada registrada:" + response);
+                                Snackbar.make(getView(), getString(R.string.new_entry), Snackbar.LENGTH_LONG).show();
+                                shopData.setActualCapacity(actualCapacity);
+                                float percentage = ((float) shopData.getActualCapacity() / shopData.getMaxCapacity()) * 100;
+                                percentageChartView.setProgress(percentage, true);
+                                updateShopCapacityText();
+                                mRegisteringEntryDialog.dismiss();
+                            }
+                        });
+                        writeShopNameAndEntryNumber(socket, entryNumber);
+                        storeSocketInMap(socket, Integer.parseInt(entryNumber));
+                    }
+
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -483,6 +709,7 @@ public class ShopCapacityFragment extends Fragment {
                     });
 
                     if (error instanceof TimeoutError) {
+                        Log.e("BLUETOOTH", "Http error timetout");
                         closeSocket(socket);
                     } else {
                         int responseCode = RequestUtils.getErrorCodeRequest(error);
@@ -492,6 +719,7 @@ public class ShopCapacityFragment extends Fragment {
                         // 401 shop not open, close socket (should not happen)
                         // 401 client already entered, send shop name and keep socket
                         // unknow code close socket
+                        Log.e("BLUETOOTH", "Http error " + responseCode);
                         switch (responseCode) {
                             case 404:
                                 closeSocket(socket);
@@ -520,41 +748,6 @@ public class ShopCapacityFragment extends Fragment {
                                 closeSocket(socket);
                                 break;
                         }
-                    }
-                }
-            });
-        }
-
-        private void registerExitClient(Integer idEntry) {
-            String url = BackEndEndpoints.EXIT_CLIENT(shopData.getIdShop(), idEntry);
-
-            RequestUtils.sendStringRequest(getContext(), Request.Method.PUT, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.e("BLUETOOTH", "Salida");
-                            shopData.setActualCapacity(shopData.getActualCapacity() - 1);
-                            float percentage = ((float) shopData.getActualCapacity() / shopData.getMaxCapacity()) * 100;
-                            percentageChartView.setProgress(percentage, true);
-                            updateShopCapacityText();
-                        }
-                    });
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("BLUETOOTH", "Http error");
-
-                    if (error instanceof TimeoutError) {
-                        // do nothing
-                    } else {
-                        int responseCode = RequestUtils.getErrorCodeRequest(error);
-                        // 404 not found entry, do nothing ???
-                        // 401 shop not open, do nothing ???
-                        // 401 client already exit, do nothing ???
-                        // unknow code close socket
                     }
                 }
             });
@@ -603,10 +796,15 @@ public class ShopCapacityFragment extends Fragment {
         public void registerDisconnect(BluetoothDevice device) {
             String address = device.getAddress();
             Integer idEntry = socketConnections.get(address);
-
             if (idEntry != null) {
                 Log.e("BLUETOOTH", "Detectando salida (entrada): " + idEntry);
-                registerExitClient(idEntry);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        registerExitClient(idEntry, false);
+                    }
+                });
+
             }
         }
 

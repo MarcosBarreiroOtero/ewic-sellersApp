@@ -31,6 +31,9 @@ public class RequestUtils {
     public static final String CLIENT_ALREADY_ENTERED = "Client already entered";
     public static final String EXIT_ALREADY_REGISTERED = "Exit already registered";
 
+    public static final String RESERVATION_WHEN_SHOP_FULL = "Reservation when shop full";
+    public static final String MOVE_RESERVATION_TO_PAST = "Move reservation to past";
+
     public static void sendJsonArrayRequest(Context context, int mehod, String url, JSONArray jsonRequest,
                                             Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         RequestQueue queue = Volley.newRequestQueue(context);
