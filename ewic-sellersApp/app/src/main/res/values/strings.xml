@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Ewic - Sellers</string>
+    <string name="app_name">Ewyc - Sellers</string>
     <string name="connect_local">Connect to local server</string>
     <string name="connect_remote">Connect to remote server</string>
     <string name="retry">Retry</string>

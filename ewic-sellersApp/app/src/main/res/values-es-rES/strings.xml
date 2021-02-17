@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Ewic - Sellers</string>
+    <string name="app_name">Ewyc - Sellers</string>
     <string name="connect_local">Conectarse a un servidor local</string>
     <string name="connect_remote">Conectar a un servidor remoto</string>
     <string name="retry">Reintentar</string>
@@ -131,7 +131,7 @@
     <string name="update_email_params">Actualizar parámetros del correo</string>
     <string name="parameters_updated_successfully">Parámetros actualizados correctamente</string>
     <string name="reservationWaitMinutes_hint">Minutos de espera reserva</string>
-    <string name="reservationWaitMinutes_helper">Minutos que tarda una reserva en marcarse como no aparece desde la hora de la misma. Por defecto 10.</string>
+    <string name="reservationWaitMinutes_helper">Minutos que tarda una reserva en marcarse como no aparece desde su hora de entrada. Por defecto 10.</string>
     <string name="minutesBetweenReservations_hint">Minutos entre reservas</string>
     <string name="minutesBetweenReservations_helper">Intervalo de minutos entre reservas disponibles. Por defecto 15.</string>
     <string name="update_reservation_params">Actualizar parámetros de las reservas</string>

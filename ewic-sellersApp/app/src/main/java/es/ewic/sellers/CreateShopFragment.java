@@ -1,20 +1,9 @@
 package es.ewic.sellers;
 
 import android.app.ProgressDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-
-import android.text.InputType;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +12,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.TimePicker;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
@@ -37,14 +30,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import es.ewic.sellers.model.Seller;
@@ -752,7 +740,7 @@ public class CreateShopFragment extends Fragment {
             Float latitude = Float.parseFloat(tiet_latitude.getText().toString().trim());
 
             //Longitude
-            TextInputEditText tiet_longitude = parent.findViewById(R.id.create_shop_latitude_input);
+            TextInputEditText tiet_longitude = parent.findViewById(R.id.create_shop_longitude_input);
             Float longitude = Float.parseFloat(tiet_longitude.getText().toString().trim());
 
             //Max capacity
