@@ -39,10 +39,10 @@ public class ReservationRowAdapter extends BaseAdapter implements ListAdapter {
     private final Resources resources;
     private final String packageName;
 
-    private OnEditReservationListener mCallback;
+    private final OnEditReservationListener mCallback;
 
     public interface OnEditReservationListener {
-        public void editReservation(Reservation reservation, Shop shop);
+        void editReservation(Reservation reservation, Shop shop);
     }
 
     public ReservationRowAdapter(List<Reservation> reservationList, Shop shop, Seller seller, Fragment fragment, Resources resources, String packageName) {
@@ -111,18 +111,14 @@ public class ReservationRowAdapter extends BaseAdapter implements ListAdapter {
             reservationState.setText(resources.getIdentifier(reservation.getState(), "string", packageName));
             switch (reservation.getState()) {
                 case "ACTIVE":
-                    reservationState.setTextColor(resources.getColor(R.color.semaphore_green));
-                    break;
                 case "WAITING":
-                    reservationState.setTextColor(resources.getColor(R.color.semaphore_green));
+                    reservationState.setTextColor(resources.getColor(R.color.semaphore_green, null));
                     break;
                 case "COMPLETED":
                     break;
                 case "NOT_APPEAR":
-                    reservationState.setTextColor(resources.getColor(R.color.semaphore_red));
-                    break;
                 case "CANCELLED":
-                    reservationState.setTextColor(resources.getColor(R.color.semaphore_red));
+                    reservationState.setTextColor(resources.getColor(R.color.semaphore_red, null));
                     break;
                 default:
                     break;
@@ -133,19 +129,13 @@ public class ReservationRowAdapter extends BaseAdapter implements ListAdapter {
 
             final View view = convertView;
             ImageView reservation_cancel_button = convertView.findViewById(R.id.reservation_cancel_button);
-            reservation_cancel_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showPreCancelDialog(view, reservation, position);
-                }
+            reservation_cancel_button.setOnClickListener(v -> {
+                showPreCancelDialog(view, reservation, position);
             });
 
             ImageView reservation_edit_button = convertView.findViewById(R.id.reservation_edit_button);
-            reservation_edit_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mCallback.editReservation(reservation, shop);
-                }
+            reservation_edit_button.setOnClickListener(v -> {
+                mCallback.editReservation(reservation, shop);
             });
         }
         return convertView;
@@ -164,7 +154,7 @@ public class ReservationRowAdapter extends BaseAdapter implements ListAdapter {
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface arg0) {
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.semaphore_red));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.semaphore_red, null));
             }
         });
         dialog.show();

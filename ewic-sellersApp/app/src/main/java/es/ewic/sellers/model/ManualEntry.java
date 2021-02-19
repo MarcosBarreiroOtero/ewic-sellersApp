@@ -28,11 +28,4 @@ public class ManualEntry implements Serializable {
         this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return "ManualEntry{" +
-                "entryNumber=" + entryNumber +
-                ", description='" + description + '\'' +
-                '}';
-    }
 }

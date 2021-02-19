@@ -75,14 +75,4 @@ public class Seller implements Serializable {
         this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return "Seller{" +
-                "idSeller=" + idSeller +
-                ", loginName='" + loginName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
 }

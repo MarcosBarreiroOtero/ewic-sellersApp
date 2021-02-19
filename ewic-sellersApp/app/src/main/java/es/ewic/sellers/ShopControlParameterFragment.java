@@ -219,8 +219,6 @@ public class ShopControlParameterFragment extends Fragment {
 
         String url = BackEndEndpoints.CONFIGURATION_BATCH(shop.getIdShop());
 
-        Log.e("PARAMETERS", parameters.toString());
-
         RequestUtils.sendJsonArrayRequest(getContext(), Request.Method.POST, url, parameters, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -301,7 +299,6 @@ public class ShopControlParameterFragment extends Fragment {
         RequestUtils.sendStringRequest(getContext(), Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e("HTTP", "ok " + response.length());
                 String base64 = response;
                 Bitmap map = ImageUtils.convert(base64);
                 mImageView.setImageBitmap(map);
@@ -309,7 +306,7 @@ public class ShopControlParameterFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("HTTP", "ok");
+                Log.e("HTTP", "error");
             }
         });
     }
@@ -362,7 +359,7 @@ public class ShopControlParameterFragment extends Fragment {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-                        Log.e("Http", "error timetout");
+                        Log.e("Http", "error timeout");
                     }
                     Log.e("Http", "error");
                 }

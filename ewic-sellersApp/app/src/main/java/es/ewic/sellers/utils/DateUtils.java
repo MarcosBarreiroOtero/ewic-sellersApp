@@ -8,10 +8,10 @@ import java.util.TimeZone;
 
 public class DateUtils {
 
-    public static SimpleDateFormat sdfLong = new SimpleDateFormat("HH:mm dd/MM/yyyy");
-    public static SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
-    public static SimpleDateFormat sdfBackendDate = new SimpleDateFormat("yyyy-MM-dd");
-    public static SimpleDateFormat sdfHour = new SimpleDateFormat("HH:mm");
+    public static final SimpleDateFormat sdfLong = new SimpleDateFormat("HH:mm dd/MM/yyyy");
+    public static final SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
+    public static final SimpleDateFormat sdfBackendDate = new SimpleDateFormat("yyyy-MM-dd");
+    public static final SimpleDateFormat sdfHour = new SimpleDateFormat("HH:mm");
 
     public static Calendar parseDateLong(String dateString) {
         return parseDate(dateString, sdfLong);

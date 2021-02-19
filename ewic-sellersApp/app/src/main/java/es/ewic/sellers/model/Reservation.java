@@ -98,17 +98,4 @@ public class Reservation implements Serializable {
         this.clientName = clientName;
     }
 
-    @Override
-    public String toString() {
-        return "Reservation{" +
-                "idReservation=" + idReservation +
-                ", date=" + date +
-                ", state='" + state + '\'' +
-                ", remarks='" + remarks + '\'' +
-                ", nClients=" + nClients +
-                ", idGoogleLoginClient='" + idGoogleLoginClient + '\'' +
-                ", idShop=" + idShop +
-                ", clientName='" + clientName + '\'' +
-                '}';
-    }
 }

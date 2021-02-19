@@ -257,24 +257,10 @@ public class ShopCapacityFragment extends Fragment {
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     Log.e("BLUETOOTH", "Disconnect : " + device.getName());
                     thread.registerDisconnect(device);
-                } else if (BluetoothDevice.ACTION_PAIRING_REQUEST.equals(action)) {
-                    Log.e("BLUETOOTH", "Request pairing");
-                    //TODO revisar obtener permisos bluetooth privileges
-//                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-//                    int pin = intent.getIntExtra(BluetoothDevice.EXTRA_PAIRING_KEY, 0);
-//                    Log.d("BLUETOOTH", "PIN" + pin);
-//                    byte[] pinBytes;
-//                    pinBytes = ("" + pin).getBytes();
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//                        device.setPin(pinBytes);
-//                        device.setPairingConfirmation(true);
-//                    }
-
                 }
             }
         };
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
-        filter.addAction(BluetoothDevice.ACTION_PAIRING_REQUEST);
         getActivity().registerReceiver(mBroadcastReceiver, filter);
     }
 
@@ -476,7 +462,6 @@ public class ShopCapacityFragment extends Fragment {
                     String entryNumber = response.split("@#")[0];
                     Integer actualCapacity = Integer.parseInt(response.split("@#")[1]);
 
-                    Log.e("BLUETOOTH", "Entrada registrada:" + response);
                     Snackbar.make(getView(), getString(R.string.new_entry), Snackbar.LENGTH_LONG).show();
 
                     shopData.setActualCapacity(actualCapacity);
@@ -668,7 +653,6 @@ public class ShopCapacityFragment extends Fragment {
                 @Override
                 public void onResponse(String response) {
                     if (!response.contains("@#")) {
-                        Log.e("BLUETOOTH", "Max capacity");
                         closeSocket(socket);
                         Snackbar.make(getView(), getString(R.string.max_capacity_exceeded_message), Snackbar.LENGTH_LONG).show();
                         requireActivity().runOnUiThread(new Runnable() {
@@ -683,7 +667,6 @@ public class ShopCapacityFragment extends Fragment {
                         requireActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Log.e("BLUETOOTH", "Entrada registrada:" + response);
                                 Snackbar.make(getView(), getString(R.string.new_entry), Snackbar.LENGTH_LONG).show();
                                 shopData.setActualCapacity(actualCapacity);
                                 float percentage = ((float) shopData.getActualCapacity() / shopData.getMaxCapacity()) * 100;
@@ -709,7 +692,7 @@ public class ShopCapacityFragment extends Fragment {
                     });
 
                     if (error instanceof TimeoutError) {
-                        Log.e("BLUETOOTH", "Http error timetout");
+                        Log.e("BLUETOOTH", "Http error timeout");
                         closeSocket(socket);
                     } else {
                         int responseCode = RequestUtils.getErrorCodeRequest(error);
@@ -725,22 +708,18 @@ public class ShopCapacityFragment extends Fragment {
                                 closeSocket(socket);
                                 break;
                             case 400:
-                                Log.e("BLUETOOTH", "Entry duplicated");
                                 writeShopNameAndEntryNumber(socket, null);
                                 break;
                             case 202:
-                                Log.e("BLUETOOTH", "Max capacity");
                                 closeSocket(socket);
                                 break;
                             case 401:
                                 String errorMessage = RequestUtils.getErrorMessageRequest(error);
                                 Log.e("BLUETOOTH", "Error: " + errorMessage);
                                 if (errorMessage.contains(RequestUtils.CLIENT_ALREADY_ENTERED)) {
-                                    Log.e("BLUETOOTH", "Already entered");
                                     writeShopNameAndEntryNumber(socket, null);
                                 } else {
                                     //Shop closed
-                                    Log.e("BLUETOOTH", "Shop not opened");
                                     closeSocket(socket);
                                 }
                                 break;
@@ -779,7 +758,6 @@ public class ShopCapacityFragment extends Fragment {
                 }
 
                 if (socket != null) {
-                    Log.e("BLUETOOTH", "Nueva conexión");
                     final BluetoothSocket socketFinal = socket;
 
                     //Read idGoogleLogin
@@ -797,7 +775,6 @@ public class ShopCapacityFragment extends Fragment {
             String address = device.getAddress();
             Integer idEntry = socketConnections.get(address);
             if (idEntry != null) {
-                Log.e("BLUETOOTH", "Detectando salida (entrada): " + idEntry);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -811,10 +788,8 @@ public class ShopCapacityFragment extends Fragment {
         public void cancel() {
             closeShop = true;
             try {
-                Log.e("BLUETOOTH", "Closing server socket");
                 for (BluetoothSocket socket : socketsOpened) {
                     try {
-                        Log.e("BLUETOOTH", "Closing individual socket");
                         socket.getInputStream().close();
                         socket.getOutputStream().close();
                         socket.close();
