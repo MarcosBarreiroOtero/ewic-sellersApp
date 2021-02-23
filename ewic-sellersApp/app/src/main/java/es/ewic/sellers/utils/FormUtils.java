@@ -10,8 +10,6 @@ import android.util.Patterns;
 
 import androidx.core.graphics.ColorUtils;
 
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.ramijemli.percentagechartview.PercentageChartView;
 import com.ramijemli.percentagechartview.callback.AdaptiveColorProvider;
 import com.ramijemli.percentagechartview.renderer.BaseModeRenderer;
@@ -20,7 +18,6 @@ import com.ramijemli.percentagechartview.renderer.RingModeRenderer;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 
 import es.ewic.sellers.R;
 
@@ -69,18 +66,18 @@ public class FormUtils {
                 .startAngle(90)
                 .textStyle(Typeface.BOLD)
                 .textSize(200)
-                .backgroundBarColor(resources.getColor(R.color.purple_500)).apply();
+                .backgroundBarColor(resources.getColor(R.color.purple_500, null)).apply();
 
         percentageChartView.setProgress(percentage, false);
         percentageChartView.setAdaptiveColorProvider(new AdaptiveColorProvider() {
             @Override
             public int provideProgressColor(float progress) {
                 if (progress < 75) {
-                    return resources.getColor(R.color.semaphore_green);
+                    return resources.getColor(R.color.semaphore_green, null);
                 } else if (progress < 100) {
-                    return resources.getColor(R.color.semaphore_ambar);
+                    return resources.getColor(R.color.semaphore_ambar, null);
                 } else {
-                    return resources.getColor(R.color.semaphore_red);
+                    return resources.getColor(R.color.semaphore_red, null);
                 }
             }
 

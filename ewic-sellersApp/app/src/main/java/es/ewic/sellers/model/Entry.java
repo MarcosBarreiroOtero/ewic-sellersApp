@@ -79,16 +79,4 @@ public class Entry implements Serializable {
         this.clientName = clientName;
     }
 
-    @Override
-    public String toString() {
-        return "Entry{" +
-                "entryNumber=" + entryNumber +
-                ", start=" + start +
-                ", end=" + end +
-                ", duration=" + duration +
-                ", description='" + description + '\'' +
-                ", shopName='" + shopName + '\'' +
-                ", clientName='" + clientName + '\'' +
-                '}';
-    }
 }

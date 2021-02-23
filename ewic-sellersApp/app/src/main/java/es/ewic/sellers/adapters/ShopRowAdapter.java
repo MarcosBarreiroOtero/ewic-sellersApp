@@ -2,7 +2,6 @@ package es.ewic.sellers.adapters;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,8 +12,6 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 
 import java.util.List;
 
@@ -29,7 +26,6 @@ public class ShopRowAdapter extends BaseAdapter implements ListAdapter {
     private final List<Shop> shopList;
     private final Fragment fragment;
     private final Resources resources;
-    private final String packageName;
 
     public ShopRowAdapter(Fragment fragment, List<Shop> shopList, Resources resources, String packageName) {
         assert fragment != null;
@@ -40,7 +36,6 @@ public class ShopRowAdapter extends BaseAdapter implements ListAdapter {
         this.fragment = fragment;
         this.shopList = shopList;
         this.resources = resources;
-        this.packageName = packageName;
     }
 
     @Override
@@ -85,10 +80,10 @@ public class ShopRowAdapter extends BaseAdapter implements ListAdapter {
 
             if (shop_data.isAllowEntries()) {
                 shop_state.setText(resources.getString(R.string.open));
-                shop_state.setTextColor(resources.getColor(R.color.semaphore_green));
+                shop_state.setTextColor(resources.getColor(R.color.semaphore_green, null));
             } else {
                 shop_state.setText(resources.getString(R.string.closed));
-                shop_state.setTextColor(resources.getColor(R.color.semaphore_red));
+                shop_state.setTextColor(resources.getColor(R.color.semaphore_red, null));
             }
 
             ImageView image = convertView.findViewById(R.id.shop_list_image);
@@ -101,23 +96,13 @@ public class ShopRowAdapter extends BaseAdapter implements ListAdapter {
 
     private void getShopImage(Shop shopData, ImageView image) {
         String url = BackEndEndpoints.CONFIGURATION_IMAGE(shopData.getIdShop());
-        RequestUtils.sendStringRequest(fragment.getContext(), Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (!response.isEmpty()) {
-                    String base64 = response;
-                    Bitmap map = ImageUtils.convert(base64);
-                    image.setImageBitmap(map);
-                } else {
-                    image.setVisibility(View.GONE);
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("HTTP", "ok");
+        RequestUtils.sendStringRequest(fragment.getContext(), Request.Method.GET, url, response -> {
+            if (!response.isEmpty()) {
+                Bitmap map = ImageUtils.convert(response);
+                image.setImageBitmap(map);
+            } else {
                 image.setVisibility(View.GONE);
             }
-        });
+        }, error -> image.setVisibility(View.GONE));
     }
 }

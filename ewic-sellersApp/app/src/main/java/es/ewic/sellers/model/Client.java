@@ -58,14 +58,4 @@ public class Client implements Serializable {
         this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return "Client{" +
-                "idClient=" + idClient +
-                ", idGoogleLogin='" + idGoogleLogin + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
 }
